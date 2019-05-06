@@ -11,8 +11,8 @@ import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 
 // core components
-import GridContainer from "components/Grid/GridContainer";
-import GridItem from "components/Grid/GridItem";
+import GridContainer from "components/Theme/Grid/GridContainer";
+import GridItem from "components/Theme/Grid/GridItem";
 
 import navPillsStyle from "assets/jss/material-kit-pro-react/components/navPillsStyle.jsx";
 

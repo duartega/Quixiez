@@ -8,14 +8,14 @@ import ListItem from "@material-ui/core/ListItem";
 import Grid from "@material-ui/core/Grid";
 
 // core components
-import Header from "components/Header/Header.jsx";
-import HeaderLinks from "components/Header/HeaderLinks.jsx";
-import Parallax from "components/Parallax/Parallax.jsx";
-import Footer from "components/Footer/Footer.jsx";
-import GridContainer from "components/Grid/GridContainer";
-import GridItem from "components/Grid/GridItem";
-import Button from "components/CustomButtons/Button.jsx";
-import ImageUpload from "components/CustomUpload/ImageUpload";
+import Header from "components/Theme/Header/Header";
+import HeaderLinks from "components/Theme/Header/HeaderLinks";
+import Parallax from "components/Theme/Parallax/Parallax";
+import Footer from "components/Theme/Footer/Footer";
+import GridContainer from "components/Theme/Grid/GridContainer";
+import GridItem from "components/Theme/Grid/GridItem";
+import Button from "components/Theme/CustomButtons/Button";
+import ImageUpload from "components/Theme/CustomUpload/ImageUpload";
 
 import uploadPageStyle from "assets/jss/styles/uploadPageStyle";
 

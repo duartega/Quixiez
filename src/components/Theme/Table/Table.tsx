@@ -24,7 +24,7 @@ interface TableProps {
     | "rose"
     | "gray";
   tableHead: string[];
-  tableData: [[]];
+  tableData: [string[]];
   hover: boolean;
   coloredColls: number[];
   // Of(["warning","primary","danger","success","info","rose","gray"]) - colorsColls

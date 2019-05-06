@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
+import CustomInput from "components/Theme/CustomInput/CustomInput";
+import Button from "components/Theme/CustomButtons/Button";
 
 import styles from "assets/jss/material-kit-pro-react/components/customFileInputStyle.jsx";
 
