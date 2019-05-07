@@ -25,7 +25,8 @@ const defaultStyle = createStyles({
     display: "inline-block",
     minHeight: "20px",
     padding: "10px",
-    margin: "14px"
+    margin: "14px",
+    maxWidth: "50%"
   },
 
   defaultAfter: {
@@ -39,9 +40,17 @@ const defaultStyle = createStyles({
   }
 });
 
+const defaultContainer = createStyles({
+  container: {
+    display: "inline-block",
+    padding: "20px"
+  }
+});
+
 const ChatBubbleStyles = createStyles({
   fromChatBubble: {
     ...defaultStyle.defaultBubble,
+    float: "right",
     "&:after": {
       ...defaultStyle.defaultAfter,
 
@@ -51,15 +60,18 @@ const ChatBubbleStyles = createStyles({
 
   toChatBubble: {
     ...defaultStyle.defaultBubble,
+    float: "left",
     "&:after": {
       ...defaultStyle.defaultAfter,
       ...defaultArrowStyle.toArrow
     }
   },
   toContainer: {
+    ...defaultContainer.container,
     float: "right"
   },
   fromContainer: {
+    ...defaultContainer.container,
     float: "left"
   }
 });

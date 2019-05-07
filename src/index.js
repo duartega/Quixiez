@@ -14,9 +14,9 @@ var hist = createBrowserHistory();
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
-      {/* <Route path="/" component={UploadPage} /> */}
-      <Route exact path="/" component={MessagePage} />
-      <Route path="/message" component={SingleMessagePage} />
+      <Route path="/upload" component={UploadPage} />
+      {/* <Route exact path="/" component={MessagePage} /> */}
+      {/* <Route path="/message" component={SingleMessagePage} /> */}
     </Switch>
   </Router>,
   document.getElementById("root")

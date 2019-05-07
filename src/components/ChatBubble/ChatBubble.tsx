@@ -13,10 +13,7 @@ const ChatBubble: React.FC<ChatBubble> = ({
   classes
 }: ChatBubble) => {
   return (
-    <div
-      style={{ backgroundColor: "pink" }}
-      className={isSender ? classes.fromContainer : classes.toContainer}
-    >
+    <div className={isSender ? classes.fromContainer : classes.toContainer}>
       <p className={isSender ? classes.fromChatBubble : classes.toChatBubble}>
         {message}
       </p>

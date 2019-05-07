@@ -19,7 +19,14 @@ const singleMessagePageStyle = createStyles({
     textAlign: "center"
   },
   containerStyle: {
-    width: "70%"
+    // width: "70%",
+    height: "80vh",
+    overflow: "auto",
+    margin: "0",
+    marginTop: "20px"
+  },
+  cardStyle: {
+    marginTop: "0"
   }
 });
 

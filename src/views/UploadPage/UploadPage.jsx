@@ -18,19 +18,93 @@ import Button from "components/Theme/CustomButtons/Button";
 import ImageUpload from "components/Theme/CustomUpload/ImageUpload";
 
 import uploadPageStyle from "assets/jss/styles/uploadPageStyle";
+import { userImageUploadUrl } from "routes/endpoints";
 
 class UploadPage extends React.Component {
   constructor(props) {
     super(props);
-    this.imageUploader = React.createRef();
+    this.state = {
+      file: null,
+      validParams: null
+    };
+    this.urlParams = new URLSearchParams(window.location.search);
   }
+
   componentDidMount() {
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
+    // window.scrollTo(0, 0);
+    // document.body.scrollTop = 0;
+    this.verifyUrlParams();
   }
+
+  verifyUrlParams = () => {
+    const user_id = this.urlParams.get("user_id");
+    const image_type = this.urlParams.get("image_type");
+
+    /**
+     * dl_image
+     * rec_image
+     */
+    if (
+      (user_id && image_type && image_type === "dl_image") ||
+      image_type === "rec_image"
+    ) {
+      const validParams = { image_type, user_id };
+      this.setState({ validParams });
+    } else {
+      this.setState({ validParams: false });
+    }
+  };
+
+  fileCallback = file => {
+    this.setState({ file });
+  };
+
+  /**
+     * handleSubmit = async () => {
+    this.setState({ loading: true });
+    const formData = new FormData();
+    if (this.state.file) {
+      formData.append("image", this.state.file);
+    }
+    try {
+      const response = await fetch(imageUploadUri, {
+        body: formData,
+        method: "POST"
+      });
+      console.log(await response.json());
+    } catch (e) {
+      console.warn(e);
+    }
+
+    this.setState({ loading: false });
+};
+     */
+  handleSubmit = async e => {
+    e.preventDefault();
+    const {
+      file,
+      validParams: { user_id, image_type }
+    } = this.state;
+    const formData = new FormData();
+    if (file) {
+      formData.append("image", file);
+      try {
+        const response = await fetch(userImageUploadUrl(user_id, image_type), {
+          body: formData,
+          method: "POST"
+        });
+        const responseJson = await response.json();
+        console.log(responseJson);
+        alert("Image uploaded");
+      } catch (e) {
+        console.log("error", e);
+      }
+    }
+  };
+
   render() {
     const { classes } = this.props;
-    return (
+    return this.state.validParams !== false ? (
       <div>
         <Header
           brand="Material Kit PRO React"
@@ -54,7 +128,7 @@ class UploadPage extends React.Component {
               alignItems="center"
             >
               <Grid item>
-                <ImageUpload ref={this.imageUploader} />
+                <ImageUpload fileCallback={this.fileCallback} />
               </Grid>
             </GridContainer>
             <GridContainer
@@ -64,11 +138,7 @@ class UploadPage extends React.Component {
               alignItems="center"
             >
               <Grid item>
-                <Button
-                  onClick={() => this.imageUploader.current.handleSubmit()}
-                >
-                  Submit
-                </Button>
+                <Button onClick={e => this.handleSubmit(e)}>Submit</Button>
               </Grid>
             </GridContainer>
           </div>
@@ -160,6 +230,8 @@ class UploadPage extends React.Component {
           }
         />
       </div>
+    ) : (
+      <h1>Invalid url</h1>
     );
   }
 }
