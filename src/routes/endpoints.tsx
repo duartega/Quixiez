@@ -1,6 +1,6 @@
-const baseUrl = `https://app.thegoodpeoplefarms.com`;
+const baseUrl = `https://api.stage.quixiez.com`;
 
 export const userImageUploadUrl = (
   userId: string,
   imageType: "rec_image" | "dl_image"
-) => `${baseUrl}//api/users/upload/${userId}/${imageType}`;
+) => `${baseUrl}/users/upload/${userId}/${imageType}`;
