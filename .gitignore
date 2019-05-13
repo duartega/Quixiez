@@ -11,6 +11,10 @@
 # production
 /build
 
+# assets
+company-site/src/assets/img/
+upload-form/src/assets/img/
+
 # misc
 .DS_Store
 .env.local
