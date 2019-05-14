@@ -11,6 +11,16 @@ import { socketTest } from "../../constants/routes";
  * discussed. They are just here for me to test the endpoints
  * because if the end point wasn't returning anything then
  * there was most likely an error unrelated to the websocket.
+ *
+ * Sockets really are only going to be used for a few things.
+ * 1. Conversations/Messages.
+ * 2. Updates:
+ *  - New Message/Order update
+ *  - New employee request
+ *
+ * Again, like I was saying before, I honestly am not 100% sure
+ * how this is going to work out. This is just a demo, as far as
+ * the frontend goes, I wouldn't even worry about the backend.
  */
 class Test extends React.Component {
   constructor(props) {

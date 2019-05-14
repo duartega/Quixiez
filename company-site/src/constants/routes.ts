@@ -1,5 +1,7 @@
-const testing = true;
-const baseRoute = "https://api.stage.quixiez.com";
+const testing = false;
+const baseRoute = testing
+  ? "https://api.stage.quixiez.com"
+  : "https://api.quixiez.com";
 
 export const queTextRoute = `${baseRoute}/quetext`;
 export const socketTest = `${baseRoute}/test`;
