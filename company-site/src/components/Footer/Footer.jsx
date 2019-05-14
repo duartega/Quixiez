@@ -1,55 +1,53 @@
-/* eslint-disable */
+/*eslint-disable*/
 import React from "react";
-// nodejs library to set properties for components
+import { Container, Row } from "reactstrap";
+// used for making the prop types of this component
 import PropTypes from "prop-types";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-// @material-ui/icons
-import Favorite from "@material-ui/icons/Favorite";
 
-import footerStyle from "assets/jss/material-kit-pro-react/components/footerStyle.jsx";
-
-function Footer(props) {
-  const { children, content, classes, theme, big, className } = props;
-  const themeType =
-    theme === "transparent" || theme == undefined ? false : true;
-  const footerClasses = classNames({
-    [classes.footer]: true,
-    [classes[theme]]: themeType,
-    [classes.big]: big || children !== undefined,
-    [className]: className !== undefined
-  });
-  const aClasses = classNames({
-    [classes.a]: true
-  });
-
-  return (
-    <footer className={footerClasses}>
-      <div className={classes.container}>
-        {children !== undefined ? (
-          <div>
-            <div className={classes.content}>{children}</div>
-            <hr />
+class Footer extends React.Component {
+  render() {
+    return (
+      <footer
+        className={"footer" + (this.props.default ? " footer-default" : "")}
+      >
+        <Container fluid={this.props.fluid ? true : false}>
+          <ul className="nav">
+            <li className="nav-item">
+              <a className="nav-link" href="https://www.creative-tim.com">
+                Creative Tim
+              </a>
+            </li>{" "}
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                href="https://www.creative-tim.com/presentation"
+              >
+                About us
+              </a>
+            </li>{" "}
+            <li className="nav-item">
+              <a className="nav-link" href="https://blog.creative-tim.com">
+                Blog
+              </a>
+            </li>
+          </ul>
+          <div className="copyright">
+            © {new Date().getFullYear()} made with{" "}
+            <i className="tim-icons icon-heart-2" /> by{" "}
+            <a href="javascript:void(0)" target="_blank">
+              Creative Tim
+            </a>{" "}
+            for a better web.
           </div>
-        ) : (
-          " "
-        )}
-        {content}
-        <div className={classes.clearFix} />
-      </div>
-    </footer>
-  );
+        </Container>
+      </footer>
+    );
+  }
 }
 
 Footer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.oneOf(["dark", "white", "transparent"]),
-  big: PropTypes.bool,
-  content: PropTypes.node.isRequired
+  default: PropTypes.bool,
+  fluid: PropTypes.bool
 };
 
-export default withStyles(footerStyle)(Footer);
+export default Footer;

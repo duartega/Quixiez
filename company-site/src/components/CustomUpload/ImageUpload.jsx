@@ -2,8 +2,7 @@ import React from "react";
 // used for making the prop types of this component
 import PropTypes from "prop-types";
 
-// core components
-import Button from "components/CustomButtons/Button.jsx";
+import { Button } from "reactstrap";
 
 import defaultImage from "assets/img/image_placeholder.jpg";
 import defaultAvatar from "assets/img/placeholder.jpg";
@@ -49,34 +48,37 @@ class ImageUpload extends React.Component {
     this.refs.fileInput.value = null;
   }
   render() {
-    var {
-      avatar,
-      addButtonProps,
-      changeButtonProps,
-      removeButtonProps
-    } = this.props;
     return (
       <div className="fileinput text-center">
         <input type="file" onChange={this.handleImageChange} ref="fileInput" />
-        <div className={"thumbnail" + (avatar ? " img-circle" : "")}>
+        <div className={"thumbnail" + (this.props.avatar ? " img-circle" : "")}>
           <img src={this.state.imagePreviewUrl} alt="..." />
         </div>
         <div>
           {this.state.file === null ? (
-            <Button {...addButtonProps} onClick={() => this.handleClick()}>
-              {avatar ? "Add Photo" : "Select image"}
+            <Button
+              color={this.props.addBtnColor}
+              className={this.props.addBtnClasses}
+              onClick={() => this.handleClick()}
+            >
+              {this.props.avatar ? "Add Photo" : "Select image"}
             </Button>
           ) : (
             <span>
-              <Button {...changeButtonProps} onClick={() => this.handleClick()}>
+              <Button
+                color={this.props.changeBtnColor}
+                className={this.props.changeBtnClasses}
+                onClick={() => this.handleClick()}
+              >
                 Change
               </Button>
-              {avatar ? <br /> : null}
+              {this.props.avatar ? <br /> : null}
               <Button
-                {...removeButtonProps}
+                color={this.props.removeBtnColor}
+                className={this.props.removeBtnClasses}
                 onClick={() => this.handleRemove()}
               >
-                <i className="fas fa-times" /> Remove
+                <i className="fa fa-times" /> Remove
               </Button>
             </span>
           )}
@@ -86,11 +88,51 @@ class ImageUpload extends React.Component {
   }
 }
 
+ImageUpload.defaultProps = {
+  avatar: false,
+  removeBtnClasses: "btn-round",
+  removeBtnColor: "danger",
+  addBtnClasses: "btn-round",
+  addBtnColor: "primary",
+  changeBtnClasses: "btn-round",
+  changeBtnColor: "primary"
+};
+
 ImageUpload.propTypes = {
   avatar: PropTypes.bool,
-  addButtonProps: PropTypes.object,
-  changeButtonProps: PropTypes.object,
-  removeButtonProps: PropTypes.object
+  removeBtnClasses: PropTypes.string,
+  removeBtnColor: PropTypes.oneOf([
+    "default",
+    "primary",
+    "secondary",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "link"
+  ]),
+  addBtnClasses: PropTypes.string,
+  addBtnColor: PropTypes.oneOf([
+    "default",
+    "primary",
+    "secondary",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "link"
+  ]),
+  changeBtnClasses: PropTypes.string,
+  changeBtnColor: PropTypes.oneOf([
+    "default",
+    "primary",
+    "secondary",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "link"
+  ])
 };
 
 export default ImageUpload;
