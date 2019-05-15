@@ -12,17 +12,21 @@ import "assets/css/nucleo-icons.css";
 import "assets/scss/black-dashboard-pro-react.scss?v=1.0.0";
 import "assets/demo/demo.css";
 import "react-notification-alert/dist/animate.css";
+import "routes.js";
+import Login from 'Login';
 
 const hist = createBrowserHistory();
 
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
-      {/* <Route path="/auth" render={props => <AuthLayout {...props} />} />
+      <Route path="/auth" render={props => <Login {...props} />} />
       <Route path="/admin" render={props => <AdminLayout {...props} />} />
       <Route path="/rtl" render={props => <RTLLayout {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" /> */}
-      <Route path="/test" render={props => <Test />} />
+      <Route path="/test" render={props => <Test {...props} />} />
+      <Redirect from="/" to="/admin/dashboard" />
+      
+      {/* <Route path="/auth" render={props => <Login />} /> */}
     </Switch>
   </Router>,
   document.getElementById("root")
