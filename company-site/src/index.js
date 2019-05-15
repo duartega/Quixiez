@@ -15,6 +15,7 @@ import "react-notification-alert/dist/animate.css";
 import "routes.js";
 import Login from 'Login';
 
+
 const hist = createBrowserHistory();
 
 ReactDOM.render(

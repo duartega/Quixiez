@@ -1,6 +1,7 @@
 import React from "react";
 import Axios from 'axios';
 import { login } from './constants/routes.ts'
+import DashBoard from './views/Dashboard'
 
 
 // reactstrap components
@@ -30,6 +31,7 @@ class Login extends React.Component {
       JWT: "",
       email: "",
       password: "",
+      loggedIn: false,
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,7 +51,7 @@ class Login extends React.Component {
 
     Axios.post(`${login}`, {email, password}).then(result => {
       console.log("RES: ", result.data)
-      this.setState({JWT: result.data['jwt']})
+      this.setState({JWT: result.data['jwt'], loggedIn: true})
     }
     ).catch(err => {
       alert("Wrong username or password")
@@ -64,8 +66,8 @@ class Login extends React.Component {
   }
 
   render() {
+    if (this.state.loggedIn === false){
     return (
-      <>
         <div className="content">
           <Container>
             <Col className="ml-auto mr-auto" lg="4" md="6">
@@ -93,7 +95,7 @@ class Login extends React.Component {
                           <i className="tim-icons icon-lock-circle" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input placeholder="Password" type="text" value={this.state.password} onChange={this.handleChange} />
+                      <Input  placeholder="Password" type="password" value={this.state.password} onChange={this.handleChange} />
                     </InputGroup>
                   </CardBody>
                   <CardFooter>
@@ -135,8 +137,11 @@ class Login extends React.Component {
             </Col>
           </Container>
         </div>
-      </>
-    );
+        
+    );}
+    else {
+      return (<DashBoard /> /** this needs to change to show more things and pass props */)
+    }
   }
 }
 
