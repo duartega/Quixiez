@@ -30,7 +30,10 @@ class Login extends React.Component {
       JWT: "",
       email: "",
       password: "",
-      loggedIn: false
+      loggedIn: false,
+      alert: "",
+      unkown: "",
+      failed: 0,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,7 +62,11 @@ class Login extends React.Component {
         console.log(err.response.status);
         const { status } = err.response;
         if (status === 401) {
-          alert("Wrong username or password");
+          this.setState({
+            alert: "Wrong username or password",
+            failed: 1,
+          })
+          // alert("Wrong username or password");
         } else {
           // else unknown error
           alert("Unknown error has occurred please try again");
@@ -75,7 +82,7 @@ class Login extends React.Component {
   }
 
   render() {
-    if (this.state.loggedIn === false) {
+    if (this.state.loggedIn === false && this.state.failed === 0) {
       return (
         <div className="content">
           <Container>
@@ -126,7 +133,7 @@ class Login extends React.Component {
                       onClick={this.handleSubmit}
                       size="lg"
                     >
-                      Get Started
+                      Signin
                     </Button>
                     <div className="pull-left">
                       <h6>
@@ -157,7 +164,92 @@ class Login extends React.Component {
           </Container>
         </div>
       );
-    } else {
+    }else if (this.state.loggedIn === false && this.state.failed === 1) {
+      return (
+        <div className="content">
+          <Container>
+          <div class="alert alert-danger" role="alert">
+            Wrong username or password. Please try again
+          </div>
+            <Col className="ml-auto mr-auto" lg="4" md="6">
+              <Form className="form">
+                <Card className="card-login card-white">
+                  <CardHeader>
+                    <img
+                      alt="..."
+                      src={require("assets/img/card-primary.png")}
+                    />
+                    <CardTitle tag="h1">sign-in</CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="tim-icons icon-email-85" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        placeholder="Email"
+                        type="text"
+                        value={this.state.email}
+                        onChange={this.handleChangeEmail}
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="tim-icons icon-lock-circle" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        placeholder="Password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
+                    </InputGroup>
+                  </CardBody>
+                  <CardFooter>
+                    <Button
+                      block
+                      className="mb-3"
+                      color="primary"
+                      href="#pablo"
+                      onClick={this.handleSubmit}
+                      size="lg"
+                    >
+                      Signin
+                    </Button>
+                    <div className="pull-left">
+                      <h6>
+                        <a
+                          className="link footer-link"
+                          href="#pablo"
+                          onClick={e => e.preventDefault()}
+                        >
+                          Create Account
+                        </a>
+                      </h6>
+                    </div>
+                    <div className="pull-right">
+                      <h6>
+                        <a
+                          className="link footer-link"
+                          href="#pablo"
+                          onClick={e => e.preventDefault()}
+                        >
+                          Need Help?
+                        </a>
+                      </h6>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </Form>
+            </Col>
+          </Container>
+        </div>
+      );
+    } else if (this.state.loggedIn === true) {
       return (
         <DashBoard /> /** this needs to change to show more things and pass props */
       );
