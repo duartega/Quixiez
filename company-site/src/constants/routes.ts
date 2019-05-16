@@ -6,3 +6,4 @@ const baseRoute = testing
 export const queTextRoute = `${baseRoute}/quetext`;
 export const socketTest = `${baseRoute}/test`;
 export const login = `${baseRoute}/auth/company/login`;
+export const registration = `${baseRoute}/auth/company/user/register`;

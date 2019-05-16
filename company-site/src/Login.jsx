@@ -4,6 +4,8 @@ import { login } from "./constants/routes.ts";
 import DashBoard from "./views/Dashboard";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "./redux/actions";
+import Register from './views/pages/Register';
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -34,11 +36,13 @@ class Login extends React.Component {
       alert: "",
       unkown: "",
       failed: 0,
+      register: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.createAccount = this.createAccount.bind(this);
   }
   componentDidMount() {
     document.body.classList.toggle("login-page");
@@ -81,8 +85,12 @@ class Login extends React.Component {
     this.setState({ email: event.target.value });
   }
 
+  createAccount() {
+    this.setState({register: true})
+  }
+
   render() {
-    if (this.state.loggedIn === false && this.state.failed === 0) {
+    if (this.state.loggedIn === false && this.state.failed === 0 && this.state.register === false) {
       return (
         <div className="content">
           <Container>
@@ -140,7 +148,7 @@ class Login extends React.Component {
                         <a
                           className="link footer-link"
                           href="#pablo"
-                          onClick={e => e.preventDefault()}
+                          onClick={this.createAccount}
                         >
                           Create Account
                         </a>
@@ -225,7 +233,7 @@ class Login extends React.Component {
                         <a
                           className="link footer-link"
                           href="#pablo"
-                          onClick={e => e.preventDefault()}
+                          onClick={this.createAccount}
                         >
                           Create Account
                         </a>
@@ -252,6 +260,11 @@ class Login extends React.Component {
     } else if (this.state.loggedIn === true) {
       return (
         <DashBoard /> /** this needs to change to show more things and pass props */
+      );
+    } else if (this.state.register) {
+      return (
+        // <Register />
+        <Redirect to="/register" />
       );
     }
   }
