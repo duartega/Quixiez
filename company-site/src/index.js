@@ -13,22 +13,26 @@ import "assets/scss/black-dashboard-pro-react.scss?v=1.0.0";
 import "assets/demo/demo.css";
 import "react-notification-alert/dist/animate.css";
 import "routes.js";
-import Login from 'Login';
-
+import Login from "Login";
+import store from "./redux/store";
+import { Provider } from "react-redux";
 
 const hist = createBrowserHistory();
 
-ReactDOM.render(
-  <Router history={hist}>
-    <Switch>
-      <Route path="/auth" render={props => <Login {...props} />} />
-      <Route path="/admin" render={props => <AdminLayout {...props} />} />
-      <Route path="/rtl" render={props => <RTLLayout {...props} />} />
-      <Route path="/test" render={props => <Test {...props} />} />
-      <Redirect from="/" to="/admin/dashboard" />
-      
-      {/* <Route path="/auth" render={props => <Login />} /> */}
-    </Switch>
-  </Router>,
-  document.getElementById("root")
+const Root = ({ store }) => (
+  <Provider store={store}>
+    <Router history={hist}>
+      <Switch>
+        <Route path="/auth" render={props => <Login {...props} />} />
+        <Route path="/admin" render={props => <AdminLayout {...props} />} />
+        <Route path="/rtl" render={props => <RTLLayout {...props} />} />
+        <Route path="/test" render={props => <Test {...props} />} />
+        <Redirect from="/" to="/admin/dashboard" />
+
+        <Route path="/auth" render={props => <Login />} />
+      </Switch>
+    </Router>
+  </Provider>
 );
+
+ReactDOM.render(<Root store={store} />, document.getElementById("root"));
