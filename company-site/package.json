@@ -4,7 +4,9 @@
   "private": true,
   "homepage": "https://creativetimofficial.github.io/black-dashboard-pro-react/admin/dashboard",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "@types/socket.io-client": "^1.4.32",
+    "autosuggest-highlight": "^3.1.1",
     "axios": "^0.18.0",
     "chart.js": "2.8.0",
     "classnames": "2.2.6",
@@ -15,6 +17,7 @@
     "perfect-scrollbar": "1.4.0",
     "prop-types": "15.7.2",
     "react": "16.8.6",
+    "react-autosuggest": "^9.4.3",
     "react-big-calendar": "0.21.0",
     "react-bootstrap-sweetalert": "4.4.1",
     "react-bootstrap-switch": "15.5.3",

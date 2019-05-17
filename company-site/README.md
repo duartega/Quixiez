@@ -7,3 +7,7 @@ This is where the dashboard and everything pertaining to the company will be.
 ## ._ files
 
 To remove run `dot_clean .`
+
+## References
+
+[Material UI Autofill](https://material-ui.com/demos/autocomplete/)

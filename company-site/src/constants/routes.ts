@@ -7,3 +7,6 @@ export const queTextRoute = `${baseRoute}/quetext`;
 export const socketTest = `${baseRoute}/test`;
 export const login = `${baseRoute}/auth/company/login`;
 export const registration = `${baseRoute}/auth/company/user/register`;
+export const getCompanyId = `${baseRoute}/company/predictions/?predict=`;
+export const register = `${baseRoute}/auth/company/register/user`;
+
