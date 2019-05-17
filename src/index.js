@@ -17,6 +17,7 @@ import Login from "Login";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import Register from "views/pages/Register";
+import RegisterCompany from 'views/pages/RegisterCompany'
 
 const hist = createBrowserHistory();
 
@@ -29,6 +30,7 @@ const Root = ({ store }) => (
         <Route path="/rtl" render={props => <RTLLayout {...props} />} />
         <Route path="/test" render={props => <Test {...props} />} />
         <Route path="/register" render={props => <Register {...props} />} />
+        <Route path="/registerCompany" render={props => <RegisterCompany {...props} />} />
         <Redirect from="/" to="/admin/dashboard" />
 
         <Route path="/auth" render={props => <Login />} />

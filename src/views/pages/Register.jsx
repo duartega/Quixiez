@@ -4,6 +4,8 @@ import Axios from "axios";
 import { getCompanyId, register } from "../../constants/routes.ts";
 import { connect } from "react-redux";
 import { setCompanyUserID } from "../../redux/actions";
+import RegisterCompany from './RegisterCompany'; 
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -82,19 +84,13 @@ class Register extends React.Component {
     {
       this.setState({wrongPassword: true})
       // alert("Passwords do not match")
-    }else {
-    if (this.state.company !== ""){
+    } else {
       this.setState({readyToSubmit: true})
       Axios.post(register, {email, password}).then(result =>{
-        if (password !== confirmPassword)
-        {
-          console.log("wrong pass")
-        }
         this.props.setCompanyUserID(result.data.id)
       }).catch(err => {
         console.log("err: ", err)
       })
-    }
   }
 }
 
@@ -293,7 +289,10 @@ class Register extends React.Component {
       </>
     );}
     else if (this.state.readyToSubmit){
-      
+      return(
+        // <RegisterCompany />
+        <Redirect to="/registerCompany" />
+      );
     }
   }
 }
