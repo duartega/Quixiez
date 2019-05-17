@@ -17,8 +17,6 @@ export const companyUserReducer = (state = companyUserState, action) => {
         jwt: action.jwt
       };
     case SET_COMPANY_USER_ID:
-    console.log(action.companyUserId)
-
     return {
         ...state,
       companyUserId: action.companyUserId

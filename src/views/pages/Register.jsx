@@ -32,6 +32,7 @@ class Register extends React.Component {
     this.state = {
       email: "",
       password: "",
+      confirmPassword: "",
       FirstName: "",
       LastName: "",
       PhoneNumber: "",
@@ -39,6 +40,12 @@ class Register extends React.Component {
       id: "",
       validCompany: false,
       companyUserId: "",
+      readyToSubmit: false,
+      wrongPassword: false,
+      emptyEmail: false,
+      emptyFirstName: false,
+      emptyLastName: false,
+      emptyPhoneNumber: false,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -55,25 +62,41 @@ class Register extends React.Component {
   }
 
   handleChange(event) {
+    const {email, password, PhoneNumber, FirstName, LastName } = this.state;
     this.setState({ [event.target.name]: event.target.value });
+    if (PhoneNumber !== "") {this.setState({emptyPhoneNumber: false})}
+    if (FirstName !== "") {this.setState({emptyFirstName: false})}
+    if (LastName !== "") {this.setState({emptyLastName: false})}
+    if (email !== "") {this.setState({emptyEmail: false})}
+    if (password !== "") {this.setState({wrongPassword: false})}
   }
 
   handleSubmit(event) {
-    const {email, password } = this.state;
-    console.log("email: ", email, "PAss: ", password)
+    const {email, password, confirmPassword, PhoneNumber, FirstName, LastName } = this.state;
+    if (PhoneNumber === "") {this.setState({emptyPhoneNumber: true})}
+    if (FirstName === "") {this.setState({emptyFirstName: true})}
+    if (LastName === "") {this.setState({emptyLastName: true})}
+    if (email === "") {this.setState({emptyEmail: true})}
 
-    if (this.state.Company === "") {
-      console.log("Need to insert a company")
-    } else if (this.state.company !== ""){
+    if (password !== confirmPassword)
+    {
+      this.setState({wrongPassword: true})
+      // alert("Passwords do not match")
+    }else {
+    if (this.state.company !== ""){
+      this.setState({readyToSubmit: true})
       Axios.post(register, {email, password}).then(result =>{
-        console.log(result.data)
-        console.log(result.data.id)
+        if (password !== confirmPassword)
+        {
+          console.log("wrong pass")
+        }
         this.props.setCompanyUserID(result.data.id)
       }).catch(err => {
         console.log("err: ", err)
       })
     }
   }
+}
 
   handleCompany (companyName){
     if (companyName.length > 1){
@@ -91,7 +114,21 @@ class Register extends React.Component {
 
 
   render() {
-    console.log(this.props.reduxState)
+    let wrongPass, empty_email, empty_FirstName, empty_LastName, empty_PhoneNumber = ""
+    let error = "has-danger form-group"
+    // Highlight the fields if they are not filled or incorrect
+    if (this.state.wrongPassword) { wrongPass = error; }
+    else { wrongPass = ""; }
+    if (this.state.emptyEmail) { empty_email = error; } 
+    else { empty_email = ""}
+    if (this.state.emptyFirstName) { empty_FirstName = error;}
+    else { empty_FirstName = ""}
+    if (this.state.emptyLastName) { empty_LastName = error;}
+    else { empty_LastName = ""}
+    if (this.state.emptyPhoneNumber) { empty_PhoneNumber = error;}
+    else { empty_PhoneNumber = ""}
+
+    if (this.state.readyToSubmit === false){
     return (
       <>
         <div className="content">
@@ -146,62 +183,85 @@ class Register extends React.Component {
                   </CardHeader>
                   <CardBody>
                     <Form className="form">
+                    
+                    <div className={empty_email}>
                       <InputGroup> {/** email input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-email-85" />
                           </InputGroupText>
-                        </InputGroupAddon>
-                        <Input placeholder="email" name="email" onChange={this.handleChange} type="text" />
+                          </InputGroupAddon>
+                        <Input placeholder="email*" name="email" onChange={this.handleChange} type="email" />
                       </InputGroup>
+                    </div>
+                      
+                    <div className={wrongPass}>
                       <InputGroup> {/** password input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-lock-circle" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="password" name="password" onChange={this.handleChange} type="password" />
+                        <Input placeholder="password*" name="password" onChange={this.handleChange} type="password" />
                       </InputGroup>
+                    </div>
+
+                    <div className={wrongPass}>
+                      <InputGroup> {/** confirm password input field */}
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="tim-icons icon-lock-circle" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input placeholder="confirm password*" name="confirmPassword" onChange={this.handleChange} type="password" />
+                      </InputGroup>
+                    </div>
+
+                    <div className={empty_FirstName}>
                       <InputGroup > {/** First name input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-single-02" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="First Name" name="FirstName" onChange={this.handleChange} type="text" />
+                        <Input placeholder="First Name*" name="FirstName" onChange={this.handleChange} type="text" />
                       </InputGroup>
+                    </div>
+
+                    <div className={empty_LastName}>
                       <InputGroup> {/** Last name input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-single-02" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Last Name" name="LastName" onChange={this.handleChange}  type="text" />
+                        <Input placeholder="Last Name*" name="LastName" onChange={this.handleChange}  type="text" />
                       </InputGroup>
+                    </div>
+
+                    <div className={empty_PhoneNumber}>
                       <InputGroup> {/** Phone number input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-mobile" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Phone Number" name="PhoneNumber" onChange={this.handleChange} type="text" />
+                        <Input placeholder="Phone Number*" name="PhoneNumber" onChange={this.handleChange} type="number" />
                       </InputGroup>
-                      <InputGroup> {/** Company input field */}
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="tim-icons icon-bank" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        {/* <Input placeholder="Company" type="text" /> */}
-                          {/* <Input render={<AutoSuggestion  />} /> */}
-                          <AutoSuggestion
-                            name="Company"
-                            onChange={this.handleChange}
-                            action={this.handleCompany}
-                            isCompanyValid={this.isCompanyValid
-                            } />
-
-                      </InputGroup>
+                    </div>
+                      {/* <InputGroup>  */}
+                        {/* <InputGroupAddon addonType="prepend"> */}
+                          {/* <InputGroupText> */}
+                            {/* <i className="tim-icons icon-bank" /> */}
+                          {/* </InputGroupText> */}
+                        {/* </InputGroupAddon> */}
+                          {/* <AutoSuggestion */}
+                            {/* name="Company" */}
+                            {/* onChange={this.handleChange} */}
+                            {/* action={this.handleCompany} */}
+                            {/* isCompanyValid={this.isCompanyValid */}
+                            {/* } /> */}
+                      {/* </InputGroup> */}
                       <FormGroup check className="text-left">
                         <Label check>
                           <Input type="checkbox" />
@@ -231,7 +291,10 @@ class Register extends React.Component {
           </Container>
         </div>
       </>
-    );
+    );}
+    else if (this.state.readyToSubmit){
+      
+    }
   }
 }
 
