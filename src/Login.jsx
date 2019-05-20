@@ -4,8 +4,7 @@ import { login } from "./constants/routes.ts";
 import DashBoard from "./views/Dashboard";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "./redux/actions";
-import Register from './views/pages/Register';
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -49,7 +48,6 @@ class Login extends React.Component {
   }
   componentDidMount() {
     document.body.classList.toggle("login-page");
-    console.log(this.props.reduxState);
   }
 
   componentWillUnmount() {
@@ -64,7 +62,6 @@ class Login extends React.Component {
     // if ((email || password) !== "")
     Axios.post(login, { email, password })
       .then(result => {
-        console.log("RES: ", result);
         this.setState({ JWT: result.data["jwt"], loggedIn: true });
       })
       .catch(err => {

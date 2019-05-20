@@ -1,11 +1,9 @@
 import React from "react";
-import AutoSuggestion from '../../MaterialUI/Auto-Suggest';
 import Axios from "axios";
 import { getCompanyId, register } from "../../constants/routes.ts";
 import { connect } from "react-redux";
 import { setCompanyUserID } from "../../redux/actions";
-import RegisterCompany from './RegisterCompany'; 
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -35,9 +33,9 @@ class Register extends React.Component {
       email: "",
       password: "",
       confirmPassword: "",
-      FirstName: "",
-      LastName: "",
-      PhoneNumber: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
       Company: "",
       id: "",
       validCompany: false,
@@ -45,9 +43,14 @@ class Register extends React.Component {
       readyToSubmit: false,
       wrongPassword: false,
       emptyEmail: false,
-      emptyFirstName: false,
-      emptyLastName: false,
-      emptyPhoneNumber: false,
+      emptyfirstName: false,
+      emptylastName: false,
+      emptyphoneNumber: false,
+      emptyPassword: false,
+      emptyConfirmPassword: false,
+      registerErrorMessage: "",
+      passwordErrorMesssage: "",
+      passwordsMatch: false,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -64,32 +67,44 @@ class Register extends React.Component {
   }
 
   handleChange(event) {
-    const {email, password, PhoneNumber, FirstName, LastName } = this.state;
+    const {email, password, confirmPassword, phoneNumber, firstName, lastName } = this.state;
     this.setState({ [event.target.name]: event.target.value });
-    if (PhoneNumber !== "") {this.setState({emptyPhoneNumber: false})}
-    if (FirstName !== "") {this.setState({emptyFirstName: false})}
-    if (LastName !== "") {this.setState({emptyLastName: false})}
+    if (phoneNumber !== "") {this.setState({emptyphoneNumber: false})}
+    if (firstName !== "") {this.setState({emptyfirstName: false})}
+    if (lastName !== "") {this.setState({emptylastName: false})}
     if (email !== "") {this.setState({emptyEmail: false})}
     if (password !== "") {this.setState({wrongPassword: false})}
+    if (confirmPassword !== "") {this.setState({emptyConfirmPassword: false})}
+
+    if (password === confirmPassword) {this.setState({wrongPassword: false, passwordsMatch: true, passwordErrorMesssage: ""})}
   }
 
   handleSubmit(event) {
-    const {email, password, confirmPassword, PhoneNumber, FirstName, LastName } = this.state;
-    if (PhoneNumber === "") {this.setState({emptyPhoneNumber: true})}
-    if (FirstName === "") {this.setState({emptyFirstName: true})}
-    if (LastName === "") {this.setState({emptyLastName: true})}
+    const {email, password, confirmPassword, phoneNumber, firstName, lastName } = this.state;
+
+    if (phoneNumber === "") {this.setState({emptyphoneNumber: true})}
+    if (firstName === "") {this.setState({emptyfirstName: true})}
+    if (lastName === "") {this.setState({emptylastName: true})}
     if (email === "") {this.setState({emptyEmail: true})}
+    if (password === "") {this.setState({emptyPassword: true})}
+    if (confirmPassword === "") {this.setState({emptyConfirmPassword: true})}
 
     if (password !== confirmPassword)
     {
-      this.setState({wrongPassword: true})
-      // alert("Passwords do not match")
-    } else {
-      this.setState({readyToSubmit: true})
-      Axios.post(register, {email, password}).then(result =>{
+      this.setState({wrongPassword: true, passwordErrorMesssage: "Passwords do not match", passwordsMatch: false})
+    } else if((email || password || confirmPassword || phoneNumber || firstName || lastName) !== "") {
+      
+      Axios.post(register, {email, password, firstName, lastName, phoneNumber}).then(result =>{
+        this.setState({readyToSubmit: true})
         this.props.setCompanyUserID(result.data.id)
+
       }).catch(err => {
-        console.log("err: ", err)
+        if (err.response.status === 400 )
+        {
+          this.setState({errorCodeEmail: true})
+        }
+        console.log("err: ", err.response)
+        this.setState({registerErrorMessage: err.response.data.error})
       })
   }
 }
@@ -110,19 +125,34 @@ class Register extends React.Component {
 
 
   render() {
-    let wrongPass, empty_email, empty_FirstName, empty_LastName, empty_PhoneNumber = ""
+    let wrongPass, empty_email, empty_firstName, empty_lastName, empty_phoneNumber = ""
     let error = "has-danger form-group"
     // Highlight the fields if they are not filled or incorrect
     if (this.state.wrongPassword) { wrongPass = error; }
-    else { wrongPass = ""; }
+      else { wrongPass = ""; }
     if (this.state.emptyEmail) { empty_email = error; } 
-    else { empty_email = ""}
-    if (this.state.emptyFirstName) { empty_FirstName = error;}
-    else { empty_FirstName = ""}
-    if (this.state.emptyLastName) { empty_LastName = error;}
-    else { empty_LastName = ""}
-    if (this.state.emptyPhoneNumber) { empty_PhoneNumber = error;}
-    else { empty_PhoneNumber = ""}
+      else { empty_email = ""}
+    if (this.state.emptyfirstName) { empty_firstName = error;}
+      else { empty_firstName = ""}
+    if (this.state.emptylastName) { empty_lastName = error;}
+      else { empty_lastName = ""}
+    if (this.state.emptyphoneNumber) { empty_phoneNumber = error;}
+      else { empty_phoneNumber = ""}
+    if (this.state.emptyPassword) { wrongPass = error;}
+        else { wrongPass = ""}
+    if (this.state.emptyConfirmPassword) { wrongPass = error;}
+        else { wrongPass = ""}
+
+    let registerErrorMessage, passwordErrorMesssage = "";
+    if (this.state.registerErrorMessage !== "") { registerErrorMessage = this.state.registerErrorMessage; empty_email = error;}
+        else { registerErrorMessage = ""}
+
+    if (this.state.passwordErrorMesssage !== "") { passwordErrorMesssage = this.state.passwordErrorMesssage; wrongPass = error;}
+          else { passwordErrorMesssage = ""}
+
+    if (this.state.passwordsMatch) { wrongPass = "has-success form-group"; }
+    else { wrongPass = ""; }
+
 
     if (this.state.readyToSubmit === false){
     return (
@@ -188,9 +218,11 @@ class Register extends React.Component {
                           </InputGroupText>
                           </InputGroupAddon>
                         <Input placeholder="email*" name="email" onChange={this.handleChange} type="email" />
+                        
+
                       </InputGroup>
                     </div>
-                      
+                      {registerErrorMessage}
                     <div className={wrongPass}>
                       <InputGroup> {/** password input field */}
                         <InputGroupAddon addonType="prepend">
@@ -201,7 +233,7 @@ class Register extends React.Component {
                         <Input placeholder="password*" name="password" onChange={this.handleChange} type="password" />
                       </InputGroup>
                     </div>
-
+                    {passwordErrorMesssage} 
                     <div className={wrongPass}>
                       <InputGroup> {/** confirm password input field */}
                         <InputGroupAddon addonType="prepend">
@@ -212,37 +244,37 @@ class Register extends React.Component {
                         <Input placeholder="confirm password*" name="confirmPassword" onChange={this.handleChange} type="password" />
                       </InputGroup>
                     </div>
-
-                    <div className={empty_FirstName}>
+                    {passwordErrorMesssage}
+                    <div className={empty_firstName}>
                       <InputGroup > {/** First name input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-single-02" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="First Name*" name="FirstName" onChange={this.handleChange} type="text" />
+                        <Input placeholder="First Name*" name="firstName" onChange={this.handleChange} type="text" />
                       </InputGroup>
                     </div>
 
-                    <div className={empty_LastName}>
+                    <div className={empty_lastName}>
                       <InputGroup> {/** Last name input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-single-02" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Last Name*" name="LastName" onChange={this.handleChange}  type="text" />
+                        <Input placeholder="Last Name*" name="lastName" onChange={this.handleChange}  type="text" />
                       </InputGroup>
                     </div>
 
-                    <div className={empty_PhoneNumber}>
+                    <div className={empty_phoneNumber}>
                       <InputGroup> {/** Phone number input field */}
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-mobile" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Phone Number*" name="PhoneNumber" onChange={this.handleChange} type="number" />
+                        <Input placeholder="Phone Number*" name="phoneNumber" onChange={this.handleChange} type="number" />
                       </InputGroup>
                     </div>
                       {/* <InputGroup>  */}

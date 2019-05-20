@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://creativetimofficial.github.io/black-dashboard-pro-react/admin/dashboard",
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "@material-ui/core": "^3.9.3",
     "@types/socket.io-client": "^1.4.32",
     "autosuggest-highlight": "^3.1.1",
@@ -26,6 +27,8 @@
     "react-datetime": "2.16.3",
     "react-dom": "16.8.6",
     "react-google-maps": "9.4.5",
+    "react-google-maps-loader": "^4.2.5",
+    "react-google-places-suggest": "^3.7.1",
     "react-jvectormap": "0.0.10",
     "react-notification-alert": "0.0.12",
     "react-redux": "^7.0.3",
@@ -36,6 +39,7 @@
     "react-tagsinput": "3.19.0",
     "reactstrap": "8.0.0",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "socket.io-client": "^2.2.0",
     "typescript": "^3.4.5"
   },

@@ -33,6 +33,9 @@ function renderInputComponent(inputProps) {
           ref(node);
           inputRef(node);
         },
+        root: {
+          color: '#ffffff'
+        },
         classes: {
           input: classes.input,
         },
@@ -74,7 +77,7 @@ function getSuggestions(value) {
     ? []
     : suggestions.filter(suggestion => {
         const keep =
-          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+          count < 10 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
 
         if (keep) {
           count += 1;
@@ -92,9 +95,11 @@ const styles = theme => ({
   root: {
     height: 10,
     flexGrow: 1,
+    color: '#ffffff',
   },
   container: {
     position: 'relative',
+    color: '#ffffff',
   },
   suggestionsContainerOpen: {
     position: 'absolute',
@@ -140,11 +145,13 @@ class IntegrationAutosuggest extends React.Component {
       Axios.get(getCompanyId+newValue).then(result => {
         let suggestions = result.data.map((val) => {
           return {
-            label: val.name
+            label: val.companyName
           }
         })
 
       this.setState({ suggestions: suggestions});
+      this.props.isValid(true)
+      
       }).catch(err=>{
         console.log(err.response)
       })

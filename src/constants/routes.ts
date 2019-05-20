@@ -9,4 +9,6 @@ export const login = `${baseRoute}/auth/company/login`;
 export const registration = `${baseRoute}/auth/company/user/register`;
 export const getCompanyId = `${baseRoute}/company/predictions/?predict=`;
 export const register = `${baseRoute}/auth/company/register/user`;
+export const finishRegister = `${baseRoute}/company/user/request`;
+export const createCompany = `${baseRoute}/company/`;
 

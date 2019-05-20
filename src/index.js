@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 
-import AuthLayout from "layouts/Auth/Auth.jsx";
+// import AuthLayout from "layouts/Auth/Auth.jsx";
 import AdminLayout from "layouts/Admin/Admin.jsx";
 import RTLLayout from "layouts/RTL/RTL.jsx";
 import Test from "layouts/Test/Test.jsx";
@@ -16,8 +16,18 @@ import "routes.js";
 import Login from "Login";
 import store from "./redux/store";
 import { Provider } from "react-redux";
+
 import Register from "views/pages/Register";
 import RegisterCompany from 'views/pages/RegisterCompany'
+import RegisterWithCompany from 'views/pages/RegisterWithCompany'
+import RegisterACompany from 'views/pages/CreateCompany'
+import DashBoard from "views/Dashboard";
+import Settings from "views/pages/GeneralSettings";
+import Invite from "views/pages/InviteEmployee";
+import Hours from "views/pages/BusinessHours";
+
+
+
 
 const hist = createBrowserHistory();
 
@@ -31,6 +41,16 @@ const Root = ({ store }) => (
         <Route path="/test" render={props => <Test {...props} />} />
         <Route path="/register" render={props => <Register {...props} />} />
         <Route path="/registerCompany" render={props => <RegisterCompany {...props} />} />
+        <Route path="/registerACompany" render={props => <RegisterACompany {...props} />} />
+        <Route path="/registerWithCompany" render={props => <RegisterWithCompany {...props} />} />
+        <Route path="/dashboard" render={props => <DashBoard {...props} />} />
+        <Route path="/settings" render={props => <Settings {...props} />} />
+        <Route path="/hours" render={props => <Hours {...props} />} />
+        <Route path="/invite" render={props => <Invite {...props} />} />
+
+
+        
+        {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
         <Redirect from="/" to="/admin/dashboard" />
 
         <Route path="/auth" render={props => <Login />} />
