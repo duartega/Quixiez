@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { Line, Bar } from "react-chartjs-2";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
+import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 // reactstrap components
 import {
@@ -67,14 +68,14 @@ class Dashboard extends React.Component {
     return (
       <>
         <div className="content">
+          <p onClick={e => {e.preventDefault(); console.log("Printing")}}>General Settings</p>
           <Row>
             <Col xs="12">
               <Card className="card-chart">
                 <CardHeader>
                   <Row>
                     <Col className="text-left" sm="6">
-                      <h5 className="card-category">Total Shipments</h5>
-                      <CardTitle tag="h2">Performance</CardTitle>
+                      <CardTitle tag="h2">Orders Complete</CardTitle>
                     </Col>
                     <Col sm="6">
                       <ButtonGroup
@@ -253,7 +254,7 @@ class Dashboard extends React.Component {
             <Col lg="4">
               <Card className="card-chart">
                 <CardHeader>
-                  <h5 className="card-category">Total Shipments</h5>
+                  <h5 className="card-category">Total Text Messages Received</h5>
                   <CardTitle tag="h3">
                     <i className="tim-icons icon-bell-55 text-primary" />{" "}
                     763,215
@@ -291,7 +292,7 @@ class Dashboard extends React.Component {
             <Col lg="4">
               <Card className="card-chart">
                 <CardHeader>
-                  <h5 className="card-category">Completed Tasks</h5>
+                  <h5 className="card-category">Total Text Messages Sent</h5>
                   <CardTitle tag="h3">
                     <i className="tim-icons icon-send text-success" /> 12,100K
                   </CardTitle>

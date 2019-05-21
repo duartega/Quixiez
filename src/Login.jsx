@@ -24,7 +24,7 @@ import {
 } from "reactstrap";
 import { axiosPost } from "./network/ApiCalls";
 
-const TESTING = true;
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +51,6 @@ class Login extends React.Component {
   }
   componentDidMount() {
     document.body.classList.toggle("login-page");
-    TESTING && console.log(this.props.companyUserReducer);
   }
 
   componentWillUnmount() {
