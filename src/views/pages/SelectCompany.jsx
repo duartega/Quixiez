@@ -16,39 +16,33 @@ import {
   Col
 } from "reactstrap";
 import { selectCompany } from "../../constants/routes";
-
+import Dashboard from "../Dashboard";
 import { connect } from "react-redux";
 import Axios from "axios";
 import { setCompanyUserJWT } from "redux/actions";
 
 class Pricing extends React.Component {
   state = {
-    companiesElementsToRender: []
-    // companiesResponse: []
+    companiesElementsToRender: [],
+    isCompanySelected: false,
   };
 
   componentDidMount() {
     document.body.classList.toggle("pricing-page");
-    // console.log(this.props.companyUserReducer);
   }
 
   loadCompaniesComponents() {
     const { companies: propCompanies } = this.props;
 
-    // console.log(propCompanies);
     let { companiesElementsToRender: stateCompanies } = this.state;
     const { jwt } = this.props;
-    console.log("jwt", jwt);
     stateCompanies = propCompanies.map((aCompany, idx) => {
-      console.log(aCompany);
-
       return (
-        <Button
+        
+        <Button 
           key={idx}
           onClick={e => {
             e.preventDefault();
-            // console.log(e);
-            console.log(aCompany);
             Axios.post(
               selectCompany,
               {
@@ -65,8 +59,7 @@ class Pricing extends React.Component {
                 const { jwt } = response.data;
                 const { setCompanyUserJWT } = this.props;
                 setCompanyUserJWT(jwt);
-
-                console.log(response.data);
+                this.setState({isCompanySelected: true});
               })
               .catch(err => {
                 console.log("Error posting", err);
@@ -77,89 +70,43 @@ class Pricing extends React.Component {
             <p>{aCompany.companyName}</p>
           </div>
         </Button>
+
+
       );
     });
 
     this.setState({
       companiesElementsToRender: stateCompanies
-      //   companiesResponse: propCompanies
     });
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.jwt !== prevProps.jwt) {
       this.loadCompaniesComponents();
     }
-    // const { jwt } = this.props;
-    // console.log(jwt);
-    //   console.log();
-    //   const companies =
   }
 
   componentWillUnmount() {
     document.body.classList.toggle("pricing-page");
   }
   render() {
-    // const companies = this.props;
-    // console.log(companies['companies']) // gets array of companies
-    // let c = companies["companies"];
-    // c.map(result => console.log(result)); // gets each company individually
     const { companiesElementsToRender } = this.state;
 
+    if (!this.state.isCompanySelected) {
     return (
       <div className="content ">
+          <h2 align="center">
+              Please select a company to continue
+          </h2>
         {companiesElementsToRender}
-        <Row className="col-md-12">
-          <Col lg="3" md="6">
-            <Card className="card-pricing card-primary card-white">
-              {/* <Button className="btn-round btn-just-icon" color="primary" onClick={e => {
-                  e.preventDefault();
-                  console.log("clicked")
-              }}> */}
-              <CardBody>
-                <CardImg
-                  alt="..."
-                  src={require("assets/img/card-primary.png")}
-                />
-                <ListGroup>
-                  <ListGroupItem>
-                    Are you registering for a company?
-                  </ListGroupItem>
-                </ListGroup>
-              </CardBody>
-              <CardFooter className="text-center mb-3 mt-3">
-                Continue
-              </CardFooter>
-              {/* </Button> */}
-            </Card>
-          </Col>
 
-          <Col lg="3" md="6">
-            <Card className="card-pricing card-secondary">
-              <CardBody>
-                <CardImg
-                  alt="..."
-                  src={require("assets/img/card-primary.png")}
-                />
-                <ListGroup>
-                  <ListGroupItem>
-                    Are you creating a company account?
-                  </ListGroupItem>
-                </ListGroup>
-              </CardBody>
-              <CardFooter className="text-center mb-3 mt-3">
-                <Button
-                  className="btn-round btn-just-icon"
-                  color="primary"
-                  onClick={this.handleContinueCC}
-                >
-                  Continue
-                </Button>
-              </CardFooter>
-            </Card>
-          </Col>
-        </Row>
       </div>
     );
+    } else if (this.state.isCompanySelected) {
+        return (
+            <Dashboard/>
+        )
+    }
   }
 }
 
