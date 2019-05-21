@@ -3,17 +3,17 @@ import React from "react";
 // reactstrap components
 import {
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardImg,
-  CardTitle,
-  ListGroupItem,
-  ListGroup,
-  Progress,
-  Container,
-  Row,
-  Col
+  // Card,
+  // CardBody,
+  // CardFooter,
+  // CardImg,
+  // CardTitle,
+  // ListGroupItem,
+  // ListGroup,
+  // Progress,
+  // Container,
+  // Row,
+  // Col
 } from "reactstrap";
 import { selectCompany } from "../../constants/routes";
 import Dashboard from "../Dashboard";
@@ -21,6 +21,10 @@ import { connect } from "react-redux";
 import Axios from "axios";
 import { setCompanyUserJWT } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
+import Settings from '../pages/GeneralSettings'
+
+
+
 class Pricing extends React.Component {
   state = {
     companiesElementsToRender: [],
@@ -42,7 +46,7 @@ class Pricing extends React.Component {
           key={idx}
           onClick={e => {
             e.preventDefault();
-            console.log(aCompany);
+            // console.log(aCompany);
             axiosPost(selectCompany, { companyId: aCompany.id }, jwt)
               .then(response => {
                 const { jwt } = response.data;
@@ -87,7 +91,7 @@ class Pricing extends React.Component {
         </div>
       );
     } else if (this.state.isCompanySelected) {
-      return <Dashboard />;
+      return <Settings jwt={this.state.jwt} />;
     }
   }
 }

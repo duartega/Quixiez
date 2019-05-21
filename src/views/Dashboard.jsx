@@ -64,6 +64,7 @@ class Dashboard extends React.Component {
       bigChartData: name
     });
   };
+  
   render() {
     return (
       <>

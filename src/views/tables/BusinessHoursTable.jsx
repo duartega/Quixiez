@@ -83,6 +83,7 @@ class RegularTables extends React.Component {
                   <Table>
                    <thead className="text-primary">
                       <tr>
+                        <th>Is Open?</th>
                         <th>DAY</th>
                         <th>OPENS AT</th>
                         <th>CLOSES AT</th>
