@@ -24,7 +24,7 @@ import { axiosPost } from "../../network/ApiCalls";
 class Pricing extends React.Component {
   state = {
     companiesElementsToRender: [],
-    isCompanySelected: false,
+    isCompanySelected: false
   };
 
   componentDidMount() {
@@ -38,8 +38,7 @@ class Pricing extends React.Component {
     const { jwt } = this.props;
     stateCompanies = propCompanies.map((aCompany, idx) => {
       return (
-        
-        <Button 
+        <Button
           key={idx}
           onClick={e => {
             e.preventDefault();
@@ -49,7 +48,8 @@ class Pricing extends React.Component {
                 const { jwt } = response.data;
                 const { setCompanyUserJWT } = this.props;
                 setCompanyUserJWT(jwt);
-                this.setState({isCompanySelected: true});
+                this.setState({ isCompanySelected: true });
+              })
               .catch(err => {
                 console.log(err);
               });
@@ -59,8 +59,6 @@ class Pricing extends React.Component {
             <p>{aCompany.companyName}</p>
           </div>
         </Button>
-
-
       );
     });
 
@@ -82,19 +80,14 @@ class Pricing extends React.Component {
     const { companiesElementsToRender } = this.state;
 
     if (!this.state.isCompanySelected) {
-    return (
-      <div className="content ">
-          <h2 align="center">
-              Please select a company to continue
-          </h2>
-        {companiesElementsToRender}
-
-      </div>
-    );
+      return (
+        <div className="content ">
+          <h2 align="center">Please select a company to continue</h2>
+          {companiesElementsToRender}
+        </div>
+      );
     } else if (this.state.isCompanySelected) {
-        return (
-            <Dashboard/>
-        )
+      return <Dashboard />;
     }
   }
 }
