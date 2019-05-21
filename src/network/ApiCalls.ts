@@ -40,10 +40,9 @@ export function axiosPost(
   jwtToken?: string,
   contentType: contentType = "application/json"
 ): Promise<AxiosResponse> {
-  const headers = setHeaders(contentType, jwtToken);
   return new Promise((resolve, reject) => {
     Axios.post(endpoint, data, {
-      headers
+      headers: setHeaders(contentType, jwtToken)
     })
       .then(result => {
         resolve(result);
@@ -62,10 +61,9 @@ export function axiosPut(
   jwtToken?: string,
   contentType: contentType = "application/json"
 ) {
-  const headers = setHeaders(contentType, jwtToken);
   return new Promise((resolve, reject) => {
     Axios.put(endpoint, data, {
-      headers
+      headers: setHeaders(contentType, jwtToken)
     })
       .then(result => {
         resolve(result);
@@ -87,10 +85,9 @@ export function axiosGet(
   jwtToken?: string,
   contentType: contentType = "application/json"
 ): Promise<AxiosResponse> {
-  const headers = setHeaders(contentType, jwtToken);
   return new Promise((resolve, reject) => {
     Axios.get(endpoint, {
-      headers
+      headers: setHeaders(contentType, jwtToken)
     })
       .then(result => {
         resolve(result);
