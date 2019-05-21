@@ -6,7 +6,7 @@ import { SET_JWT_TOKEN, SET_COMPANY_USER_ID } from "../ActionTypes";
 
 const companyUserState = {
   jwt: "",
-  companyUserID: "",
+  companyUserID: ""
 };
 
 export const companyUserReducer = (state = companyUserState, action) => {
@@ -17,10 +17,10 @@ export const companyUserReducer = (state = companyUserState, action) => {
         jwt: action.jwt
       };
     case SET_COMPANY_USER_ID:
-    return {
+      return {
         ...state,
-      companyUserId: action.companyUserId
-      }
+        companyUserId: action.companyUserId
+      };
     default:
       return {
         ...state

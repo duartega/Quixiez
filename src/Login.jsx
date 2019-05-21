@@ -23,6 +23,7 @@ import {
   Col
 } from "reactstrap";
 
+const TESTING = true;
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,7 @@ class Login extends React.Component {
       emptyPassword: false,
       error: "has-danger form-group",
       register: false,
-      allCompanies: [],
+      allCompanies: []
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,6 +50,7 @@ class Login extends React.Component {
   }
   componentDidMount() {
     document.body.classList.toggle("login-page");
+    TESTING && console.log(this.props.companyUserReducer);
   }
 
   componentWillUnmount() {
@@ -57,13 +59,23 @@ class Login extends React.Component {
 
   handleSubmit() {
     const { email, password } = this.state;
-    if (email === "") { this.setState({emptyUsername: true})}
-    if (password === "") { this.setState({emptyPassword: true})}
+    if (email === "") {
+      this.setState({ emptyUsername: true });
+    }
+    if (password === "") {
+      this.setState({ emptyPassword: true });
+    }
 
     // if ((email || password) !== "")
     Axios.post(login, { email, password })
       .then(result => {
-        this.setState({ JWT: result.data["jwt"], loggedIn: true, allCompanies: result.data.companies});
+        const { jwt } = result.data;
+        this.setState({
+          JWT: jwt,
+          loggedIn: true,
+          allCompanies: result.data.companies
+        });
+        this.props.setCompanyUserJWT(jwt);
       })
       .catch(err => {
         console.log(err.response);
@@ -72,8 +84,8 @@ class Login extends React.Component {
         if (status === 401) {
           this.setState({
             alert: "Wrong username or password",
-            failed: 1,
-          })
+            failed: 1
+          });
           // alert("Wrong username or password");
         } else {
           // else unknown error
@@ -83,28 +95,39 @@ class Login extends React.Component {
   }
 
   handleChange(event) {
-    const {email, password} = this.state;
+    const { email, password } = this.state;
     this.setState({ password: event.target.value });
-    
-    if (email !== "") { this.setState({emptyUsername: false})}
-    if (password !== "") { this.setState({emptyPassword: false})}
+
+    if (email !== "") {
+      this.setState({ emptyUsername: false });
+    }
+    if (password !== "") {
+      this.setState({ emptyPassword: false });
+    }
   }
   handleChangeEmail(event) {
     this.setState({ email: event.target.value });
   }
 
   createAccount() {
-      this.setState({register: true})
+    this.setState({ register: true });
   }
 
   render() {
-    let empty_Username, empty_Password = "";
-    if (this.state.emptyUsername) { empty_Username = this.state.error }
-    else { empty_Username = "" }
-    if (this.state.emptyPassword) { empty_Password = this.state.error }
-    else { empty_Password = "" }
+    let empty_Username,
+      empty_Password = "";
+    if (this.state.emptyUsername) {
+      empty_Username = this.state.error;
+    } else {
+      empty_Username = "";
+    }
+    if (this.state.emptyPassword) {
+      empty_Password = this.state.error;
+    } else {
+      empty_Password = "";
+    }
 
-    if (this.state.loggedIn === false &&  this.state.register === false) {
+    if (this.state.loggedIn === false && this.state.register === false) {
       return (
         <div className="content">
           <Container>
@@ -119,39 +142,37 @@ class Login extends React.Component {
                     <CardTitle tag="h1">sign-in</CardTitle>
                   </CardHeader>
                   <CardBody>
-
-                  <div className={empty_Username}>
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="tim-icons icon-email-85" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        placeholder="Email"
-                        type="text"
-                        value={this.state.email}
-                        onChange={this.handleChangeEmail}
-                      />
-                    </InputGroup>
+                    <div className={empty_Username}>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="tim-icons icon-email-85" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="Email"
+                          type="text"
+                          value={this.state.email}
+                          onChange={this.handleChangeEmail}
+                        />
+                      </InputGroup>
                     </div>
 
                     <div className={empty_Password}>
-                    <InputGroup>
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="tim-icons icon-lock-circle" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        placeholder="Password"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                      />
-                    </InputGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="tim-icons icon-lock-circle" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="Password"
+                          type="password"
+                          value={this.state.password}
+                          onChange={this.handleChange}
+                        />
+                      </InputGroup>
                     </div>
-                    
                   </CardBody>
                   <CardFooter>
                     <Button
@@ -193,10 +214,11 @@ class Login extends React.Component {
           </Container>
         </div>
       );
-    }
-    else if (this.state.loggedIn === true) {
+    } else if (this.state.loggedIn === true) {
       return (
-        <SelectCompany companies={this.state.allCompanies}/> /** this needs to change to show more things and pass props */
+        <SelectCompany
+          companies={this.state.allCompanies}
+        /> /** this needs to change to show more things and pass props */
       );
     } else if (this.state.register) {
       return (
@@ -207,11 +229,7 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    reduxState: state
-  };
-};
+const mapStateToProps = ({ companyUserReducer }) => ({ companyUserReducer });
 
 const mapDispatchToProps = dispatch => {
   return {
