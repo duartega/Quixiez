@@ -22,6 +22,7 @@ import {
   Container,
   Col
 } from "reactstrap";
+import { axiosPost } from "./network/ApiCalls";
 
 
 class Login extends React.Component {
@@ -60,21 +61,24 @@ class Login extends React.Component {
     const { email, password } = this.state;
     if (email === "") {
       this.setState({ emptyUsername: true });
+      return;
     }
     if (password === "") {
       this.setState({ emptyPassword: true });
+      return;
     }
 
-    // if ((email || password) !== "")
-    Axios.post(login, { email, password })
+    axiosPost(login, { email, password })
       .then(result => {
-        const { jwt } = result.data;
+        const { jwt, companies } = result.data;
+        const { setCompanyUserJWT } = this.props;
+
         this.setState({
           JWT: jwt,
           loggedIn: true,
-          allCompanies: result.data.companies
+          allCompanies: companies
         });
-        this.props.setCompanyUserJWT(jwt);
+        setCompanyUserJWT(jwt);
       })
       .catch(err => {
         console.log(err.response);
