@@ -1,5 +1,4 @@
 {
-  "typescript.preferences.importModuleSpecifier": "relative",
   "flow.useNPMPackagedFlow": true,
   "editor.formatOnSave": true,
   "editor.detectIndentation": false,
@@ -8,5 +7,8 @@
 
   "javascript.validate.enable": false, // "editor.formatOnPaste": true, // "editor.wrappingIndent": "none", // "editor.autoIndent": false,
   "typescript.format.enable": false,
-  "editor.renderIndentGuides": true
+  "editor.renderIndentGuides": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "breadcrumbs.enabled": true,
+  "cSpell.userWords": ["indica", "twilio", "twiml", "typeorm"]
 }
