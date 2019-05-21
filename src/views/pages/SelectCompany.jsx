@@ -20,7 +20,7 @@ import { selectCompany } from "../../constants/routes";
 import { connect } from "react-redux";
 import Axios from "axios";
 import { setCompanyUserJWT } from "redux/actions";
-
+import { axiosPost } from "../../network/ApiCalls";
 class Pricing extends React.Component {
   state = {
     companiesElementsToRender: []
@@ -49,27 +49,12 @@ class Pricing extends React.Component {
             e.preventDefault();
             // console.log(e);
             console.log(aCompany);
-            Axios.post(
-              selectCompany,
-              {
-                companyId: aCompany.id
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${jwt}`,
-                  "Content-Type": `application/json`
-                }
-              }
-            )
-              .then(response => {
-                const { jwt } = response.data;
-                const { setCompanyUserJWT } = this.props;
-                setCompanyUserJWT(jwt);
-
-                console.log(response.data);
+            axiosPost(selectCompany, { companyId: aCompany.id }, jwt)
+              .then(result => {
+                console.log(result);
               })
               .catch(err => {
-                console.log("Error posting", err);
+                console.log(err);
               });
           }}
         >
