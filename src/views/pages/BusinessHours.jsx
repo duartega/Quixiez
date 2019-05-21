@@ -1,5 +1,5 @@
 import React from "react";
-import BusinessHoursTable from '../tables/BusinessHoursTable';
+import BusinessHoursTable from "../tables/BusinessHoursTable";
 
 // reactstrap components
 import {
@@ -13,28 +13,34 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      MondayOpenTime: "", MondayCloseTime: "",
-      TuesdayOpenTime: "", TuesdayCloseTime: "",
-      WednesdayOpenTime: "", WednesdayCloseTime: "",
-      ThursdayOpenTime: "", ThursdayCloseTime: "",
-      FridayOpenTime: "", FridayCloseTime: "",
-      SaturdayOpenTime: "", SaturdayCloseTime: "",
-      SundayOpenTime: "", SundayCloseTime: "",
-    }
+      MondayOpenTime: "",
+      MondayCloseTime: "",
+      TuesdayOpenTime: "",
+      TuesdayCloseTime: "",
+      WednesdayOpenTime: "",
+      WednesdayCloseTime: "",
+      ThursdayOpenTime: "",
+      ThursdayCloseTime: "",
+      FridayOpenTime: "",
+      FridayCloseTime: "",
+      SaturdayOpenTime: "",
+      SaturdayCloseTime: "",
+      SundayOpenTime: "",
+      SundayCloseTime: ""
+    };
   }
   render() {
     return (
       <>
         <div className="content">
-          <Row >
+          <Row>
             <Col md="8">
               <Card>
-                <CardHeader >
+                <CardHeader>
                   <h2 className="title">Business Hours</h2>
                 </CardHeader>
                 <CardBody>
@@ -47,7 +53,6 @@ class User extends React.Component {
                 </CardFooter>
               </Card>
             </Col>
-
           </Row>
         </div>
       </>

@@ -1,9 +1,9 @@
 import React from "react";
-import { axiosPost, axiosGet } from '../../network/ApiCalls';
-import { getAddress, getSocialMediaLinks } from '../../constants/routes';
-import { connect } from 'react-redux';
+import { axiosPost, axiosGet } from "../../network/ApiCalls";
+import { getAddress, getSocialMediaLinks } from "../../constants/routes";
+import { connect } from "react-redux";
 import { setCompanyUserJWT } from "../../redux/actions";
-import Hours from '../pages/BusinessHours';
+import Hours from "../pages/BusinessHours";
 
 // reactstrap components
 import {
@@ -20,9 +20,7 @@ import {
   Label
 } from "reactstrap";
 
-
 class User extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -39,47 +37,50 @@ class User extends React.Component {
       facebook: "",
       snapchat: "",
       instagram: "",
-      twitter: "",
+      twitter: ""
     };
   }
 
   componentDidMount() {
     const jwt = this.props.companyUserReducer.jwt;
-    axiosGet(getAddress, jwt).then(result => {
-      this.setState({
-        street: result.data['street'],
-        city: result.data['city'],
-        state: result.data['state'],
-        zip: result.data['zip'],
-        showStreet: result.data['showStreet'],
-        showCity: result.data['showCity'],
-        showState: result.data['showState'],
-        showZip: result.data['showZip'],
+    axiosGet(getAddress, jwt)
+      .then(result => {
+        this.setState({
+          street: result.data["street"],
+          city: result.data["city"],
+          state: result.data["state"],
+          zip: result.data["zip"],
+          showStreet: result.data["showStreet"],
+          showCity: result.data["showCity"],
+          showState: result.data["showState"],
+          showZip: result.data["showZip"]
+        });
       })
-    }).catch(err => {
-      console.log(err, err.resonse)
-    })
-    axiosGet(getSocialMediaLinks, jwt).then(result => {
-      this.setState({
-        facebook: result.data['facebookUrl'],
-        twitter: result.data['twitterUsername'],
-        snapchat: result.data['snapChatUsername'],
-        instagram: result.data['instagramUsername'],
+      .catch(err => {
+        console.log(err, err.response);
+      });
+    axiosGet(getSocialMediaLinks, jwt)
+      .then(result => {
+        this.setState({
+          facebook: result.data["facebookUrl"],
+          twitter: result.data["twitterUsername"],
+          snapchat: result.data["snapChatUsername"],
+          instagram: result.data["instagramUsername"]
+        });
       })
-    }).catch(err => {
-      console.log(err, err.resonse)
-    })
-  };
-
+      .catch(err => {
+        console.log(err, err.response);
+      });
+  }
 
   render() {
     return (
       <>
-        <div className="content" >
+        <div className="content">
           <Row className="mx-xl-xl">
             <Col md="8">
               <Card>
-                <CardHeader >
+                <CardHeader>
                   <h2 className="title">Company Overview</h2>
                 </CardHeader>
                 <CardBody>
@@ -88,10 +89,7 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
                           <label>Company</label>
-                          <Input
-                            defaultValue="Joe's Crab Shack"
-                            type="text"
-                          />
+                          <Input defaultValue="Joe's Crab Shack" type="text" />
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="3">
@@ -112,7 +110,10 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Business Email</label>
-                          <Input defaultValue="support@quixez.com" type="email" />
+                          <Input
+                            defaultValue="support@quixez.com"
+                            type="email"
+                          />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
@@ -143,15 +144,11 @@ class User extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Form>
-
                     <Row>
                       <Col className="px-md-3" md="12">
                         <FormGroup>
                           <label>Company Address</label>
-                          <Input
-                            defaultValue={this.state.street}
-                            type="text"
-                          />
+                          <Input defaultValue={this.state.street} type="text" />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -185,7 +182,6 @@ class User extends React.Component {
               </Card>
             </Col>
           </Row>
-
         </div>
         <div>
           <Row className="mx-xl-xl">
@@ -200,13 +196,21 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Facebook URL</label>
-                          <Input placeholder="www.facebook.com/" defaultValue={this.state.facebook} type="url" />
+                          <Input
+                            placeholder="www.facebook.com/"
+                            defaultValue={this.state.facebook}
+                            type="url"
+                          />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
                         <FormGroup>
                           <label>Instagram Username</label>
-                          <Input placeholder="www.instagram.com/" defaultValue={this.state.instagram} type="url" />
+                          <Input
+                            placeholder="www.instagram.com/"
+                            defaultValue={this.state.instagram}
+                            type="url"
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -215,16 +219,22 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Twitter Username</label>
-                          <Input placeholder="www.twitter.com/" defaultValue={this.state.twitter} type="url" />
+                          <Input
+                            placeholder="www.twitter.com/"
+                            defaultValue={this.state.twitter}
+                            type="url"
+                          />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
                         <FormGroup>
                           <label>Snapchat Username</label>
-                          <Input placeholder="@username" defaultValue={this.state.snapchat} type="url" />
+                          <Input
+                            placeholder="@username"
+                            defaultValue={this.state.snapchat}
+                            type="url"
+                          />
                         </FormGroup>
-
-
                       </Col>
                       {/* <FormGroup radio>
                           <Label radio>
@@ -235,7 +245,6 @@ class User extends React.Component {
                         </FormGroup> */}
                     </Row>
                   </Form>
-
                 </CardBody>
                 <CardFooter className="text-right">
                   <Button className="btn-fill" color="success" type="submit">
@@ -246,7 +255,7 @@ class User extends React.Component {
             </Col>
           </Row>
         </div>
-      <Hours/>
+        <Hours />
       </>
     );
   }
