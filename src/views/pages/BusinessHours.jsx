@@ -13,6 +13,20 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      MondayOpenTime: "", MondayCloseTime: "",
+      TuesdayOpenTime: "", TuesdayCloseTime: "",
+      WednesdayOpenTime: "", WednesdayCloseTime: "",
+      ThursdayOpenTime: "", ThursdayCloseTime: "",
+      FridayOpenTime: "", FridayCloseTime: "",
+      SaturdayOpenTime: "", SaturdayCloseTime: "",
+      SundayOpenTime: "", SundayCloseTime: "",
+    }
+  }
   render() {
     return (
       <>

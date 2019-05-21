@@ -1,7 +1,7 @@
 import React from "react";
 import Axios from "axios";
 import { login } from "./constants/routes.ts";
-import DashBoard from "./views/Dashboard";
+import SelectCompany from "./views/pages/SelectCompany";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "./redux/actions";
 import { Redirect } from "react-router-dom";
@@ -29,8 +29,8 @@ class Login extends React.Component {
 
     this.state = {
       JWT: "",
-      email: "",
-      password: "",
+      email: "joemissamore@live.com",
+      password: "testtest",
       loggedIn: false,
       alert: "",
       unkown: "",
@@ -39,6 +39,7 @@ class Login extends React.Component {
       emptyPassword: false,
       error: "has-danger form-group",
       register: false,
+      allCompanies: [],
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -62,7 +63,7 @@ class Login extends React.Component {
     // if ((email || password) !== "")
     Axios.post(login, { email, password })
       .then(result => {
-        this.setState({ JWT: result.data["jwt"], loggedIn: true });
+        this.setState({ JWT: result.data["jwt"], loggedIn: true, allCompanies: result.data.companies});
       })
       .catch(err => {
         console.log(err.response);
@@ -195,7 +196,7 @@ class Login extends React.Component {
     }
     else if (this.state.loggedIn === true) {
       return (
-        <DashBoard /> /** this needs to change to show more things and pass props */
+        <SelectCompany companies={this.state.allCompanies}/> /** this needs to change to show more things and pass props */
       );
     } else if (this.state.register) {
       return (
