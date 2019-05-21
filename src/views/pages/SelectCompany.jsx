@@ -19,6 +19,7 @@ import { selectCompany } from "../../constants/routes";
 
 import { connect } from "react-redux";
 import Axios from "axios";
+import { setCompanyUserJWT } from "redux/actions";
 
 class Pricing extends React.Component {
   state = {
@@ -29,13 +30,18 @@ class Pricing extends React.Component {
   componentDidMount() {
     document.body.classList.toggle("pricing-page");
     // console.log(this.props.companyUserReducer);
+  }
+
+  loadCompaniesComponents() {
     const { companies: propCompanies } = this.props;
 
     // console.log(propCompanies);
     let { companiesElementsToRender: stateCompanies } = this.state;
+    const { jwt } = this.props;
+    console.log("jwt", jwt);
     stateCompanies = propCompanies.map((aCompany, idx) => {
       console.log(aCompany);
-      const { jwt } = this.props;
+
       return (
         <Button
           key={idx}
@@ -50,12 +56,17 @@ class Pricing extends React.Component {
               },
               {
                 headers: {
-                  Authorization: `Bearer ${jwt}`
+                  Authorization: `Bearer ${jwt}`,
+                  "Content-Type": `application/json`
                 }
               }
             )
               .then(response => {
-                console.log(response);
+                const { jwt } = response.data;
+                const { setCompanyUserJWT } = this.props;
+                setCompanyUserJWT(jwt);
+
+                console.log(response.data);
               })
               .catch(err => {
                 console.log("Error posting", err);
@@ -74,7 +85,10 @@ class Pricing extends React.Component {
       //   companiesResponse: propCompanies
     });
   }
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (this.props.jwt !== prevProps.jwt) {
+      this.loadCompaniesComponents();
+    }
     // const { jwt } = this.props;
     // console.log(jwt);
     //   console.log();
@@ -150,8 +164,10 @@ class Pricing extends React.Component {
 }
 
 const mapStateToProps = ({ companyUserReducer: { jwt } }) => ({ jwt });
-
+const mapDispatchToProps = dispatch => ({
+  setCompanyUserJWT: jwt => dispatch(setCompanyUserJWT(jwt))
+});
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Pricing);
