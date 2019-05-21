@@ -19,19 +19,27 @@ const setHeaders = (contentType: contentType, jwtToken?: string) => {
       };
 };
 
+/** Post Requests */
+
+export function axiosPost(endpoint: string, data?: any): Promise<AxiosResponse>;
+
+export function axiosPost(
+  endpoint: string,
+  data?: any,
+  jwtToken?: string
+): Promise<AxiosResponse>;
 /**
- *
  * @param endpoint api endpoint
  * @param data data to be posted
  * @param jwtToken jwt token for authorization
  * @param contentType already set by default to "application/json"
  */
-export const axiosPost = (
+export function axiosPost(
   endpoint: string,
   data?: any,
   jwtToken?: string,
   contentType: contentType = "application/json"
-): Promise<AxiosResponse> => {
+): Promise<AxiosResponse> {
   const headers = setHeaders(contentType, jwtToken);
   return new Promise((resolve, reject) => {
     Axios.post(endpoint, data, {
@@ -44,9 +52,10 @@ export const axiosPost = (
         reject(err);
       });
   });
-};
+}
 
 /** Put Request */
+
 export function axiosPut(
   endpoint: string,
   data?: any,
