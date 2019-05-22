@@ -1,10 +1,12 @@
 import React from "react";
 
 // reactstrap components
-import { Card, CardBody, Row, Col, Table, Input } from "reactstrap";
+import { Card, CardBody, Row, Col, Table, Input, FormGroup } from "reactstrap";
 import { axiosGet } from "../../network/ApiCalls";
 import { companyHours as companyHoursEndpoint } from "../../constants/routes";
 import { connect } from "react-redux";
+import moment from "moment";
+import DateTime from "react-datetime";
 
 let companyHours = {
   created: "2019-05-14T23:44:18.712Z",
@@ -73,33 +75,59 @@ let Sunday = {
 // );
 
 class RegularTables extends React.Component {
-  state = {};
+  state = {
+    isLoading: true
+  };
 
   componentDidMount() {
     const { jwt } = this.props;
     console.log(jwt);
+    let timeObj = {};
     axiosGet(companyHoursEndpoint, jwt)
       .then(result => {
         const { data } = result;
         if (data !== {}) {
           delete data.created;
           delete data.updated;
-          const { sundayCloseUtcTime, created } = data;
-          // Create a new data
-          const testDate = new Date();
-          // set the time in utc
-          // time here is 01:05:02
-          testDate.setUTCHours(1, 5, 2);
-          // will print the locale time
-          // 6:05:02 PM
-          console.log(testDate.toLocaleTimeString());
+          for (let key in data) {
+            /**
+             * If the last 4 letters of the key are
+             * time we know that its a time property
+             * and we will format the time
+             */
+            if (
+              key.slice(key.length - 4).toLowerCase() === "time" &&
+              data[key]
+            ) {
+              /**
+               * Moment will format the time to an acceptable
+               * string for Date()
+               */
+              timeObj[key] = new Date(
+                // Moment formats the value
+                moment(data[key], "HH:mm:ss")
+                  // Tell moment that it's a UTC time
+                  .utc(true)
+                  // Convert the UTC time to local time
+                  .local()
+                  // Format it to a string
+                  .format()
+              );
+            } else {
+              /**
+               * Else it's another property
+               * as of writing this now the only
+               * other properties returned from
+               * this api response is isOpen<day_of_week>
+               */
+              timeObj[key] = data[key];
+            }
+          }
 
-          console.log(testDate.getTimezoneOffset());
-          console.log(typeof sundayCloseUtcTime);
-
-          this.setState({ ...data });
+          // Set the state
+          this.setState({ time: timeObj, isLoading: false });
         }
-        console.log(data);
+        console.log(this.state);
       })
       .catch(err => {
         console.log("err getting business hours", err);
@@ -108,8 +136,56 @@ class RegularTables extends React.Component {
 
   render() {
     console.log(this.state);
-    return (
+    /**
+     * If this.state.time exists
+     * destructor all of the values
+     * returned from the api call.
+     *
+     * IMPORTANT!!
+     * All of these are of type Date()
+     */
+    if (this.state.time) {
+      var {
+        fridayCloseUtcTime,
+        fridayOpenUtcTime,
+        id,
+        isOpenFriday,
+        isOpenMonday,
+        isOpenSaturday,
+        isOpenSunday,
+        isOpenThursday,
+        isOpenTuesday,
+        isOpenWednesday,
+        mondayCloseUtcTime,
+        mondayOpenUtcTime,
+        saturdayCloseUtcTime,
+        saturdayOpenUtcTime,
+        sundayCloseUtcTime,
+        sundayOpenUtcTime,
+        thursdayCloseUtcTime,
+        thursdayOpenUtcTime,
+        tuesdayCloseUtcTime,
+        tuesdayOpenUtcTime,
+        wednesdayCloseUtcTime,
+        wednesdayOpenUtcTime
+      } = this.state.time;
+      // For debugging prints out the time from the
+      // Date() object
+      // console.log(sundayCloseUtcTime.toTimeString());
+    }
+    const { isLoading } = this.state;
+    return isLoading ? null : (
       <>
+        {/* THIS WORKS OUTSIDE THE FORM
+        THE FORM IS STYLING PART OF THIS COMPONENT */}
+        <DateTime
+          dateFormat={false}
+          inputProps={{
+            className: "form-control",
+            placeholder: "Select Time"
+          }}
+          onChange={val => console.log("changed", val)}
+        />
         <div className="content">
           <Row>
             <Col className="mb-5" md="12">
@@ -129,7 +205,16 @@ class RegularTables extends React.Component {
                       <tr>
                         <td>Monday</td>
                         <td>
-                          <Input defaultValue={Monday.openTime} />
+                          {/* <Input defaultValue={Monday.openTime} /> */}
+
+                          <DateTime
+                            dateFormat={false}
+                            inputProps={{
+                              className: "form-control",
+                              placeholder: "Select Time"
+                            }}
+                            onChange={val => console.log("changed", val)}
+                          />
                         </td>
                         <td>
                           <Input defaultValue={Monday.closeTime} />
