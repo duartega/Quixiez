@@ -1,6 +1,6 @@
 import React from "react";
-import { axiosPost, axiosGet } from '../../network/ApiCalls';
-import { getAddress, getSocialMediaLinks } from '../../constants/routes';
+import { axiosPost, axiosGet, axiosPut } from '../../network/ApiCalls';
+import { getAddress, getSocialMediaLinks, putSocialMediaLinks, putAddress } from '../../constants/routes';
 import { connect } from 'react-redux';
 import { setCompanyUserJWT } from "../../redux/actions";
 import Hours from '../pages/BusinessHours';
@@ -27,6 +27,10 @@ class User extends React.Component {
     super(props);
     this.state = {
       JWT: "",
+      quixiezNumber: "",
+      businessNumber: "",
+      businessEmail: "",
+      businessWebsite: "",
       street: "",
       city: "",
       state: "",
@@ -40,11 +44,18 @@ class User extends React.Component {
       snapchat: "",
       instagram: "",
       twitter: "",
+      companyName: "",
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCompanyOverviewSave = this.handleCompanyOverviewSave.bind(this);
+    this.handleCompanyAddressSave = this.handleCompanyAddressSave.bind(this);
+    this.handleCompanySocialMediaSave = this.handleCompanySocialMediaSave.bind(this);
   }
 
   componentDidMount() {
     const jwt = this.props.companyUserReducer.jwt;
+    this.setState({companyName: this.props.companyUserReducer.companyName });
     axiosGet(getAddress, jwt).then(result => {
       this.setState({
         street: result.data['street'],
@@ -57,7 +68,7 @@ class User extends React.Component {
         showZip: result.data['showZip'],
       })
     }).catch(err => {
-      console.log(err, err.resonse)
+      console.log(err, err.response)
     })
     axiosGet(getSocialMediaLinks, jwt).then(result => {
       this.setState({
@@ -67,11 +78,42 @@ class User extends React.Component {
         instagram: result.data['instagramUsername'],
       })
     }).catch(err => {
-      console.log(err, err.resonse)
+      console.log(err, err.response)
     })
   };
 
+  handleChange = event =>
+    this.setState({ [event.target.name]: event.target.value });
+    
+  handleCompanyAddressSave() {
+    const { street, city, state, zip, showStreet, showCity, showState, showZip } = this.state
+    const jwt = this.props.companyUserReducer.jwt;
+    axiosPut(putAddress, { street, city, state, zip, showStreet, showCity, showState, showZip }, jwt).then(result => {
+      console.log(result);
+    }).catch(err => {
+      console.log(err, err.response);
+    });
+  }
 
+  handleCompanyOverviewSave() {
+
+  }
+
+  handleCompanySocialMediaSave() {
+    const facebookUrl = this.state.facebook;
+    const twitterUsername = this.state.twitter;
+    const snapChatUsername = this.state.snapchat;
+    const instagramUsername = this.state.instagram;
+
+    // lets create a bool that lets us know if the field has changed so the user doesnt spam the save button
+    const jwt = this.props.companyUserReducer.jwt;
+    axiosPut(putSocialMediaLinks, { facebookUrl, twitterUsername, snapChatUsername, instagramUsername }, jwt).then(result => {
+      console.log(result)
+    }).catch(err => {
+      console.log(err, err.response)
+    });
+  }
+  
   render() {
     return (
       <>
@@ -89,8 +131,9 @@ class User extends React.Component {
                         <FormGroup>
                           <label>Company</label>
                           <Input
-                            defaultValue="Joe's Crab Shack"
+                            defaultValue={this.state.companyName}
                             type="text"
+                            name="companyName" onChange={this.handleChange}
                           />
                         </FormGroup>
                       </Col>
@@ -98,13 +141,13 @@ class User extends React.Component {
                         <FormGroup>
                           <label>Quixiez Number</label>
                           {/* should change to number */}
-                          <Input defaultValue="123-456-7899" type="text" />
+                          <Input defaultValue="123-456-7899" type="text" name="quixiezNumber" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="4">
                         <FormGroup>
                           <label>Bussiness Number</label>
-                          <Input defaultValue="541-703-3114" type="text" />
+                          <Input defaultValue="541-703-3114" type="text" name="businessNumber" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -112,13 +155,13 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Business Email</label>
-                          <Input defaultValue="support@quixez.com" type="email" />
+                          <Input defaultValue="support@quixez.com" type="email" name="businessEmail" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
                         <FormGroup>
                           <label>Business Website</label>
-                          <Input defaultValue="www.quixiez.com" type="url" />
+                          <Input defaultValue="www.quixiez.com" type="url" name="businessWebsite" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -151,6 +194,7 @@ class User extends React.Component {
                           <Input
                             defaultValue={this.state.street}
                             type="text"
+                            name="street" onChange={this.handleChange}
                           />
                         </FormGroup>
                       </Col>
@@ -159,26 +203,26 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="4">
                         <FormGroup>
                           <label>City</label>
-                          <Input defaultValue={this.state.city} type="text" />
+                          <Input defaultValue={this.state.city} type="text" name="city" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="4">
                         <FormGroup>
                           <label>State</label>
-                          <Input defaultValue={this.state.state} type="text" />
+                          <Input defaultValue={this.state.state} type="text" name="state" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="4">
                         <FormGroup>
                           <label>Postal Code</label>
-                          <Input defaultValue={this.state.zip} type="number" />
+                          <Input defaultValue={this.state.zip} type="number" name="zip" onChange={this.handleChange}/>
                         </FormGroup>
                       </Col>
                     </Row>
                   </Form>
                 </CardBody>
                 <CardFooter className="text-right">
-                  <Button className="btn-fill" color="success" type="submit">
+                  <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanyAddressSave}>
                     Save
                   </Button>
                 </CardFooter>
@@ -200,13 +244,23 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Facebook URL</label>
-                          <Input placeholder="www.facebook.com/" defaultValue={this.state.facebook} type="url" />
+                          <Input
+                            placeholder="www.facebook.com/"
+                            defaultValue={this.state.facebook}
+                            type="url"
+                            name="facebook"
+                            onChange={this.handleChange} />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
                         <FormGroup>
                           <label>Instagram Username</label>
-                          <Input placeholder="www.instagram.com/" defaultValue={this.state.instagram} type="url" />
+                          <Input
+                            placeholder="www.instagram.com/"
+                            defaultValue={this.state.instagram}
+                            type="url"
+                            name="instagram"
+                            onChange={this.handleChange} />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -215,13 +269,25 @@ class User extends React.Component {
                       <Col className="pr-md-1" md="6">
                         <FormGroup>
                           <label>Twitter Username</label>
-                          <Input placeholder="www.twitter.com/" defaultValue={this.state.twitter} type="url" />
+                          <Input
+                            placeholder="www.twitter.com/"
+                            defaultValue={this.state.twitter}
+                            type="url" 
+                            name="twitter"
+                            onChange={this.handleChange}
+                            />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="6">
                         <FormGroup>
                           <label>Snapchat Username</label>
-                          <Input placeholder="@username" defaultValue={this.state.snapchat} type="url" />
+                          <Input
+                            placeholder="@username"
+                            defaultValue={this.state.snapchat}
+                            type="url" 
+                            name="snapchat"
+                            onChange={this.handleChange}
+                            />
                         </FormGroup>
 
 
@@ -238,7 +304,7 @@ class User extends React.Component {
 
                 </CardBody>
                 <CardFooter className="text-right">
-                  <Button className="btn-fill" color="success" type="submit">
+                  <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanySocialMediaSave}>
                     Save
                   </Button>
                 </CardFooter>
@@ -246,7 +312,7 @@ class User extends React.Component {
             </Col>
           </Row>
         </div>
-      <Hours/>
+        <Hours />
       </>
     );
   }
