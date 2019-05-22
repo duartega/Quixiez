@@ -19,7 +19,7 @@ import { selectCompany } from "../../constants/routes";
 import Dashboard from "../Dashboard";
 import { connect } from "react-redux";
 import Axios from "axios";
-import { setCompanyUserJWT } from "redux/actions";
+import { setCompanyUserJWT, setCompanyName } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
 import Settings from '../pages/GeneralSettings'
 
@@ -39,19 +39,19 @@ class Pricing extends React.Component {
     const { companies: propCompanies } = this.props;
 
     let { companiesElementsToRender: stateCompanies } = this.state;
-    const { jwt } = this.props;
+    const { jwt, setCompanyName, setCompanyUserJWT } = this.props;
     stateCompanies = propCompanies.map((aCompany, idx) => {
       return (
         <Button
           key={idx}
           onClick={e => {
             e.preventDefault();
-            // console.log(aCompany);
+            // console.log(aCompany.companyName);
             axiosPost(selectCompany, { companyId: aCompany.id }, jwt)
               .then(response => {
                 const { jwt } = response.data;
-                const { setCompanyUserJWT } = this.props;
                 setCompanyUserJWT(jwt);
+                setCompanyName(aCompany.companyName)
                 this.setState({ isCompanySelected: true });
               })
               .catch(err => {
@@ -91,14 +91,15 @@ class Pricing extends React.Component {
         </div>
       );
     } else if (this.state.isCompanySelected) {
-      return <Settings jwt={this.state.jwt} />;
+      return <Settings />;
     }
   }
 }
 
 const mapStateToProps = ({ companyUserReducer: { jwt } }) => ({ jwt });
 const mapDispatchToProps = dispatch => ({
-  setCompanyUserJWT: jwt => dispatch(setCompanyUserJWT(jwt))
+  setCompanyUserJWT: jwt => dispatch(setCompanyUserJWT(jwt)),
+  setCompanyName: companyName => dispatch(setCompanyName(companyName))
 });
 export default connect(
   mapStateToProps,
