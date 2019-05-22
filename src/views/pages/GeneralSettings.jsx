@@ -3,7 +3,7 @@ import { axiosPost, axiosGet, axiosPut } from '../../network/ApiCalls';
 import { getAddress, getSocialMediaLinks, putSocialMediaLinks, putAddress } from '../../constants/routes';
 import { connect } from 'react-redux';
 import { setCompanyUserJWT } from "../../redux/actions";
-import Hours from '../pages/BusinessHours';
+import Hours from "../pages/BusinessHours";
 
 // reactstrap components
 import {
@@ -20,9 +20,7 @@ import {
   Label
 } from "reactstrap";
 
-
 class User extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -117,11 +115,11 @@ class User extends React.Component {
   render() {
     return (
       <>
-        <div className="content" >
+        <div className="content">
           <Row className="mx-xl-xl">
             <Col md="8">
               <Card>
-                <CardHeader >
+                <CardHeader>
                   <h2 className="title">Company Overview</h2>
                 </CardHeader>
                 <CardBody>
@@ -186,7 +184,6 @@ class User extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <Form>
-
                     <Row>
                       <Col className="px-md-3" md="12">
                         <FormGroup>
@@ -229,7 +226,6 @@ class User extends React.Component {
               </Card>
             </Col>
           </Row>
-
         </div>
         <div>
           <Row className="mx-xl-xl">
@@ -289,8 +285,6 @@ class User extends React.Component {
                             onChange={this.handleChange}
                             />
                         </FormGroup>
-
-
                       </Col>
                       {/* <FormGroup radio>
                           <Label radio>
@@ -301,7 +295,6 @@ class User extends React.Component {
                         </FormGroup> */}
                     </Row>
                   </Form>
-
                 </CardBody>
                 <CardFooter className="text-right">
                   <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanySocialMediaSave}>
