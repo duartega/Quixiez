@@ -25,6 +25,7 @@ import DashBoard from "views/Dashboard";
 import Settings from "views/pages/GeneralSettings";
 import Invite from "views/pages/InviteEmployee";
 import Hours from "views/pages/BusinessHours";
+import Conversations from "views/pages/Conversations";
 
 
 
@@ -47,6 +48,7 @@ const Root = ({ store }) => (
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/hours" render={props => <Hours {...props} />} />
         <Route path="/invite" render={props => <Invite {...props} />} />
+        <Route path="/conversations" render={props => <Conversations {...props} />} />
 
 
         

@@ -77,7 +77,7 @@ class RegularTables extends React.Component {
 
   componentDidMount() {
     const { jwt } = this.props;
-    console.log(jwt);
+    // console.log(jwt);
     axiosGet(companyHoursEndpoint, jwt)
       .then(result => {
         const { data } = result;
@@ -92,14 +92,14 @@ class RegularTables extends React.Component {
           testDate.setUTCHours(1, 5, 2);
           // will print the locale time
           // 6:05:02 PM
-          console.log(testDate.toLocaleTimeString());
+          // console.log(testDate.toLocaleTimeString());
 
-          console.log(testDate.getTimezoneOffset());
-          console.log(typeof sundayCloseUtcTime);
+          // console.log(testDate.getTimezoneOffset());
+          // console.log(typeof sundayCloseUtcTime);
 
           this.setState({ ...data });
         }
-        console.log(data);
+        // console.log(data);
       })
       .catch(err => {
         console.log("err getting business hours", err);
@@ -107,7 +107,7 @@ class RegularTables extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <>
         <div className="content">
