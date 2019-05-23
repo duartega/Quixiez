@@ -42,17 +42,17 @@ class Popovers extends React.Component {
             <Col>
               <Row>
                 <Button color="link" disabled>
-                  <p style={{color:"#D1CDCD"}}>View Profile</p>
+                  <p style={{ color: "#D1CDCD" }}>View Profile</p>
                 </Button>
               </Row>
               <Row>
                 <Button color="link">
-                  <p style={{color:"black"}}>Order Complete</p>
+                  <p style={{ color: "black" }}>Order Complete</p>
                 </Button>
               </Row>
               <Row>
                 <Button color="link">
-                  <p style={{color:"black"}}>Cancel Order</p>
+                  <p style={{ color: "black" }}>Cancel Order</p>
                 </Button>
               </Row>
             </Col>

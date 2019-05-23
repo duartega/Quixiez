@@ -12,28 +12,26 @@ import "assets/css/nucleo-icons.css";
 import "assets/scss/black-dashboard-pro-react.scss?v=1.0.0";
 import "assets/demo/demo.css";
 import "react-notification-alert/dist/animate.css";
+import "assets/css/our-custom.css";
 import "routes.js";
 import Login from "Login";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 
 import Register from "views/pages/Register";
-import RegisterCompany from 'views/pages/RegisterCompany'
-import RegisterWithCompany from 'views/pages/RegisterWithCompany'
-import RegisterACompany from 'views/pages/CreateCompany'
+import RegisterCompany from "views/pages/RegisterCompany";
+import RegisterWithCompany from "views/pages/RegisterWithCompany";
+import RegisterACompany from "views/pages/CreateCompany";
 import DashBoard from "views/Dashboard";
 import Settings from "views/pages/GeneralSettings";
 import Invite from "views/pages/InviteEmployee";
 import Hours from "views/pages/BusinessHours";
-<<<<<<< Updated upstream
 
-
-
-=======
 import Conversations from "views/pages/Conversations";
 import AllConversations from "views/pages/AllConversations";
-import ConversationsList from './our-components/Tables/ConversationsList';
->>>>>>> Stashed changes
+import List from './our-components/Tables/ConversationsList';
+
+
 
 const hist = createBrowserHistory();
 
@@ -46,9 +44,18 @@ const Root = ({ store }) => (
         <Route path="/rtl" render={props => <RTLLayout {...props} />} />
         <Route path="/test" render={props => <Test {...props} />} />
         <Route path="/register" render={props => <Register {...props} />} />
-        <Route path="/registerCompany" render={props => <RegisterCompany {...props} />} />
-        <Route path="/registerACompany" render={props => <RegisterACompany {...props} />} />
-        <Route path="/registerWithCompany" render={props => <RegisterWithCompany {...props} />} />
+        <Route
+          path="/registerCompany"
+          render={props => <RegisterCompany {...props} />}
+        />
+        <Route
+          path="/registerACompany"
+          render={props => <RegisterACompany {...props} />}
+        />
+        <Route
+          path="/registerWithCompany"
+          render={props => <RegisterWithCompany {...props} />}
+        />
         <Route path="/dashboard" render={props => <DashBoard {...props} />} />
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/hours" render={props => <Hours {...props} />} />
@@ -58,15 +65,13 @@ const Root = ({ store }) => (
           render={props => <Conversations {...props} />}
         />
         <Route
+          path="/list"
+          render={props => <List {...props} />}
+        />
+        <Route
           path="/allconversations"
           render={props => <AllConversations {...props} />}
         />
-
-        <Route
-          path="/list"
-          render={props => <ConversationsList {...props} />}
-        />
-
         {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
         <Redirect from="/" to="/admin/dashboard" />
 

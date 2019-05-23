@@ -1,0 +1,149 @@
+/* @import "./black-dashboard-pro-react.css"; */
+
+/* Chat */
+.timeline-panel.our-timeline,
+.timeline-panel.our-timeline-inverted {
+  background: #27293d;
+  width: 45%;
+  float: left;
+  padding: 20px;
+  border-radius: 0.2857rem;
+  box-shadow: 0 1px 20px 0px rgba(0, 0, 0, 0.1);
+  color: #222a42;
+  /* Getting rid of extra space */
+  /* margin-bottom: 20px; */
+  margin-bottom: 0px;
+  position: relative;
+  background-color: #27293d;
+}
+
+.timeline-panel.our-timeline {
+  float: right;
+}
+
+.our-timeline > h6,
+.our-timeline-inverted > h6 {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  margin: 10px 0px 0px;
+}
+
+.our-timeline:before {
+  position: absolute;
+  top: 26px;
+  right: -15px;
+  display: inline-block;
+  border-top: 15px solid transparent;
+  border-left: 15px solid #222a42;
+  border-right: 0 solid #222a42;
+  border-bottom: 15px solid transparent;
+  content: " ";
+}
+
+.our-timeline:after {
+  position: absolute;
+  top: 27px;
+  right: -14px;
+  display: inline-block;
+  border-top: 14px solid transparent;
+  border-left: 14px solid #27293d;
+  border-right: 0 solid #27293d;
+  border-bottom: 14px solid transparent;
+  content: " ";
+}
+
+.our-timeline-inverted:before {
+  position: absolute;
+  top: 26px;
+  left: -15px;
+  display: inline-block;
+  border-top: 15px solid transparent;
+  border-left: 0 solid #222a42;
+  border-right: 15px solid #222a42;
+  border-bottom: 15px solid transparent;
+  content: " ";
+}
+
+.our-timeline-inverted:after {
+  position: absolute;
+  top: 27px;
+  left: -14px;
+  display: inline-block;
+  border-top: 14px solid transparent;
+  border-left: 0 solid #27293d;
+  border-right: 14px solid #27293d;
+  border-bottom: 14px solid transparent;
+  content: " ";
+}
+
+span.bubble-badge {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.card-no-margin {
+  /* Getting rid of extra space */
+  margin: 0;
+}
+
+/*************************/
+
+/* 
+.flex-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.flex-col-scroll {
+  flex-grow: 1;
+  overflow: auto;
+  min-height: 100%;
+}
+
+.flex-no-shrink {
+  flex-shrink: 0;
+} */
+/* This html, body and #root 
+ * makes the conversation page work in that it 
+ * does not allow the scrolling
+ * it may mess up other components */
+/* html, */
+/* body {
+  margin: 0;
+  height: 100%;
+} */
+
+/* #root { */
+/* height: 100%; */
+/* display: flex; */
+/* flex-direction: column; */
+/* } */
+
+/* Chat Header */
+
+.all-conversations-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+div.chat-header-container {
+  position: sticky;
+  top: 0;
+  /* margin: 0; */
+  /* width: 100%; */
+  /* background-color: #27293d; */
+  background-color: #1e1e2f;
+  z-index: 1000;
+  /* display: flex; */
+}
+
+.col.header-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.col.header-col > h3 {
+  margin: 0;
+}
