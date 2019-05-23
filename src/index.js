@@ -25,9 +25,15 @@ import DashBoard from "views/Dashboard";
 import Settings from "views/pages/GeneralSettings";
 import Invite from "views/pages/InviteEmployee";
 import Hours from "views/pages/BusinessHours";
+<<<<<<< Updated upstream
 
 
 
+=======
+import Conversations from "views/pages/Conversations";
+import AllConversations from "views/pages/AllConversations";
+import ConversationsList from './our-components/Tables/ConversationsList';
+>>>>>>> Stashed changes
 
 const hist = createBrowserHistory();
 
@@ -47,9 +53,20 @@ const Root = ({ store }) => (
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/hours" render={props => <Hours {...props} />} />
         <Route path="/invite" render={props => <Invite {...props} />} />
+        <Route
+          path="/conversations"
+          render={props => <Conversations {...props} />}
+        />
+        <Route
+          path="/allconversations"
+          render={props => <AllConversations {...props} />}
+        />
 
+        <Route
+          path="/list"
+          render={props => <ConversationsList {...props} />}
+        />
 
-        
         {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
         <Redirect from="/" to="/admin/dashboard" />
 
