@@ -12,6 +12,8 @@ export const getCompanyId = `${baseRoute}/company/predictions/?predict=`;
 export const register = `${baseRoute}/auth/company/register/user`;
 export const finishRegister = `${baseRoute}/company/user/request`;
 export const createCompany = `${baseRoute}/company/`;
+export const getCompanyInfo = `${baseRoute}/company/`;
+export const putCompanyInfo = `${baseRoute}/company/`;
 export const getAddress = `${baseRoute}/address/`;
 export const putAddress = `${baseRoute}/address/`;
 export const getSocialMediaLinks = `${baseRoute}/company/socialMedia/`;

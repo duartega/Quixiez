@@ -81,53 +81,29 @@ class RegularTables extends React.Component {
 
   componentDidMount() {
     const { jwt } = this.props;
-    console.log(jwt);
-    let timeObj = {};
+    // console.log(jwt);
     axiosGet(companyHoursEndpoint, jwt)
       .then(result => {
         const { data } = result;
         if (data !== {}) {
           delete data.created;
           delete data.updated;
-          for (let key in data) {
-            /**
-             * If the last 4 letters of the key are
-             * time we know that its a time property
-             * and we will format the time
-             */
-            if (
-              key.slice(key.length - 4).toLowerCase() === "time" &&
-              data[key]
-            ) {
-              /**
-               * Moment will format the time to an acceptable
-               * string for Date()
-               */
-              timeObj[key] = new Date(
-                // Moment formats the value
-                moment(data[key], "HH:mm:ss")
-                  // Tell moment that it's a UTC time
-                  .utc(true)
-                  // Convert the UTC time to local time
-                  .local()
-                  // Format it to a string
-                  .format()
-              );
-            } else {
-              /**
-               * Else it's another property
-               * as of writing this now the only
-               * other properties returned from
-               * this api response is isOpen<day_of_week>
-               */
-              timeObj[key] = data[key];
-            }
-          }
+          const { sundayCloseUtcTime, created } = data;
+          // Create a new data
+          const testDate = new Date();
+          // set the time in utc
+          // time here is 01:05:02
+          testDate.setUTCHours(1, 5, 2);
+          // will print the locale time
+          // 6:05:02 PM
+          // console.log(testDate.toLocaleTimeString());
 
-          // Set the state
-          this.setState({ time: timeObj, isLoading: false });
+          // console.log(testDate.getTimezoneOffset());
+          // console.log(typeof sundayCloseUtcTime);
+
+          this.setState({ ...data });
         }
-        console.log(this.state);
+        // console.log(data);
       })
       .catch(err => {
         console.log("err getting business hours", err);
