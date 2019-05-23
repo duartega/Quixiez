@@ -26,8 +26,12 @@ import DashBoard from "views/Dashboard";
 import Settings from "views/pages/GeneralSettings";
 import Invite from "views/pages/InviteEmployee";
 import Hours from "views/pages/BusinessHours";
+
 import Conversations from "views/pages/Conversations";
 import AllConversations from "views/pages/AllConversations";
+import List from './our-components/Tables/ConversationsList';
+
+
 
 const hist = createBrowserHistory();
 
@@ -60,11 +64,14 @@ const Root = ({ store }) => (
           path="/conversations"
           render={props => <Conversations {...props} />}
         />
-                <Route
+        <Route
+          path="/list"
+          render={props => <List {...props} />}
+        />
+        <Route
           path="/allconversations"
           render={props => <AllConversations {...props} />}
         />
-
         {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
         <Redirect from="/" to="/admin/dashboard" />
 
