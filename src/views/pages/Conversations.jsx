@@ -2,6 +2,7 @@ import React from "react";
 // react plugin used to create switch buttons
 import Switch from "react-bootstrap-switch";
 import { ChatBubble } from "../../our-components/ChatBubble";
+import { ChatFooter } from "../../our-components/ChatFooter";
 
 // reactstrap components
 import {
@@ -41,7 +42,7 @@ class Widgets extends React.Component {
     this.addMessage = this.addMessage.bind(this);
   }
   componentDidMount() {
-    this.scrollToBottom(); // scroll to bottom of screen on mount
+    this.initScroll(); // scroll to bottom of screen on mount
 
     {
       /* If you want to see the chat bubble come in switch to true*/
@@ -52,6 +53,10 @@ class Widgets extends React.Component {
       }, 2000);
     }
   }
+
+  initScroll = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "auto" });
+  };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
@@ -135,7 +140,10 @@ class Widgets extends React.Component {
   render() {
     return (
       <>
-        <div className="content" style={{ height: "100%", overflow: "auto" }}>
+        <div
+          className="content"
+          style={{ height: "100%", overflowX: "hidden", overflowY: "auto" }}
+        >
           {this.getNormalBubble()}
           <div
           // style={{ backgroundColor: "blue" }}
@@ -214,28 +222,14 @@ class Widgets extends React.Component {
             />
           </div>
         </div>
-
-        <br />
-        <br />
-        <br />
-        <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
-          <Row>
-            <Col md="5">
-              <Input
-                placeholder="Enter Message"
-                onChange={this.handleChange}
-                name={"message"}
-                value={this.state.message}
-                onKeyDown={this.keyPress}
-                autoFocus
-                style={{ backgroundColor: "#27293d" }}
-              />
-            </Col>
-            <Col lg="3">
-              <Button onClick={this.addMessage}>Send</Button>
-            </Col>
-          </Row>
-        </div>
+        <ChatFooter
+          inputPlaceHolder="Enter Message"
+          inputOnChange={this.handleChange}
+          inputName="message"
+          inputValue={this.state.message}
+          inputOnKeyDown={this.keyPress}
+          inputStyle={{ backgroundColor: "#27293d" }}
+        />
       </>
     );
   }
