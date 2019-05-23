@@ -20,7 +20,7 @@ import Dashboard from "../Dashboard";
 import { connect } from "react-redux";
 import Axios from "axios";
 import { setCompanyUserJWT } from "redux/actions";
-
+import { axiosPost } from "../../network/ApiCalls";
 class Pricing extends React.Component {
   state = {
     companiesElementsToRender: [],
@@ -43,26 +43,15 @@ class Pricing extends React.Component {
           key={idx}
           onClick={e => {
             e.preventDefault();
-            Axios.post(
-              selectCompany,
-              {
-                companyId: aCompany.id
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${jwt}`,
-                  "Content-Type": `application/json`
-                }
-              }
-            )
+            console.log(aCompany);
+            axiosPost(selectCompany, { companyId: aCompany.id }, jwt)
               .then(response => {
                 const { jwt } = response.data;
                 const { setCompanyUserJWT } = this.props;
                 setCompanyUserJWT(jwt);
                 this.setState({isCompanySelected: true});
-              })
               .catch(err => {
-                console.log("Error posting", err);
+                console.log(err);
               });
           }}
         >
