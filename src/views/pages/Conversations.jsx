@@ -183,7 +183,7 @@ class Widgets extends React.Component {
         <br/><br/><br/>
         <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
           <Row>
-          <Col md="9">
+          <Col md="5">
           <Input placeholder="Enter Message"
             onChange={this.handleChange}
             name={"message"}
