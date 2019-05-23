@@ -9,13 +9,18 @@
   border-radius: 0.2857rem;
   box-shadow: 0 1px 20px 0px rgba(0, 0, 0, 0.1);
   color: #222a42;
-  margin-bottom: 20px;
+  /* Getting rid of extra space */
+  /* margin-bottom: 20px; */
+  margin-bottom: 0px;
   position: relative;
   background-color: #27293d;
-  /* margin: 500px; */
 }
 
-.our-timeline,
+.timeline-panel.our-timeline {
+  float: right;
+}
+
+.our-timeline > h6,
 .our-timeline-inverted > h6 {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 400;
@@ -68,4 +73,14 @@
   border-right: 14px solid #27293d;
   border-bottom: 14px solid transparent;
   content: " ";
+}
+
+span.bubble-badge {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.card-no-margin {
+  /* Getting rid of extra space */
+  margin: 0;
 }
