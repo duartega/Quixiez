@@ -3,31 +3,9 @@ import React from "react";
 import Switch from "react-bootstrap-switch";
 import { ChatBubble } from "../../our-components/ChatBubble";
 import { ChatFooter } from "../../our-components/ChatFooter";
-
+import { ChatHeader } from "../../our-components/ChatHeader";
 // reactstrap components
-import {
-  Badge,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardImg,
-  CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
-  ListGroupItem,
-  ListGroup,
-  Table,
-  Row,
-  Col,
-  UncontrolledTooltip
-} from "reactstrap";
+import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
 class Widgets extends React.Component {
   constructor() {
@@ -42,7 +20,7 @@ class Widgets extends React.Component {
     this.addMessage = this.addMessage.bind(this);
   }
   componentDidMount() {
-    this.initScroll(); // scroll to bottom of screen on mount
+    this.scrollToBottom(); // scroll to bottom of screen on mount
 
     {
       /* If you want to see the chat bubble come in switch to true*/
@@ -53,10 +31,6 @@ class Widgets extends React.Component {
       }, 2000);
     }
   }
-
-  initScroll = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "auto" });
-  };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
@@ -132,7 +106,7 @@ class Widgets extends React.Component {
   };
 
   keyPress = e => {
-    if (e.keyCode == 13 && this.state.message !== "") {
+    if (e.keyCode === 13 && this.state.message !== "") {
       this.testBubble();
     }
   };
@@ -141,26 +115,12 @@ class Widgets extends React.Component {
     return (
       <>
         {/* Header */}
-        {/* <div className="chat-header-container"> */}
-        <Row className="chat-header-container">
-          <Col>
-            <h3 style={{ textAlign: "center" }}>Test</h3>
-          </Col>
-          <br />
-          <br />
-          <br />
-        </Row>
-        {/* </div> */}
+        <ChatHeader />
 
         {/* Header */}
-        <div
-          className="content"
-          // style={{ height: "100%", overflowX: "hidden", overflowY: "scroll" }}
-        >
+        <div className="content">
           {this.getNormalBubble()}
-          <div
-          // style={{ backgroundColor: "blue" }}
-          >
+          <div style={{ height: "100%", overflow: "scroll" }}>
             <ChatBubble
               badgeColor="warning"
               badgeLabel="Gabe"
@@ -247,5 +207,4 @@ class Widgets extends React.Component {
     );
   }
 }
-
 export default Widgets;

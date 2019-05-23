@@ -1,5 +1,6 @@
 /* @import "./black-dashboard-pro-react.css"; */
 
+/* Chat */
 .timeline-panel.our-timeline,
 .timeline-panel.our-timeline-inverted {
   background: #27293d;
@@ -85,21 +86,6 @@ span.bubble-badge {
   margin: 0;
 }
 
-/* This html, body and #root 
- * makes the conversation page work in that it 
- * does not allow the scrolling
- * it may mess up other components */
-html,
-/* body {
-  margin: 0;
-  height: 100%;
-} */
-
-/* #root {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-} */
 /*************************/
 
 /* 
@@ -119,6 +105,21 @@ html,
 .flex-no-shrink {
   flex-shrink: 0;
 } */
+/* This html, body and #root 
+ * makes the conversation page work in that it 
+ * does not allow the scrolling
+ * it may mess up other components */
+/* html, */
+/* body {
+  margin: 0;
+  height: 100%;
+} */
+
+/* #root { */
+/* height: 100%; */
+/* display: flex; */
+/* flex-direction: column; */
+/* } */
 
 /* Chat Header */
 
@@ -130,9 +131,19 @@ html,
 div.chat-header-container {
   position: sticky;
   top: 0;
+  /* margin: 0; */
+  /* width: 100%; */
+  /* background-color: #27293d; */
+  background-color: #1e1e2f;
+  z-index: 1000;
+  /* display: flex; */
+}
+
+.col.header-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.col.header-col > h3 {
   margin: 0;
-  /* max-width: 100%; */
-  width: 100%;
-  background-color: red;
-  /* z-index: 1000; */
 }
