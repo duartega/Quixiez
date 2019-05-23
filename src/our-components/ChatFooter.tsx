@@ -31,7 +31,7 @@ export class ChatFooter extends Component<Props> {
         <br />
         <br />
         <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
-          <Row>
+          <Row style={{ position: "fixed", bottom: "0", width: "100%" }}>
             <Col md="5">
               <Input
                 placeholder={inputPlaceHolder}

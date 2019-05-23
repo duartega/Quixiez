@@ -121,12 +121,12 @@ span.bubble-badge {
 /* flex-direction: column; */
 /* } */
 
-/* Chat Header */
-
 .all-conversations-container {
   height: 100%;
   overflow: hidden;
 }
+
+/* Chat Header */
 
 div.chat-header-container {
   position: sticky;
