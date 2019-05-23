@@ -34,7 +34,7 @@ class Widgets extends React.Component {
     this.showNormalBubble = false;
     this.state = {
       testBubble: [],
-      message: "",
+      message: ""
     };
     this.key = 1;
     this.handleChange = this.handleChange.bind(this);
@@ -42,7 +42,7 @@ class Widgets extends React.Component {
   }
   componentDidMount() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
-  
+
     {
       /* If you want to see the chat bubble come in switch to true*/
     }
@@ -53,12 +53,13 @@ class Widgets extends React.Component {
     }
   }
 
-   // scroll to bottom of screen when called
+  // scroll to bottom of screen when called
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  }
+  };
   componentDidUpdate() {
-    this.scrollToBottom();  // scroll to bottom of screen on mount
+    console.log("component did update");
+    this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
   getNormalBubble = () =>
@@ -105,7 +106,7 @@ class Widgets extends React.Component {
         key={this.key++}
         badgeColor="info"
         badgeLabel="Joe"
-        message= {this.state.message}
+        message={this.state.message}
         timePassed="7 Days"
         // inverted
       />
@@ -117,25 +118,24 @@ class Widgets extends React.Component {
   };
 
   handleChange = event =>
-    this.setState({ [event.target.name]: event.target.value })
+    this.setState({ [event.target.name]: event.target.value });
 
   addMessage = () => {
     if (this.state.message !== "") {
       this.testBubble();
     }
-  }
+  };
 
   keyPress = e => {
     if (e.keyCode == 13 && this.state.message !== "") {
       this.testBubble();
     }
- }
+  };
 
   render() {
     return (
       <>
-        <div className="content"
-          style={{height:"100%", overflow:"auto"}}>
+        <div className="content" style={{ height: "100%", overflow: "auto" }}>
           {this.getNormalBubble()}
           <div
           // style={{ backgroundColor: "blue" }}
@@ -175,31 +175,66 @@ class Widgets extends React.Component {
               timePassed="7 Days"
               inverted
             />
+            <ChatBubble
+              badgeColor="warning"
+              badgeLabel="Gabe"
+              message="Hey Test Bubble"
+              timePassed="7 Days"
+              inverted
+            />
+            <ChatBubble
+              badgeColor="warning"
+              badgeLabel="Gabe"
+              message="Hey Test Bubble"
+              timePassed="7 Days"
+              inverted
+            />
+            <ChatBubble
+              badgeColor="warning"
+              badgeLabel="Gabe"
+              message="Hey Test Bubble"
+              timePassed="7 Days"
+              inverted
+            />
+            <ChatBubble
+              badgeColor="warning"
+              badgeLabel="Gabe"
+              message="Hey Test Bubble"
+              timePassed="7 Days"
+              inverted
+            />
 
             {this.state.testBubble.map(aTestBubble => aTestBubble)}
-          </div >
+
+            {/* Scroll to bottom of screen on mount */}
+            <div
+              ref={el => {
+                this.messagesEnd = el;
+              }}
+            />
+          </div>
         </div>
 
-        <br/><br/><br/>
+        <br />
+        <br />
+        <br />
         <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
           <Row>
-          <Col md="5">
-          <Input placeholder="Enter Message"
-            onChange={this.handleChange}
-            name={"message"}
+            <Col md="5">
+              <Input
+                placeholder="Enter Message"
+                onChange={this.handleChange}
+                name={"message"}
                 value={this.state.message}
                 onKeyDown={this.keyPress}
                 autoFocus
-                style={{backgroundColor: "#27293d"}}
+                style={{ backgroundColor: "#27293d" }}
               />
-          </Col>
-          <Col lg="3">
-            <Button onClick={this.addMessage} >Send</Button>
             </Col>
-            </Row>
-          </div>
-        {/* Scroll to bottom of screen on mount */}
-        <div ref={(el) => { this.messagesEnd = el; }}>
+            <Col lg="3">
+              <Button onClick={this.addMessage}>Send</Button>
+            </Col>
+          </Row>
         </div>
       </>
     );
