@@ -147,3 +147,10 @@ div.chat-header-container {
 .col.header-col > h3 {
   margin: 0;
 }
+
+/* Chat footer */
+.row.chat-footer-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

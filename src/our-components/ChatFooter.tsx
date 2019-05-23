@@ -26,28 +26,27 @@ export class ChatFooter extends Component<Props> {
     } = this.props;
     return (
       <>
-        {/* <div style={{ marginBottom: "20px" }} /> */}
         <br />
         <br />
         <br />
-        <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
-          <Row style={{ position: "fixed", bottom: "0", width: "100%" }}>
-            <Col md="5">
-              <Input
-                placeholder={inputPlaceHolder}
-                onChange={inputOnChange}
-                name={inputName}
-                value={inputValue}
-                onKeyDown={inputOnKeyDown}
-                autoFocus
-                style={inputStyle}
-              />
-            </Col>
-            <Col lg="3">
-              <Button onClick={buttonOnClick}>Send</Button>
-            </Col>
-          </Row>
-        </div>
+
+        <Row className="chat-footer-container">
+          <Col md="5">
+            <Input
+              placeholder={inputPlaceHolder}
+              onChange={inputOnChange}
+              name={inputName}
+              value={inputValue}
+              onKeyDown={inputOnKeyDown}
+              autoFocus
+              style={inputStyle}
+            />
+          </Col>
+          <Col lg="3">
+            <Button onClick={buttonOnClick}>Send</Button>
+          </Col>
+        </Row>
+        {/* </div> */}
       </>
     );
   }
