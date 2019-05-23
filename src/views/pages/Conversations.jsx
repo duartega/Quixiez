@@ -16,9 +16,8 @@ class Widgets extends React.Component {
       message: ""
     };
     this.key = 1;
-    this.handleChange = this.handleChange.bind(this);
-    this.addMessage = this.addMessage.bind(this);
   }
+
   componentDidMount() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
 
@@ -187,6 +186,16 @@ class Widgets extends React.Component {
 
           {this.state.testBubble.map(aTestBubble => aTestBubble)}
 
+          {/* </div> */}
+          <ChatFooter
+            inputPlaceHolder="Enter Message"
+            inputOnChange={this.handleChange}
+            inputName="message"
+            inputValue={this.state.message}
+            inputOnKeyDown={this.keyPress}
+            inputStyle={{ backgroundColor: "#27293d" }}
+          />
+
           {/* Scroll to bottom of screen on mount */}
           <div
             ref={el => {
@@ -194,15 +203,6 @@ class Widgets extends React.Component {
             }}
           />
         </div>
-        {/* </div> */}
-        <ChatFooter
-          inputPlaceHolder="Enter Message"
-          inputOnChange={this.handleChange}
-          inputName="message"
-          inputValue={this.state.message}
-          inputOnKeyDown={this.keyPress}
-          inputStyle={{ backgroundColor: "#27293d" }}
-        />
       </>
     );
   }
