@@ -2,31 +2,10 @@ import React from "react";
 // react plugin used to create switch buttons
 import Switch from "react-bootstrap-switch";
 import { ChatBubble } from "../../our-components/ChatBubble";
-
+import { ChatFooter } from "../../our-components/ChatFooter";
+import { ChatHeader } from "../../our-components/ChatHeader";
 // reactstrap components
-import {
-  Badge,
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardImg,
-  CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
-  ListGroupItem,
-  ListGroup,
-  Table,
-  Row,
-  Col,
-  UncontrolledTooltip
-} from "reactstrap";
+import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
 class Widgets extends React.Component {
   constructor() {
@@ -127,7 +106,7 @@ class Widgets extends React.Component {
   };
 
   keyPress = e => {
-    if (e.keyCode == 13 && this.state.message !== "") {
+    if (e.keyCode === 13 && this.state.message !== "") {
       this.testBubble();
     }
   };
@@ -135,11 +114,13 @@ class Widgets extends React.Component {
   render() {
     return (
       <>
-        <div className="content" style={{ height: "100%", overflow: "auto" }}>
+        {/* Header */}
+        <ChatHeader />
+
+        {/* Header */}
+        <div className="content">
           {this.getNormalBubble()}
-          <div
-          // style={{ backgroundColor: "blue" }}
-          >
+          <div style={{ height: "100%", overflow: "scroll" }}>
             <ChatBubble
               badgeColor="warning"
               badgeLabel="Gabe"
@@ -214,31 +195,16 @@ class Widgets extends React.Component {
             />
           </div>
         </div>
-
-        <br />
-        <br />
-        <br />
-        <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
-          <Row>
-            <Col md="5">
-              <Input
-                placeholder="Enter Message"
-                onChange={this.handleChange}
-                name={"message"}
-                value={this.state.message}
-                onKeyDown={this.keyPress}
-                autoFocus
-                style={{ backgroundColor: "#27293d" }}
-              />
-            </Col>
-            <Col lg="3">
-              <Button onClick={this.addMessage}>Send</Button>
-            </Col>
-          </Row>
-        </div>
+        <ChatFooter
+          inputPlaceHolder="Enter Message"
+          inputOnChange={this.handleChange}
+          inputName="message"
+          inputValue={this.state.message}
+          inputOnKeyDown={this.keyPress}
+          inputStyle={{ backgroundColor: "#27293d" }}
+        />
       </>
     );
   }
 }
-
 export default Widgets;

@@ -9,18 +9,21 @@ class AllConversations extends React.Component {
   render() {
     return (
       // <body style={{ height: "100%", margin: "0", overflow: "hidden"}}>
+      // <Row className="all-conversations-container">
       <Row>
-        <Col>
+        {/* <Col>
           <BusinessHours />
-        </Col>
+        </Col> */}
 
-        <Col
+        {/* <Col
           style={{
             backgroundColor: "green",
-            "overflow-y": "auto",
-            maxHeight: "100%"
+            overflowY: "auto",
+            maxHeight: "100%",
+            maxWidth: "100%"
           }}
-        >
+        > */}
+        <Col style={{ overflowY: "scroll" }}>
           <Conversations />
         </Col>
       </Row>
