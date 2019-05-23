@@ -85,18 +85,24 @@ span.bubble-badge {
   margin: 0;
 }
 
+/* This html, body and #root 
+ * makes the conversation page work in that it 
+ * does not allow the scrolling
+ * it may mess up other components */
 html,
-body {
+/* body {
   margin: 0;
   height: 100%;
-}
+} */
 
-#root {
+/* #root {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
+} */
+/*************************/
 
+/* 
 .flex-section {
   flex-grow: 1;
   display: flex;
@@ -112,4 +118,21 @@ body {
 
 .flex-no-shrink {
   flex-shrink: 0;
+} */
+
+/* Chat Header */
+
+.all-conversations-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+div.chat-header-container {
+  position: sticky;
+  top: 0;
+  margin: 0;
+  /* max-width: 100%; */
+  width: 100%;
+  background-color: red;
+  /* z-index: 1000; */
 }

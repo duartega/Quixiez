@@ -140,9 +140,22 @@ class Widgets extends React.Component {
   render() {
     return (
       <>
+        {/* Header */}
+        {/* <div className="chat-header-container"> */}
+        <Row className="chat-header-container">
+          <Col>
+            <h3 style={{ textAlign: "center" }}>Test</h3>
+          </Col>
+          <br />
+          <br />
+          <br />
+        </Row>
+        {/* </div> */}
+
+        {/* Header */}
         <div
           className="content"
-          style={{ height: "100%", overflowX: "hidden", overflowY: "auto" }}
+          // style={{ height: "100%", overflowX: "hidden", overflowY: "scroll" }}
         >
           {this.getNormalBubble()}
           <div
