@@ -27,6 +27,7 @@ import Settings from "views/pages/GeneralSettings";
 import Invite from "views/pages/InviteEmployee";
 import Hours from "views/pages/BusinessHours";
 import Conversations from "views/pages/Conversations";
+import AllConversations from "views/pages/AllConversations";
 
 const hist = createBrowserHistory();
 
@@ -58,6 +59,10 @@ const Root = ({ store }) => (
         <Route
           path="/conversations"
           render={props => <Conversations {...props} />}
+        />
+                <Route
+          path="/allconversations"
+          render={props => <AllConversations {...props} />}
         />
 
         {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
