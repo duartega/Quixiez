@@ -32,6 +32,20 @@ class Widgets extends React.Component {
   constructor() {
     super();
     this.showNormalBubble = false;
+    this.state = {
+      testBubble: []
+    };
+    this.key = 1;
+  }
+  componentDidMount() {
+    {
+      /* If you want to see the chat bubble come in switch to true*/
+    }
+    if (false) {
+      setInterval(() => {
+        this.testBubble();
+      }, 2000);
+    }
   }
 
   getNormalBubble = () =>
@@ -71,12 +85,33 @@ class Widgets extends React.Component {
         </Col>
       </Row>
     ) : null;
+
+  testBubble = () => {
+    console.log("testbubble");
+    const testBubble = (
+      <ChatBubble
+        key={this.key++}
+        badgeColor="warning"
+        badgeLabel="Gabe"
+        message="From function Test Bubble"
+        timePassed="7 Days"
+        inverted
+      />
+    );
+    const { testBubble: testBubbleState } = this.state;
+    testBubbleState.push(testBubble);
+
+    this.setState({ testBubble: testBubbleState });
+  };
   render() {
+    console.log(this.state);
     return (
       <>
         <div className="content">
           {this.getNormalBubble()}
-          <div style={{ backgroundColor: "blue" }}>
+          <div
+          // style={{ backgroundColor: "blue" }}
+          >
             <ChatBubble
               badgeColor="warning"
               badgeLabel="Gabe"
@@ -96,6 +131,7 @@ class Widgets extends React.Component {
               message="Hey Man Reply!"
               timePassed="7 Days"
             />
+
             <ChatBubble
               badgeColor="warning"
               badgeLabel="Gabe"
@@ -103,6 +139,16 @@ class Widgets extends React.Component {
               timePassed="7 Days"
               inverted
             />
+
+            <ChatBubble
+              badgeColor="warning"
+              badgeLabel="Gabe"
+              message="Hey Test Bubble"
+              timePassed="7 Days"
+              inverted
+            />
+
+            {this.state.testBubble.map(aTestBubble => aTestBubble)}
           </div>
         </div>
       </>

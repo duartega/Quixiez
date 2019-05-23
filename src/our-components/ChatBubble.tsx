@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col, Card, CardBody, Badge } from "reactstrap";
-
+import Slide from "@material-ui/core/Slide";
 interface Props {
   badgeColor: "primary" | "info" | "success" | "warning" | "danger";
   badgeLabel: string;
@@ -12,34 +12,36 @@ interface Props {
 export const ChatBubble = (props: Props) => {
   const { badgeColor, badgeLabel, message, timePassed, inverted } = props;
   return (
-    <Row className="mx-xl-xl">
-      <Col>
-        <Card className="card-timeline card-plain card-no-margin">
-          <CardBody>
-            <div
-              className={
-                inverted
-                  ? "timeline-panel our-timeline-inverted"
-                  : "timeline-panel our-timeline"
-              }
-            >
-              <div className="timeline-heading">
-                <Badge color={badgeColor} className="bubble-badge">
-                  {badgeLabel}
-                </Badge>
+    <Slide direction="up" in={true} mountOnEnter>
+      <Row className="mx-xl-xl">
+        <Col>
+          <Card className="card-timeline card-plain card-no-margin">
+            <CardBody>
+              <div
+                className={
+                  inverted
+                    ? "timeline-panel our-timeline-inverted"
+                    : "timeline-panel our-timeline"
+                }
+              >
+                <div className="timeline-heading">
+                  <Badge color={badgeColor} className="bubble-badge">
+                    {badgeLabel}
+                  </Badge>
+                </div>
+                <div className="timeline-body">
+                  <p>{message}</p>
+                </div>
+                <h6>
+                  <i className="ti-time" />
+                  {timePassed} ago
+                </h6>
               </div>
-              <div className="timeline-body">
-                <p>{message}</p>
-              </div>
-              <h6>
-                <i className="ti-time" />
-                {timePassed} ago
-              </h6>
-            </div>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </Slide>
   );
 };
 
