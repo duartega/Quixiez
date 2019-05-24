@@ -117,7 +117,7 @@ class Widgets extends React.Component {
         <ChatHeader />
 
         {/* Header */}
-        <div className="content" style={{ height: "100%", overflow: "scroll" }}>
+        {/* <div className="content" style={{ height: "100%", overflow: "auto"}}> */}
           {this.getNormalBubble()}
           {/* <div style={{ height: "100%", overflow: "scroll" }}> */}
           <ChatBubble
@@ -195,7 +195,7 @@ class Widgets extends React.Component {
               this.messagesEnd = el;
             }}
           />
-        </div>
+        {/* </div> */}
 
         <ChatFooter
           inputPlaceHolder="Enter Message"
