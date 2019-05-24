@@ -11,20 +11,16 @@ interface Props {
 
 export const ChatBubble = (props: Props) => {
   const { badgeColor, badgeLabel, message, timePassed, inverted } = props;
+  const className = "timeline-panel our-timeline";
 
   return (
     <Slide direction="up" in={true} mountOnEnter>
-      <Row className="mx-xl-xl">
+      {/* <Row className="mx-xl-xl"> */}
+      <Row className="mx-2">
         <Col>
           <Card className="card-timeline card-plain card-no-margin">
             <CardBody>
-              <div
-                className={
-                  inverted
-                    ? "timeline-panel our-timeline-inverted"
-                    : "timeline-panel our-timeline"
-                }
-              >
+              <div className={inverted ? `${className}-inverted` : className}>
                 <div className="timeline-heading">
                   <Badge color={badgeColor} className="bubble-badge">
                     {badgeLabel}
