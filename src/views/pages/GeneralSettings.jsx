@@ -89,7 +89,6 @@ class User extends React.Component {
     axiosGet(getCompanyInfo, jwt)
       .then(result => {
         const { data } = result;
-        console.log(data);
         delete data.created;
         delete data.updated;
         delete data.id;
@@ -135,7 +134,6 @@ class User extends React.Component {
       showZip
     } = this.state;
     const jwt = this.props.companyUserReducer.jwt;
-    console.log("submitted: ", showStreet);
 
     if (this.state.hasInfoChanged) {
       axiosPut(
@@ -144,7 +142,6 @@ class User extends React.Component {
         jwt
       )
         .then(result => {
-          // console.log(result);
           this.setState({ alert: "success" });
         })
         .catch(err => {

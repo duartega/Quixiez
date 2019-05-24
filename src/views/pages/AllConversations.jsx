@@ -20,9 +20,6 @@ class AllConversations extends React.Component {
 
     this.headerHeightWithPadding = 66;
   }
-  componentWillMount() {
-    console.log(window.innerHeight);
-  }
 
   render() {
     return (
