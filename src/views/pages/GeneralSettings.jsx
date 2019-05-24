@@ -240,7 +240,7 @@ class User extends React.Component {
             </Row>
           </div>
 
-          <div>
+          <div className="content">
             <Row className="mx-xl-xl">
               <Col md="8">
                 <Card>
@@ -302,7 +302,7 @@ class User extends React.Component {
               </Col>
             </Row>
           </div>
-          <div>
+          {/* <div className="content">
             <Row className="mx-xl-xl">
               <Col md="8">
                 <Card>
@@ -372,7 +372,7 @@ class User extends React.Component {
                 </Card>
               </Col>
             </Row>
-          </div>
+          </div> */}
           {/* <Hours /> */}
         </>
       );
