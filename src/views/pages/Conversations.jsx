@@ -106,6 +106,7 @@ class Widgets extends React.Component {
 
   keyPress = e => {
     if (e.keyCode === 13 && this.state.message !== "") {
+      console.log("enter")
       this.testBubble();
     }
   };
@@ -204,6 +205,7 @@ class Widgets extends React.Component {
           inputValue={this.state.message}
           inputOnKeyDown={this.keyPress}
           inputStyle={{ backgroundColor: "#27293d" }}
+          buttonOnClick={this.addMessage}
         />
       </>
     );
