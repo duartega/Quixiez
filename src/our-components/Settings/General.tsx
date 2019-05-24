@@ -36,7 +36,7 @@ export const General = (props: Props) => {
 
   return (
     <Row className="mx-xl-xl">
-      <Col md="8">
+      <Col>
         <Card>
           <CardHeader>
             <h2 className="title">Company Overview</h2>

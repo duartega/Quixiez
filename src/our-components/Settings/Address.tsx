@@ -36,7 +36,7 @@ export const Address = (props: Props) => {
   } = props;
   return (
     <Row className="mx-xl-xl">
-      <Col md="8">
+      <Col>
         <Card>
           <CardHeader>
             <h2 className="title">Company Address</h2>

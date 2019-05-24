@@ -33,7 +33,7 @@ export const SocialMedia = (props: Props) => {
   return (
     <div className="content">
       <Row className="mx-xl-xl">
-        <Col md="8">
+        <Col>
           <Card>
             <CardHeader>
               <h2 className="title">Social Media Links</h2>
