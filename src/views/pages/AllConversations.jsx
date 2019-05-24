@@ -11,7 +11,7 @@ class AllConversations extends React.Component {
   }
   render() {
     return (
-      <Row style={{ overflow: "hidden" }}>
+      <Row style={{ overflow: "hidden" }} className="content">
         <Col>
           <ConversationsList />
         </Col>

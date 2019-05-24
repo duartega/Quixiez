@@ -1,5 +1,5 @@
 import React from "react";
-import { axiosPost, axiosGet, axiosPut } from '../../network/ApiCalls';
+import { axiosPost, axiosGet, axiosPut } from "../../network/ApiCalls";
 import {
   getAddress,
   getSocialMediaLinks,
@@ -7,8 +7,8 @@ import {
   putAddress,
   getCompanyInfo,
   putCompanyInfo
-} from '../../constants/routes';
-import { connect } from 'react-redux';
+} from "../../constants/routes";
+import { connect } from "react-redux";
 import { setCompanyUserJWT } from "../../redux/actions";
 import Hours from "../pages/BusinessHours";
 import ReactBSAlert from "react-bootstrap-sweetalert";
@@ -25,8 +25,9 @@ import {
   Input,
   Row,
   Col,
-  Label,
+  Label
 } from "reactstrap";
+import { SocialMedia } from "our-components/Settings/SocialMedia";
 
 class User extends React.Component {
   constructor(props) {
@@ -53,101 +54,141 @@ class User extends React.Component {
       companyName: "",
       alert: "",
       hasInfoChanged: false,
-      method: "",
+      method: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleCheck = this.handleCheck.bind(this);
     this.handleCompanyOverviewSave = this.handleCompanyOverviewSave.bind(this);
     this.handleCompanyAddressSave = this.handleCompanyAddressSave.bind(this);
-    this.handleCompanySocialMediaSave = this.handleCompanySocialMediaSave.bind(this);
+    this.handleCompanySocialMediaSave = this.handleCompanySocialMediaSave.bind(
+      this
+    );
   }
-
 
   componentDidMount() {
     const jwt = this.props.companyUserReducer.jwt;
     this.setState({ companyName: this.props.companyUserReducer.companyName });
 
     // Get address information for the settings page
-    axiosGet(getAddress, jwt).then(result => {
-      const { data } = result;
-      delete data.created; delete data.updated;
-      this.setState({ ...data })
-    }).catch(err => {
-      console.log(err, err.response)
-    })
+    axiosGet(getAddress, jwt)
+      .then(result => {
+        const { data } = result;
+        delete data.created;
+        delete data.updated;
+        this.setState({ ...data });
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
 
     // Get social media information for the settings page
-    axiosGet(getSocialMediaLinks, jwt).then(socialMedia => {
-      this.setState({
-        facebook: socialMedia.data['facebookUrl'],
-        twitter: socialMedia.data['twitterUsername'],
-        snapchat: socialMedia.data['snapChatUsername'],
-        instagram: socialMedia.data['instagramUsername'],
+    axiosGet(getSocialMediaLinks, jwt)
+      .then(socialMedia => {
+        this.setState({
+          facebook: socialMedia.data["facebookUrl"],
+          twitter: socialMedia.data["twitterUsername"],
+          snapchat: socialMedia.data["snapChatUsername"],
+          instagram: socialMedia.data["instagramUsername"]
+        });
       })
-    }).catch(err => {
-      console.log(err, err.response)
-    })
+      .catch(err => {
+        console.log(err, err.response);
+      });
 
     // Get company information such as number and email for the settings page
-    axiosGet(getCompanyInfo, jwt).then(result => {
-      const { data } = result;
-      console.log(data)
-      delete data.created; delete data.updated; delete data.id; delete data.companyName;
-      this.setState({ ...data })
-    }).catch(err => {
-      console.log(err, err.response)
-    })
-  };
+    axiosGet(getCompanyInfo, jwt)
+      .then(result => {
+        const { data } = result;
+        console.log(data);
+        delete data.created;
+        delete data.updated;
+        delete data.id;
+        delete data.companyName;
+        this.setState({ ...data });
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
+  }
 
   handleChange = event => {
     if (event.target.name === "showStreet") {
-      if (this.state.showStreet) { this.setState({ [event.target.name]: event.target.checked, hasInfoChanged: true }) }
-      else if (!this.state.showStreet) { this.setState({ [event.target.name]: event.target.checked, hasInfoChanged: true }) };
+      if (this.state.showStreet) {
+        this.setState({
+          [event.target.name]: event.target.checked,
+          hasInfoChanged: true
+        });
+      } else if (!this.state.showStreet) {
+        this.setState({
+          [event.target.name]: event.target.checked,
+          hasInfoChanged: true
+        });
+      }
     } else {
-      this.setState({ [event.target.name]: event.target.value, hasInfoChanged: true });
+      this.setState({
+        [event.target.name]: event.target.value,
+        hasInfoChanged: true
+      });
     }
-  }
-  handleCheck = event =>
-    console.log(event)
+  };
+  handleCheck = event => console.log(event);
 
   handleCompanyAddressSave() {
-    const { street, city, state, zip, showStreet, showCity, showState, showZip } = this.state
+    const {
+      street,
+      city,
+      state,
+      zip,
+      showStreet,
+      showCity,
+      showState,
+      showZip
+    } = this.state;
     const jwt = this.props.companyUserReducer.jwt;
-    console.log("submitted: ", showStreet)
+    console.log("submitted: ", showStreet);
 
     if (this.state.hasInfoChanged) {
-      axiosPut(putAddress, { street, city, state, zip, showStreet, showCity, showState, showZip }, jwt).then(result => {
-        // console.log(result);
-        this.setState({ alert: "success" });
-      }).catch(err => {
-        this.setState({ alert: "failed" })
-        console.log(err, err.response);
-      });
+      axiosPut(
+        putAddress,
+        { street, city, state, zip, showStreet, showCity, showState, showZip },
+        jwt
+      )
+        .then(result => {
+          // console.log(result);
+          this.setState({ alert: "success" });
+        })
+        .catch(err => {
+          this.setState({ alert: "failed" });
+          console.log(err, err.response);
+        });
       this.setState({ hasInfoChanged: false });
     } else {
       this.setState({ alert: "warning" });
     }
-
-
   }
 
   handleCompanyOverviewSave() {
-    const { quixiezNumber, phoneNumber, email, websiteUrl } = this.state
+    const { quixiezNumber, phoneNumber, email, websiteUrl } = this.state;
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
-      axiosPut(putCompanyInfo, { quixiezNumber, phoneNumber, email, websiteUrl }, jwt).then(result => {
-        this.setState({ alert: "success" });
-      }).catch(err => {
-        this.setState({ alert: "failed" })
-        console.log(err, err.response)
-      });
+      axiosPut(
+        putCompanyInfo,
+        { quixiezNumber, phoneNumber, email, websiteUrl },
+        jwt
+      )
+        .then(result => {
+          this.setState({ alert: "success" });
+        })
+        .catch(err => {
+          this.setState({ alert: "failed" });
+          console.log(err, err.response);
+        });
       this.setState({ hasInfoChanged: false });
     } else {
       this.setState({ alert: "warning" });
     }
-
   }
 
   handleCompanySocialMediaSave() {
@@ -160,20 +201,25 @@ class User extends React.Component {
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
-      axiosPut(putSocialMediaLinks, { facebookUrl, twitterUsername, snapChatUsername, instagramUsername }, jwt).then(result => {
-        this.setState({ alert: "success" });
-      }).catch(err => {
-        this.setState({ alert: "failed" })
-        console.log(err, err.response)
-      });
+      axiosPut(
+        putSocialMediaLinks,
+        { facebookUrl, twitterUsername, snapChatUsername, instagramUsername },
+        jwt
+      )
+        .then(result => {
+          this.setState({ alert: "success" });
+        })
+        .catch(err => {
+          this.setState({ alert: "failed" });
+          console.log(err, err.response);
+        });
       this.setState({ hasInfoChanged: false });
     } else {
       this.setState({ alert: "warning" });
     }
   }
 
-  hideAlert = () =>
-    this.setState({ alert: "" })
+  hideAlert = () => this.setState({ alert: "" });
 
   render() {
     if (this.state.alert === "") {
@@ -195,7 +241,8 @@ class User extends React.Component {
                             <Input
                               defaultValue={this.state.companyName}
                               type="text"
-                              name="companyName" onChange={this.handleChange}
+                              name="companyName"
+                              onChange={this.handleChange}
                               placeholder="No Company Name Set"
                             />
                           </FormGroup>
@@ -204,13 +251,25 @@ class User extends React.Component {
                           <FormGroup>
                             <label>Quixiez Number</label>
                             {/* should change to number */}
-                            <Input placeholder="No Phone Number Set" defaultValue={this.state.quixiezNumber} type="text" name="quixiezNumber" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No Phone Number Set"
+                              defaultValue={this.state.quixiezNumber}
+                              type="text"
+                              name="quixiezNumber"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="4">
                           <FormGroup>
                             <label>Bussiness Number</label>
-                            <Input placeholder="No Phone Number Set" defaultValue={this.state.phoneNumber} type="text" name="phoneNumber" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No Phone Number Set"
+                              defaultValue={this.state.phoneNumber}
+                              type="text"
+                              name="phoneNumber"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -218,29 +277,46 @@ class User extends React.Component {
                         <Col className="pr-md-1" md="6">
                           <FormGroup>
                             <label>Business Email</label>
-                            <Input placeholder="No Email Set" defaultValue={this.state.email} type="email" name="email" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No Email Set"
+                              defaultValue={this.state.email}
+                              type="email"
+                              name="email"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="6">
                           <FormGroup>
                             <label>Business Website</label>
-                            <Input placeholder="No Website Set" defaultValue={this.state.websiteUrl} type="url" name="websiteUrl" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No Website Set"
+                              defaultValue={this.state.websiteUrl}
+                              type="url"
+                              name="websiteUrl"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
                     </Form>
                   </CardBody>
                   <CardFooter className="text-right">
-                    <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanyOverviewSave}>
+                    <Button
+                      className="btn-fill"
+                      color="success"
+                      type="submit"
+                      onClick={this.handleCompanyOverviewSave}
+                    >
                       Save
-                  </Button>
+                    </Button>
                   </CardFooter>
                 </Card>
               </Col>
             </Row>
           </div>
 
-          <div>
+          <div className="content">
             <Row className="mx-xl-xl">
               <Col md="8">
                 <Card>
@@ -256,7 +332,8 @@ class User extends React.Component {
                             <Input
                               defaultValue={this.state.street}
                               type="text"
-                              name="street" onChange={this.handleChange}
+                              name="street"
+                              onChange={this.handleChange}
                               placeholder="No Address Set"
                             />
                           </FormGroup>
@@ -266,25 +343,49 @@ class User extends React.Component {
                         <Col className="pr-md-1" md="4">
                           <FormGroup>
                             <label>City</label>
-                            <Input placeholder="No City Set" defaultValue={this.state.city} type="text" name="city" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No City Set"
+                              defaultValue={this.state.city}
+                              type="text"
+                              name="city"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                         <Col className="px-md-1" md="4">
                           <FormGroup>
                             <label>State</label>
-                            <Input placeholder="No State Set" defaultValue={this.state.state} type="text" name="state" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No State Set"
+                              defaultValue={this.state.state}
+                              type="text"
+                              name="state"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                         <Col className="pl-md-1" md="4">
                           <FormGroup>
                             <label>Postal Code</label>
-                            <Input placeholder="No Postal Code Set" defaultValue={this.state.zip} type="number" name="zip" onChange={this.handleChange} />
+                            <Input
+                              placeholder="No Postal Code Set"
+                              defaultValue={this.state.zip}
+                              type="number"
+                              name="zip"
+                              onChange={this.handleChange}
+                            />
                           </FormGroup>
                         </Col>
                         <Col className="pl-md-3" md="4">
                           <FormGroup check>
                             <Label check>
-                              <Input defaultChecked={this.state.showStreet} type="checkbox" value={this.state.showStreet} name="showStreet" onChange={this.handleChange}  />
+                              <Input
+                                defaultChecked={this.state.showStreet}
+                                type="checkbox"
+                                value={this.state.showStreet}
+                                name="showStreet"
+                                onChange={this.handleChange}
+                              />
                               <span className="form-check-sign" />
                               Show Street Address?
                             </Label>
@@ -294,84 +395,28 @@ class User extends React.Component {
                     </Form>
                   </CardBody>
                   <CardFooter className="text-right">
-                    <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanyAddressSave}>
+                    <Button
+                      className="btn-fill"
+                      color="success"
+                      type="submit"
+                      onClick={this.handleCompanyAddressSave}
+                    >
                       Save
-                  </Button>
+                    </Button>
                   </CardFooter>
                 </Card>
               </Col>
             </Row>
           </div>
-          <div>
-            <Row className="mx-xl-xl">
-              <Col md="8">
-                <Card>
-                  <CardHeader>
-                    <h2 className="title">Social Media Links</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <Form>
-                      <Row>
-                        <Col className="pr-md-1" md="6">
-                          <FormGroup>
-                            <label>Facebook URL</label>
-                            <Input
-                              placeholder="www.facebook.com/"
-                              defaultValue={this.state.facebook}
-                              type="url"
-                              name="facebook"
-                              onChange={this.handleChange} />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                          <FormGroup>
-                            <label>Instagram Username</label>
-                            <Input
-                              placeholder="www.instagram.com/"
-                              defaultValue={this.state.instagram}
-                              type="url"
-                              name="instagram"
-                              onChange={this.handleChange} />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-
-                      <Row>
-                        <Col className="pr-md-1" md="6">
-                          <FormGroup>
-                            <label>Twitter Username</label>
-                            <Input
-                              placeholder="www.twitter.com/"
-                              defaultValue={this.state.twitter}
-                              type="url"
-                              name="twitter"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                          <FormGroup>
-                            <label>Snapchat Username</label>
-                            <Input
-                              placeholder="@username"
-                              defaultValue={this.state.snapchat}
-                              type="url"
-                              name="snapchat"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </CardBody>
-                  <CardFooter className="text-right">
-                    <Button className="btn-fill" color="success" type="submit" onClick={this.handleCompanySocialMediaSave}>
-                      Save
-                  </Button>
-                  </CardFooter>
-                </Card>
-              </Col>
-            </Row>
+          <div className="content">
+            <SocialMedia
+              facebookDefaultValue={this.state.facebook}
+              instagramDefaultValue={this.state.instagram}
+              twitterDefaultValue={this.state.twitter}
+              snapchatDefaultValue={this.state.snapchat}
+              onButtonClick={this.handleCompanySocialMediaSave}
+              handleChange={this.handleChange}
+            />
           </div>
           {/* <Hours /> */}
         </>
@@ -380,9 +425,7 @@ class User extends React.Component {
       return (
         <div>
           <div className="places-sweet-alerts">
-
             <Row className="mt-5">
-
               <ReactBSAlert
                 success
                 style={{ display: "block", marginTop: "-100px" }}
@@ -391,20 +434,16 @@ class User extends React.Component {
                 onCancel={() => this.hideAlert()}
                 confirmBtnBsStyle="success"
                 btnSize=""
-              >
-              </ReactBSAlert>
-
+              />
             </Row>
           </div>
         </div>
-      )
+      );
     } else if (this.state.alert === "failed") {
       return (
         <div>
           <div className="places-sweet-alerts">
-
             <Row className="mt-5">
-
               <ReactBSAlert
                 danger
                 style={{ display: "block", marginTop: "-100px" }}
@@ -413,20 +452,16 @@ class User extends React.Component {
                 onCancel={() => this.hideAlert()}
                 confirmBtnBsStyle="danger"
                 btnSize=""
-              >
-              </ReactBSAlert>
-
+              />
             </Row>
           </div>
         </div>
-      )
+      );
     } else if (this.state.alert === "warning") {
       return (
         <div>
           <div className="places-sweet-alerts">
-
             <Row className="mt-5">
-
               <ReactBSAlert
                 warning
                 style={{ display: "block", marginTop: "-100px" }}
@@ -435,13 +470,11 @@ class User extends React.Component {
                 onCancel={() => this.hideAlert()}
                 confirmBtnBsStyle="warning"
                 btnSize=""
-              >
-              </ReactBSAlert>
-
+              />
             </Row>
           </div>
         </div>
-      )
+      );
     }
   }
 }

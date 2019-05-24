@@ -27,6 +27,7 @@ import Login from "views/pages/Login.jsx";
 import Rtl from "views/pages/Rtl.jsx";
 import Lock from "views/pages/Lock.jsx";
 import AllConversations from '../views/pages/AllConversations';
+import Settings from '../views/pages/GeneralSettings';
 
 const routes = [
   {
@@ -43,6 +44,13 @@ const routes = [
     rtlName: "لوحة القيادة",
     icon: "tim-icons icon-email-85",
     component: AllConversations,
+    layout: "/admin"
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    icon: "tim-icons icon-settings",
+    component: Settings,
     layout: "/admin"
   },
   {

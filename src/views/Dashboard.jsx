@@ -69,7 +69,7 @@ class Dashboard extends React.Component {
     return (
       <>
         <div className="content">
-          <p onClick={e => {e.preventDefault(); console.log("Printing")}}>General Settings</p>
+          <p onClick={e => {e.preventDefault(); console.log("Printing")}}></p>
           <Row>
             <Col xs="12">
               <Card className="card-chart">
