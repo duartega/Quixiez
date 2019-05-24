@@ -231,9 +231,7 @@ class User extends React.Component {
               onChange={this.handleChange}
               onClick={this.handleCompanyOverviewSave}
             />
-          </div>
 
-          <div className="content">
             <Address
               streetDefaultValue={this.state.street}
               cityDefaultValue={this.state.city}
@@ -243,8 +241,7 @@ class User extends React.Component {
               onChange={this.handleChange}
               onClick={this.handleCompanyAddressSave}
             />
-          </div>
-          <div className="content">
+
             <SocialMedia
               facebookDefaultValue={this.state.facebook}
               instagramDefaultValue={this.state.instagram}
