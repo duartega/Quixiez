@@ -134,7 +134,7 @@ div.chat-header-container {
   /* margin: 0; */
   /* width: 100%; */
   /* background-color: #27293d; */
-  background-color: #1e1e2f;
+  /* background-color: #1e1e2f; */
   z-index: 1000;
   /* display: flex; */
 }
@@ -153,6 +153,8 @@ div.chat-header-container {
   position: sticky;
   bottom: 0;
   width: 100%;
-  background-color: #1e1e2f;
+  background-color: #1e1e26;
+  /* background-color: #1e1e2f; */
+  /* background-color: #27293d; */
   height: 80px;
 }
