@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 // react component for creating dynamic tables
 import ReactTable from "react-table";
-import Pop from '../PopOverRight';
+import { PopOverLeft } from "../PopOverLeft";
 
 import {
   Card,
@@ -20,64 +20,39 @@ const dataTable = [
   ["Ashton Cox", "Order Delivered.", "9:50 AM", "Complete"],
   ["Bradley Greer", "Thank you for your order.", "9:30 AM", "Complete"],
   ["Brenden Wagner", "Your order has been cancelled.", "9:29 AM", "Cancelled"],
-  ["Briel Williamson", "Your order has been cancelled.", "8:00 AM", "Cancelled"],
-  ["Caesar Vance", "Your order has been rejected.", "7:30 AM", "Rejected"],
+  [
+    "Briel Williamson",
+    "Your order has been cancelled.",
+    "8:00 AM",
+    "Cancelled"
+  ],
+  ["Caesar Vance", "Your order has been rejected.", "7:30 AM", "Rejected"]
 ];
 
 class ReactTables extends Component {
   constructor(props) {
     super(props);
 
-    this.openPop = this.openPop.bind(this);
     this.state = {
-      data: dataTable.map((prop, key) => {
+      data: dataTable.map((prop, idx) => {
         return {
-          id: key,
+          orderStatus: "IN_COMPLETE",
+          id: idx,
           name: prop[0],
           message: prop[1],
           received: prop[2],
-          status: prop[3],
+          status: (
+            <Button className="btn-simple" color="success" disabled>
+              {prop[3]}
+            </Button>
+          ),
           actions: (
             // we've added some custom button actions
             <div className="actions-right">
-              {/* use this button to add a like kind of action */}
-              
-              <Button
-                onClick={() => {
-                  let obj = this.state.data.find(o => o.id === key);
-                  console.log(this.state.data.find(o => o.id === key))
-                  this.openPop();
-                }}
-                color="info"
-                
-              >
-                Action {<Pop propId={key}/>}
-              </Button>{" "}
-
-              {/* use this button to remove the data row */}
-              {/* <Button
-                onClick={() => {
-                  var data = this.state.data;
-                  data.find((o, i) => {
-                    if (o.id === key) {
-                      // here you should add some custom code so you can delete the data
-                      // from this component and from your server as well
-                      data.splice(i, 1);
-                      console.log(data);
-                      return true;
-                    }
-                    return false;
-                  });
-                  this.setState({ data: data });
-                }}
-                color="danger"
-                size="sm"
-                className={classNames("btn-icon btn-link like", {
-                  "btn-neutral": key < 5
-                })}
-              >
-                <i className="tim-icons icon-simple-remove" />
-              </Button>{" "} */}
+              <PopOverLeft
+                idx={idx}
+                onOrderCompleteClick={this.handleOrderComplete}
+              />
             </div>
           )
         };
@@ -85,8 +60,26 @@ class ReactTables extends Component {
     };
   }
 
-  openPop = () =>
-      <Pop />
+  handleOrderComplete = idx => {
+    const { data } = this.state;
+    data[idx].status = "COMPLETE";
+    this.setState({ data });
+  };
+
+  renderStatus = idx => {
+    if (
+      this.state &&
+      this.state.data &&
+      this.state.data[idx].orderStatus !== "INCOMPLETE"
+    ) {
+      return <p>COMPLETE</p>;
+    }
+    return <p>Incomplete</p>;
+  };
+
+  centerTableHeaderName = name => {
+    return <div style={{ textAlign: "center" }}>{name}</div>;
+  };
 
   render() {
     return (
@@ -119,9 +112,11 @@ class ReactTables extends Component {
                       {
                         Header: "Status",
                         accessor: "status"
+                        // For Centering header text
+                        // headerClassName: "text-center"
                       },
                       {
-                        Header: "",
+                        // Header: "Actions",
                         accessor: "actions",
                         sortable: false,
                         filterable: false
@@ -136,7 +131,6 @@ class ReactTables extends Component {
               </Card>
             </Col>
           </Row>
-          <Pop/>
         </div>
       </>
     );
