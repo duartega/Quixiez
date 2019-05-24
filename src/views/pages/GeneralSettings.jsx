@@ -1,5 +1,5 @@
 import React from "react";
-import { axiosPost, axiosGet, axiosPut } from "../../network/ApiCalls";
+import { axiosGet, axiosPut } from "../../network/ApiCalls";
 import {
   getAddress,
   getSocialMediaLinks,
@@ -10,7 +10,6 @@ import {
 } from "../../constants/routes";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "../../redux/actions";
-import Hours from "./BusinessHours";
 import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
