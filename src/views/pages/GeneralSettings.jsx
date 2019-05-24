@@ -14,19 +14,7 @@ import Hours from "./BusinessHours";
 import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label
-} from "reactstrap";
+import { Row } from "reactstrap";
 import { SocialMedia } from "our-components/Settings/SocialMedia";
 import { Address } from "our-components/Settings/Address";
 import { General } from "our-components/Settings/General";
