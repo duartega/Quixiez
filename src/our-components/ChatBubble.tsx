@@ -30,11 +30,14 @@ export const ChatBubble = (props: Props) => {
                     {badgeLabel}
                   </Badge>
                 </div>
-                <div className="timeline-body" >
+                <div className="timeline-body">
                   {/* this is to render new lines in text */}
-                  {message.split('\n').map(i => 
-                    <p>{i}<br/></p>
-                  )}
+                  {message.split("\n").map((i, idx) => (
+                    <p key={idx}>
+                      {i}
+                      <br />
+                    </p>
+                  ))}
                 </div>
                 <h6>
                   <i className="ti-time" />
