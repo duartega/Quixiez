@@ -26,7 +26,7 @@ import User from "views/pages/User.jsx";
 import Login from "views/pages/Login.jsx";
 import Rtl from "views/pages/Rtl.jsx";
 import Lock from "views/pages/Lock.jsx";
-import AllConversations from '../src/views/pages/AllConversations';
+import AllConversations from '../views/pages/AllConversations';
 
 const routes = [
   {
