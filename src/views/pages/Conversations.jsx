@@ -105,8 +105,9 @@ class Widgets extends React.Component {
   };
 
   keyPress = e => {
+    
     if (e.keyCode === 13 && this.state.message !== "") {
-      console.log("enter")
+      e.preventDefault();
       this.testBubble();
     }
   };
