@@ -186,23 +186,25 @@ class Widgets extends React.Component {
 
           {this.state.testBubble.map(aTestBubble => aTestBubble)}
 
-          {/* </div> */}
-          <ChatFooter
-            inputPlaceHolder="Enter Message"
-            inputOnChange={this.handleChange}
-            inputName="message"
-            inputValue={this.state.message}
-            inputOnKeyDown={this.keyPress}
-            inputStyle={{ backgroundColor: "#27293d" }}
-          />
-
-          {/* Scroll to bottom of screen on mount */}
+          {/* Scroll to bottom of screen on mount
+           * If this div is moved below the chat
+           * footer the footer will lose its
+           * sticky property. */}
           <div
             ref={el => {
               this.messagesEnd = el;
             }}
           />
         </div>
+
+        <ChatFooter
+          inputPlaceHolder="Enter Message"
+          inputOnChange={this.handleChange}
+          inputName="message"
+          inputValue={this.state.message}
+          inputOnKeyDown={this.keyPress}
+          inputStyle={{ backgroundColor: "#27293d" }}
+        />
       </>
     );
   }
