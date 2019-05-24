@@ -17,9 +17,8 @@ class Widgets extends React.Component {
   }
 
   componentDidMount() {
-    this.scrollToBottom(); // scroll to bottom of screen on mount
+    this.initialScroll();
 
-    // { /* If you want to see the chat bubble come in switch to true*/ }
     if (false) {
       setInterval(() => {
         this.testBubble();
@@ -27,51 +26,18 @@ class Widgets extends React.Component {
     }
   }
 
+  initialScroll = () => {
+    this.messagesEnd.scrollIntoView(true);
+  };
+
   // scroll to bottom of screen when called
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
+
   componentDidUpdate() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
-
-  getNormalBubble = () =>
-    this.showNormalBubble ? (
-      <Row className="mx-xl-xl">
-        <Col>
-          <Card className="card-timeline  card-plain ">
-            <CardBody>
-              <ul className="timeline timeline-simple">
-                {/* <ul className="our-timeline"> */}
-                <li
-                  className="timeline-inverted"
-                  // style={{ backgroundColor: "red" }}
-                >
-                  {/** this will invert the message bubble if class name taken out */}
-                  <div className="timeline-badge danger"> A </div>
-                  {/** For first letter of the persons name */}
-                  <div className="timeline-panel">
-                    <div className="timeline-heading">
-                      <Badge color="danger">Alexis</Badge>
-                    </div>
-                    <div className="timeline-body">
-                      <p>
-                        YES, I would like to also get a metal grinder. 1 ounce
-                        of blue diesel and 3 grams of grape pie as well.
-                      </p>
-                    </div>
-                    <h6>
-                      <i className="ti-time" />
-                      11 hours ago via quixiez
-                    </h6>
-                  </div>
-                </li>
-              </ul>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    ) : null;
 
   testBubble = () => {
     const testBubble = (
@@ -100,8 +66,7 @@ class Widgets extends React.Component {
   };
 
   keyPress = e => {
-    if (e.key === "Enter" && e.shiftKey) {
-    } else if (e.keyCode === 13 && this.state.message !== "") {
+    if (e.keyCode === 13 && this.state.message !== "" && !e.shiftKey) {
       e.preventDefault();
       this.testBubble();
     }
@@ -110,88 +75,88 @@ class Widgets extends React.Component {
   render() {
     return (
       <>
-        {/* Header */}
-        <ChatHeader />
+        <div ref={node => (this.chatContainer = node)}>
+          <ChatHeader />
 
-        {/* Header */}
-        {this.getNormalBubble()}
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="A message"
-          timePassed="10 hours"
-          inverted
-        />
-        <ChatBubble
-          badgeColor="info"
-          badgeLabel="Joe"
-          message="What's up Gabe?"
-          timePassed="7 Days"
-        />
-        <ChatBubble
-          badgeColor="info"
-          badgeLabel="Joe"
-          message="Hey Man Reply!"
-          timePassed="7 Days"
-        />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="A message"
+            timePassed="10 hours"
+            inverted
+          />
+          <ChatBubble
+            badgeColor="info"
+            badgeLabel="Joe"
+            message="What's up Gabe?"
+            timePassed="7 Days"
+          />
+          <ChatBubble
+            badgeColor="info"
+            badgeLabel="Joe"
+            message="Hey Man Reply!"
+            timePassed="7 Days"
+          />
 
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Joe"
-          timePassed="7 Days"
-          inverted
-        />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Joe"
+            timePassed="7 Days"
+            inverted
+          />
 
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Test Bubble"
-          timePassed="7 Days"
-          inverted
-        />
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Test Bubble"
-          timePassed="7 Days"
-          inverted
-        />
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Test Bubble"
-          timePassed="7 Days"
-          inverted
-        />
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Test Bubble"
-          timePassed="7 Days"
-          inverted
-        />
-        <ChatBubble
-          badgeColor="warning"
-          badgeLabel="Gabe"
-          message="Hey Test Bubble"
-          timePassed="7 Days"
-          inverted
-        />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Test Bubble"
+            timePassed="7 Days"
+            inverted
+          />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Test Bubble"
+            timePassed="7 Days"
+            inverted
+          />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Test Bubble"
+            timePassed="7 Days"
+            inverted
+          />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Test Bubble"
+            timePassed="7 Days"
+            inverted
+          />
+          <ChatBubble
+            badgeColor="warning"
+            badgeLabel="Gabe"
+            message="Hey Test Bubble"
+            timePassed="7 Days"
+            inverted
+          />
 
-        {this.state.testBubble.map(aTestBubble => aTestBubble)}
+          {this.state.testBubble.map(aTestBubble => {
+            return aTestBubble;
+          })}
 
-        {/* Scroll to bottom of screen on mount
-         * If this div is moved below the chat
-         * footer the footer will lose its
-         * sticky property. */}
-        <div
-          ref={el => {
-            this.messagesEnd = el;
-          }}
-        />
-        {/* </div> */}
-
+          {/* Scroll to bottom of screen on mount
+           * If this div is moved below the chat
+           * footer the footer will lose its
+           * sticky property. */}
+          <div
+            ref={el => {
+              this.messagesEnd = el;
+            }}
+          />
+          {/* </div> */}
+        </div>
         <ChatFooter
           inputPlaceHolder="Enter Message"
           inputOnChange={this.handleChange}
