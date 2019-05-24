@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { Line, Bar } from "react-chartjs-2";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+// import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 // reactstrap components
 import {

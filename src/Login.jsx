@@ -1,5 +1,4 @@
 import React from "react";
-import Axios from "axios";
 import { login } from "./constants/routes.ts";
 import SelectCompany from "./views/pages/SelectCompany";
 import { connect } from "react-redux";

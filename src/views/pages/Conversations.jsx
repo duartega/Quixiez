@@ -1,6 +1,4 @@
 import React from "react";
-// react plugin used to create switch buttons
-import Switch from "react-bootstrap-switch";
 import { ChatBubble } from "../../our-components/ChatBubble";
 import { ChatFooter } from "../../our-components/ChatFooter";
 import { ChatHeader } from "../../our-components/ChatHeader";
@@ -21,9 +19,7 @@ class Widgets extends React.Component {
   componentDidMount() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
 
-    {
-      /* If you want to see the chat bubble come in switch to true*/
-    }
+    // { /* If you want to see the chat bubble come in switch to true*/ }
     if (false) {
       setInterval(() => {
         this.testBubble();
@@ -118,9 +114,7 @@ class Widgets extends React.Component {
         <ChatHeader />
 
         {/* Header */}
-        {/* <div className="content" style={{ height: "100%", overflow: "auto"}}> */}
         {this.getNormalBubble()}
-        {/* <div style={{ height: "100%", overflow: "scroll" }}> */}
         <ChatBubble
           badgeColor="warning"
           badgeLabel="Gabe"

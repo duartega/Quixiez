@@ -3,16 +3,9 @@ import { Redirect } from 'react-router-dom'
 // reactstrap components
 import { Button } from "reactstrap";
 import { selectCompany } from "../../constants/routes";
-import Dashboard from "../Dashboard";
 import { connect } from "react-redux";
-import Axios from "axios";
 import { setCompanyUserJWT, setCompanyName } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
-import Settings from '../pages/GeneralSettings'
-import AdminLayout from '../../our-components/Admin';
-import Admin from "layouts/Admin/Admin";
-
-
 
 class Company extends React.Component {
   state = {

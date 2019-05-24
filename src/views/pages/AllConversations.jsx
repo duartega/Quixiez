@@ -1,9 +1,6 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
-import { Grid } from "@material-ui/core";
-import { ChatFooter } from "../../our-components/ChatFooter";
 import Conversations from "./Conversations";
-import BusinessHours from "../tables/BusinessHoursTable";
 import ConversationsList from "../../our-components/Tables/ConversationsList";
 
 class AllConversations extends React.Component {

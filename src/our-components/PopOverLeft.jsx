@@ -42,8 +42,6 @@ export class PopOverLeft extends React.Component {
   }
 
   render() {
-    const { idx } = this.props;
-
     return (
       <>
         <div ref={node => (this.buttonRef = node)}>
