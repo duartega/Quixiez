@@ -28,6 +28,7 @@ import {
   Label
 } from "reactstrap";
 import { SocialMedia } from "our-components/Settings/SocialMedia";
+import { Address } from "our-components/Settings/Address";
 
 class User extends React.Component {
   constructor(props) {
@@ -317,96 +318,15 @@ class User extends React.Component {
           </div>
 
           <div className="content">
-            <Row className="mx-xl-xl">
-              <Col md="8">
-                <Card>
-                  <CardHeader>
-                    <h2 className="title">Company Address</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <Form>
-                      <Row>
-                        <Col className="px-md-3" md="12">
-                          <FormGroup>
-                            <label>Company Address</label>
-                            <Input
-                              defaultValue={this.state.street}
-                              type="text"
-                              name="street"
-                              onChange={this.handleChange}
-                              placeholder="No Address Set"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col className="pr-md-1" md="4">
-                          <FormGroup>
-                            <label>City</label>
-                            <Input
-                              placeholder="No City Set"
-                              defaultValue={this.state.city}
-                              type="text"
-                              name="city"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="px-md-1" md="4">
-                          <FormGroup>
-                            <label>State</label>
-                            <Input
-                              placeholder="No State Set"
-                              defaultValue={this.state.state}
-                              type="text"
-                              name="state"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="4">
-                          <FormGroup>
-                            <label>Postal Code</label>
-                            <Input
-                              placeholder="No Postal Code Set"
-                              defaultValue={this.state.zip}
-                              type="number"
-                              name="zip"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-3" md="4">
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                defaultChecked={this.state.showStreet}
-                                type="checkbox"
-                                value={this.state.showStreet}
-                                name="showStreet"
-                                onChange={this.handleChange}
-                              />
-                              <span className="form-check-sign" />
-                              Show Street Address?
-                            </Label>
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </CardBody>
-                  <CardFooter className="text-right">
-                    <Button
-                      className="btn-fill"
-                      color="success"
-                      type="submit"
-                      onClick={this.handleCompanyAddressSave}
-                    >
-                      Save
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Col>
-            </Row>
+            <Address
+              streetDefaultValue={this.state.street}
+              cityDefaultValue={this.state.city}
+              stateDefaultValue={this.state.state}
+              zipDefaultValue={this.state.zip}
+              showStreet={this.state.showStreet}
+              onChange={this.handleChange}
+              onClick={this.handleCompanyAddressSave}
+            />
           </div>
           <div className="content">
             <SocialMedia
@@ -418,7 +338,6 @@ class User extends React.Component {
               handleChange={this.handleChange}
             />
           </div>
-          {/* <Hours /> */}
         </>
       );
     } else if (this.state.alert === "success") {
