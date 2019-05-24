@@ -26,3 +26,7 @@ upload-form/src/assets/img/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# vscode
+.vscode/ipch/
+.vscode/c_cpp_properties.json
