@@ -4,30 +4,19 @@ import { Grid } from "@material-ui/core";
 
 import Conversations from "./Conversations";
 import BusinessHours from "../tables/BusinessHoursTable";
-
+import ConversationsList from "../../our-components/Tables/ConversationsList";
 class AllConversations extends React.Component {
   render() {
     return (
-      // <body style={{ height: "100%", margin: "0", overflow: "hidden"}}>
-      // <Row className="all-conversations-container">
       <Row>
-        {/* <Col>
-          <BusinessHours />
-        </Col> */}
+        <Col>
+          <ConversationsList />
+        </Col>
 
-        {/* <Col
-          style={{
-            backgroundColor: "green",
-            overflowY: "auto",
-            maxHeight: "100%",
-            maxWidth: "100%"
-          }}
-        > */}
-        <Col style={{ overflowY: "scroll" }}>
+        <Col>
           <Conversations />
         </Col>
       </Row>
-      // </body>
     );
   }
 }

@@ -121,12 +121,12 @@ span.bubble-badge {
 /* flex-direction: column; */
 /* } */
 
-/* Chat Header */
-
 .all-conversations-container {
   height: 100%;
   overflow: hidden;
 }
+
+/* Chat Header */
 
 div.chat-header-container {
   position: sticky;
@@ -146,4 +146,13 @@ div.chat-header-container {
 }
 .col.header-col > h3 {
   margin: 0;
+}
+
+/* Chat footer */
+.row.chat-footer-container {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background-color: #1e1e2f;
+  height: 80px;
 }

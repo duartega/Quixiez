@@ -26,13 +26,13 @@ export class ChatFooter extends Component<Props> {
     } = this.props;
     return (
       <>
-        {/* <div style={{ marginBottom: "20px" }} /> */}
         <br />
         <br />
         <br />
-        <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
-          <Row>
-            <Col md="5">
+
+        <Row className="chat-footer-container align-items-start">
+          <Row className="w-100 align-items-center">
+            <Col className="md-9">
               <Input
                 placeholder={inputPlaceHolder}
                 onChange={inputOnChange}
@@ -41,13 +41,25 @@ export class ChatFooter extends Component<Props> {
                 onKeyDown={inputOnKeyDown}
                 autoFocus
                 style={inputStyle}
+                type="textarea"
+                className="px-2"
               />
             </Col>
-            <Col lg="3">
-              <Button onClick={buttonOnClick}>Send</Button>
+            <Col
+              lg={{ size: 3 }}
+              className="d-flex justify-content-center align-items-center h-100"
+            >
+              <Col className="p-0">
+                <Button onClick={buttonOnClick} className="mt-0 ">
+                  <Row className="align-item-center">
+                    Send
+                    <i className="tim-icons icon-send pl-1 " />
+                  </Row>
+                </Button>
+              </Col>
             </Col>
           </Row>
-        </div>
+        </Row>
       </>
     );
   }

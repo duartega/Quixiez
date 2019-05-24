@@ -1,10 +1,12 @@
 import React from "react";
 
 // reactstrap components
-import { Card, CardBody, Row, Col, Table, Input } from "reactstrap";
+import { Card, CardBody, Row, Col, Table, Input, FormGroup } from "reactstrap";
 import { axiosGet } from "../../network/ApiCalls";
 import { companyHours as companyHoursEndpoint } from "../../constants/routes";
 import { connect } from "react-redux";
+import moment from "moment";
+import DateTime from "react-datetime";
 
 let companyHours = {
   created: "2019-05-14T23:44:18.712Z",
@@ -73,7 +75,9 @@ let Sunday = {
 // );
 
 class RegularTables extends React.Component {
-  state = {};
+  state = {
+    isLoading: true
+  };
 
   componentDidMount() {
     const { jwt } = this.props;
@@ -107,9 +111,57 @@ class RegularTables extends React.Component {
   }
 
   render() {
-    // console.log(this.state);
-    return (
+    console.log(this.state);
+    /**
+     * If this.state.time exists
+     * destructor all of the values
+     * returned from the api call.
+     *
+     * IMPORTANT!!
+     * All of these are of type Date()
+     */
+    if (this.state.time) {
+      var {
+        fridayCloseUtcTime,
+        fridayOpenUtcTime,
+        id,
+        isOpenFriday,
+        isOpenMonday,
+        isOpenSaturday,
+        isOpenSunday,
+        isOpenThursday,
+        isOpenTuesday,
+        isOpenWednesday,
+        mondayCloseUtcTime,
+        mondayOpenUtcTime,
+        saturdayCloseUtcTime,
+        saturdayOpenUtcTime,
+        sundayCloseUtcTime,
+        sundayOpenUtcTime,
+        thursdayCloseUtcTime,
+        thursdayOpenUtcTime,
+        tuesdayCloseUtcTime,
+        tuesdayOpenUtcTime,
+        wednesdayCloseUtcTime,
+        wednesdayOpenUtcTime
+      } = this.state.time;
+      // For debugging prints out the time from the
+      // Date() object
+      // console.log(sundayCloseUtcTime.toTimeString());
+    }
+    const { isLoading } = this.state;
+    return isLoading ? null : (
       <>
+        {/* THIS WORKS OUTSIDE THE FORM
+        THE FORM IS STYLING PART OF THIS COMPONENT */}
+        <DateTime
+          dateFormat={false}
+          inputProps={{
+            className: "form-control",
+            placeholder: "Select Time"
+          }}
+          onChange={val => console.log("changed", val)}
+        />
         <div className="content">
           <Row>
             <Col className="mb-5" md="12">
@@ -129,7 +181,16 @@ class RegularTables extends React.Component {
                       <tr>
                         <td>Monday</td>
                         <td>
-                          <Input defaultValue={Monday.openTime} />
+                          {/* <Input defaultValue={Monday.openTime} /> */}
+
+                          <DateTime
+                            dateFormat={false}
+                            inputProps={{
+                              className: "form-control",
+                              placeholder: "Select Time"
+                            }}
+                            onChange={val => console.log("changed", val)}
+                          />
                         </td>
                         <td>
                           <Input defaultValue={Monday.closeTime} />
