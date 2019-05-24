@@ -1,7 +1,7 @@
 import React from "react";
-import { ChatBubble } from "../../our-components/ChatBubble";
-import { ChatFooter } from "../../our-components/ChatFooter";
-import { ChatHeader } from "../../our-components/ChatHeader";
+import { ChatBubble } from "../../our-components/Chat/ChatBubble";
+import { ChatFooter } from "../../our-components/Chat/ChatFooter";
+import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 // reactstrap components
 import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
