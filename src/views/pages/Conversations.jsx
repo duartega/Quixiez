@@ -36,7 +36,6 @@ class Widgets extends React.Component {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
   componentDidUpdate() {
-    console.log("component did update");
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
@@ -110,7 +109,6 @@ class Widgets extends React.Component {
       
     } else if (e.keyCode === 13 && this.state.message !== "") {
       e.preventDefault();
-      console.log(this.state.message)
       this.testBubble();
     }
   };
