@@ -1,5 +1,10 @@
 /* @import "./black-dashboard-pro-react.css"; */
 
+/* General */
+.vh-100 {
+  height: 100vh;
+}
+
 /* Chat */
 .timeline-panel.our-timeline,
 .timeline-panel.our-timeline-inverted {

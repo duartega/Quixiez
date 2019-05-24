@@ -19,7 +19,8 @@ import {
   InputGroupText,
   InputGroup,
   Container,
-  Col
+  Col,
+  Row
 } from "reactstrap";
 import { axiosPost } from "./network/ApiCalls";
 
@@ -130,7 +131,7 @@ class Login extends React.Component {
 
     if (this.state.loggedIn === false && this.state.register === false) {
       return (
-        <div className="content">
+        <div className="vh-100 align-items-center d-flex">
           <Container>
             <Col className="ml-auto mr-auto" lg="4" md="6">
               <Form className="form">
