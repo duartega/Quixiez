@@ -18,14 +18,6 @@ class AllConversations extends React.Component {
 
         <Col style={{ overflow: "auto", height: window.innerHeight - 50 }}>
           <Conversations />
-          <ChatFooter
-            inputPlaceHolder="Enter Message"
-            // inputOnChange={this.handleChange}
-            inputName="message"
-            // inputValue={this.state.message}
-            // inputOnKeyDown={this.keyPress}
-            inputStyle={{ backgroundColor: "#27293d" }}
-          />
         </Col>
       </Row>
     );
