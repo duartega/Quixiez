@@ -1,20 +1,7 @@
 import React from "react";
-
+import { Redirect } from 'react-router-dom'
 // reactstrap components
-import {
-  Button,
-  // Card,
-  // CardBody,
-  // CardFooter,
-  // CardImg,
-  // CardTitle,
-  // ListGroupItem,
-  // ListGroup,
-  // Progress,
-  // Container,
-  // Row,
-  // Col
-} from "reactstrap";
+import { Button } from "reactstrap";
 import { selectCompany } from "../../constants/routes";
 import Dashboard from "../Dashboard";
 import { connect } from "react-redux";
@@ -22,10 +9,12 @@ import Axios from "axios";
 import { setCompanyUserJWT, setCompanyName } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
 import Settings from '../pages/GeneralSettings'
+import AdminLayout from '../../our-components/Admin';
+import Admin from "layouts/Admin/Admin";
 
 
 
-class Pricing extends React.Component {
+class Company extends React.Component {
   state = {
     companiesElementsToRender: [],
     isCompanySelected: false
@@ -91,7 +80,10 @@ class Pricing extends React.Component {
         </div>
       );
     } else if (this.state.isCompanySelected) {
-      return <Settings />;
+      // return <AdminLayout layout="/admin" path="/dashboard" pathname="/admin/dashboard"/>;
+      return (
+        <Redirect to="/admin/dashboard" from="auth" /> 
+      );
     }
   }
 }
@@ -104,4 +96,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Pricing);
+)(Company);
