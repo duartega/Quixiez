@@ -6,14 +6,17 @@ import Conversations from "./Conversations";
 import BusinessHours from "../tables/BusinessHoursTable";
 import ConversationsList from "../../our-components/Tables/ConversationsList";
 class AllConversations extends React.Component {
+  componentWillMount() {
+    console.log(window.innerHeight);
+  }
   render() {
     return (
-      <Row style={{ overflow: "hidden", maxHeight: "100%" }}>
+      <Row style={{ overflow: "hidden" }}>
         <Col>
           <ConversationsList />
         </Col>
 
-        <Col style={{ overflow: "scroll" }}>
+        <Col style={{ overflow: "auto", height: window.innerHeight - 50 }}>
           <Conversations />
           <ChatFooter
             inputPlaceHolder="Enter Message"
