@@ -196,15 +196,6 @@ class Widgets extends React.Component {
             }}
           />
         </div>
-
-        <ChatFooter
-          inputPlaceHolder="Enter Message"
-          inputOnChange={this.handleChange}
-          inputName="message"
-          inputValue={this.state.message}
-          inputOnKeyDown={this.keyPress}
-          inputStyle={{ backgroundColor: "#27293d" }}
-        />
       </>
     );
   }
