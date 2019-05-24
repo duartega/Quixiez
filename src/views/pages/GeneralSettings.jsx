@@ -10,7 +10,7 @@ import {
 } from "../../constants/routes";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "../../redux/actions";
-import Hours from "../pages/BusinessHours";
+import Hours from "./BusinessHours";
 import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
@@ -29,6 +29,7 @@ import {
 } from "reactstrap";
 import { SocialMedia } from "our-components/Settings/SocialMedia";
 import { Address } from "our-components/Settings/Address";
+import { General } from "our-components/Settings/General";
 
 class User extends React.Component {
   constructor(props) {
@@ -170,13 +171,19 @@ class User extends React.Component {
   }
 
   handleCompanyOverviewSave() {
-    const { quixiezNumber, phoneNumber, email, websiteUrl } = this.state;
+    const {
+      quixiezNumber,
+      phoneNumber,
+      email,
+      websiteUrl,
+      companyName
+    } = this.state;
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
       axiosPut(
         putCompanyInfo,
-        { quixiezNumber, phoneNumber, email, websiteUrl },
+        { quixiezNumber, phoneNumber, email, websiteUrl, companyName },
         jwt
       )
         .then(result => {
@@ -227,94 +234,15 @@ class User extends React.Component {
       return (
         <>
           <div className="content">
-            <Row className="mx-xl-xl">
-              <Col md="8">
-                <Card>
-                  <CardHeader>
-                    <h2 className="title">Company Overview</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <Form>
-                      <Row>
-                        <Col className="pr-md-1" md="5">
-                          <FormGroup>
-                            <label>Company</label>
-                            <Input
-                              defaultValue={this.state.companyName}
-                              type="text"
-                              name="companyName"
-                              onChange={this.handleChange}
-                              placeholder="No Company Name Set"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="px-md-1" md="3">
-                          <FormGroup>
-                            <label>Quixiez Number</label>
-                            {/* should change to number */}
-                            <Input
-                              placeholder="No Phone Number Set"
-                              defaultValue={this.state.quixiezNumber}
-                              type="text"
-                              name="quixiezNumber"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="4">
-                          <FormGroup>
-                            <label>Bussiness Number</label>
-                            <Input
-                              placeholder="No Phone Number Set"
-                              defaultValue={this.state.phoneNumber}
-                              type="text"
-                              name="phoneNumber"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col className="pr-md-1" md="6">
-                          <FormGroup>
-                            <label>Business Email</label>
-                            <Input
-                              placeholder="No Email Set"
-                              defaultValue={this.state.email}
-                              type="email"
-                              name="email"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col className="pl-md-1" md="6">
-                          <FormGroup>
-                            <label>Business Website</label>
-                            <Input
-                              placeholder="No Website Set"
-                              defaultValue={this.state.websiteUrl}
-                              type="url"
-                              name="websiteUrl"
-                              onChange={this.handleChange}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </CardBody>
-                  <CardFooter className="text-right">
-                    <Button
-                      className="btn-fill"
-                      color="success"
-                      type="submit"
-                      onClick={this.handleCompanyOverviewSave}
-                    >
-                      Save
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Col>
-            </Row>
+            <General
+              companyNameDefaultValue={this.state.companyName}
+              quixiezNumberDefaultValue={this.state.quixiezNumber}
+              phoneNumberDefaultValue={this.state.phoneNumber}
+              emailDefaultValue={this.state.email}
+              websiteUrlDefaultValue={this.state.websiteUrl}
+              onChange={this.handleChange}
+              onClick={this.handleCompanyOverviewSave}
+            />
           </div>
 
           <div className="content">
