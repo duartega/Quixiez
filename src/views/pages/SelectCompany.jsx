@@ -6,6 +6,13 @@ import { selectCompany } from "../../constants/routes";
 import { connect } from "react-redux";
 import { setCompanyUserJWT, setCompanyName } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
+import { Row } from 'reactstrap';
+import TestLogo from '../../Images/testlogo.png';
+import GPF from '../../Images/gpf.png';
+import G from '../../Images/good.png';
+import S from '../../Images/s.jpg';
+
+let images = [TestLogo, G, S, GPF];
 
 class Company extends React.Component {
   state = {
@@ -42,6 +49,7 @@ class Company extends React.Component {
           }}
         >
           <div key={idx}>
+            <img src={images[idx]} alt="Test"/>
             <p>{aCompany.companyName}</p>
           </div>
         </Button>
