@@ -37,8 +37,13 @@ class Test extends React.Component {
     this.socket.emit("join");
     this.socket.on("client-incoming-message", messageData => {
       const { data } = this.state;
-      data.push(messageData);
+      const { message } = messageData;
+      data.push(message);
       this.setState({ data });
+    });
+
+    this.socket.emit("client-send-message", {
+      message: "Hey"
     });
   }
 
@@ -47,7 +52,9 @@ class Test extends React.Component {
   }
 
   render() {
-    const listOfData = this.state.data.map(data => <p>{data}</p>);
+    const listOfData = this.state.data.map((data, idx) => (
+      <p key={idx}>{data}</p>
+    ));
     return (
       <div>
         <h1>Test</h1>
