@@ -3,24 +3,22 @@ import socketIo from "socket.io-client";
 import { socketTest } from "../../constants/routes";
 
 /**
- * This is just a demonstration of how sockets works at
- * a very basic level. No need to understand this right
- * away. Tbh, I don't 100% fully get it.
+ * This works.
  *
- * The fetch requests will be replaced with axios as per
- * discussed. They are just here for me to test the endpoints
- * because if the end point wasn't returning anything then
- * there was most likely an error unrelated to the websocket.
+ * What you need to do is open to screens
+ * and connect to localhost:<your_port>/test
  *
- * Sockets really are only going to be used for a few things.
- * 1. Conversations/Messages.
- * 2. Updates:
- *  - New Message/Order update
- *  - New employee request
+ * Once you open up both screens start to refresh on of them
+ * and you will see the message of 'Hey'
  *
- * Again, like I was saying before, I honestly am not 100% sure
- * how this is going to work out. This is just a demo, as far as
- * the frontend goes, I wouldn't even worry about the backend.
+ * This works because every time you refresh the
+ * screen the component sends the message.
+ *
+ * There isn't anything in this component to actually send a message.
+ *
+ * If you try to just save a bunch of times thinking the page will
+ * refresh it wont because there haven't been any updates to the
+ * file.
  */
 class Test extends React.Component {
   constructor(props) {
