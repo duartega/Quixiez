@@ -48,6 +48,7 @@ class Test extends React.Component {
   }
 
   componentWillUnmount() {
+    /** Remove listener */
     this.socket.off("client-incoming-message");
   }
 
