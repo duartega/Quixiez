@@ -5,70 +5,88 @@ import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 // reactstrap components
 import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
-class Widgets extends React.Component {
-  constructor() {
-    super();
-    this.showNormalBubble = false;
+import { joinRoom, sendMessage, receiveMessage } from "../../sockets/socket";
+
+interface State {
+  messages: any[];
+  message: string;
+}
+
+class Conversations extends React.Component<{}, State> {
+  constructor(props: any) {
+    super(props);
     this.state = {
-      testBubble: [],
+      messages: [],
       message: ""
     };
-    this.key = 1;
   }
+
+  private key = 1;
+  private chatContainer: HTMLDivElement | null = null;
+  private messagesEnd: HTMLDivElement | null = null;
 
   componentDidMount() {
     this.initialScroll();
+    // Joining socket room
+    joinRoom();
+
+    receiveMessage(messageData => {
+      const { message } = messageData;
+      console.log(message);
+      this.createMessage(true, message);
+    });
 
     if (false) {
       setInterval(() => {
-        this.testBubble();
+        this.createMessage();
       }, 2000);
     }
   }
 
   initialScroll = () => {
-    this.messagesEnd.scrollIntoView(true);
+    this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
   componentDidUpdate() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
-  testBubble = () => {
-    const testBubble = (
+  createMessage = (receiving?: boolean, message?: string) => {
+    const messages = (
       <ChatBubble
         key={this.key++}
         badgeColor="info"
         badgeLabel="Joe"
-        message={this.state.message}
+        message={receiving && message ? message : this.state.message}
         timePassed="7 Days"
-        // inverted
+        inverted={receiving ? true : false}
       />
     );
-    const { testBubble: testBubbleState } = this.state;
-    testBubbleState.push(testBubble);
+    // console.log(receiving, message);
+    !receiving && sendMessage(this.state.message);
+    const { messages: messagesState } = this.state;
+    messagesState.push(messages);
 
-    this.setState({ testBubble: testBubbleState, message: "" });
+    this.setState({ messages: messagesState, message: "" });
   };
 
-  handleChange = event =>
-    this.setState({ [event.target.name]: event.target.value });
+  handleChange = (event: any) =>
+    this.setState({ [event.target.name as "message"]: event.target.value });
 
   addMessage = () => {
-    if (this.state.message !== "") {
-      this.testBubble();
-    }
+    const { message } = this.state;
+    message !== "" && this.createMessage();
   };
 
-  keyPress = e => {
+  keyPress = (e: any) => {
     if (e.keyCode === 13 && this.state.message !== "" && !e.shiftKey) {
       e.preventDefault();
-      this.testBubble();
+      this.createMessage();
     }
   };
 
@@ -98,52 +116,8 @@ class Widgets extends React.Component {
             timePassed="7 Days"
           />
 
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Joe"
-            timePassed="7 Days"
-            inverted
-          />
-
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-
-          {this.state.testBubble.map(aTestBubble => {
-            return aTestBubble;
+          {this.state.messages.map(amessages => {
+            return amessages;
           })}
 
           {/* Scroll to bottom of screen on mount
@@ -170,4 +144,4 @@ class Widgets extends React.Component {
     );
   }
 }
-export default Widgets;
+export default Conversations;

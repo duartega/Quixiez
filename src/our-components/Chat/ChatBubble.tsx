@@ -6,7 +6,7 @@ interface Props {
   badgeLabel: string;
   message: string;
   timePassed: string;
-  inverted: boolean;
+  inverted?: boolean;
 }
 
 export const ChatBubble = (props: Props) => {
