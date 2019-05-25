@@ -7,16 +7,23 @@ import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
 import { joinRoom, sendMessage, receiveMessage } from "../../sockets/socket";
 
-class Conversations extends React.Component {
-  constructor(props) {
+interface State {
+  messages: any[];
+  message: string;
+}
+
+class Conversations extends React.Component<{}, State> {
+  constructor(props: any) {
     super(props);
     this.state = {
       messages: [],
       message: ""
     };
-
-    this.key = 1;
   }
+
+  private key = 1;
+  private chatContainer: HTMLDivElement | null = null;
+  private messagesEnd: HTMLDivElement | null = null;
 
   componentDidMount() {
     this.initialScroll();
@@ -37,29 +44,25 @@ class Conversations extends React.Component {
   }
 
   initialScroll = () => {
-    this.messagesEnd.scrollIntoView(true);
+    this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
   componentDidUpdate() {
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
-  /**
-   * @param {boolean | undefined} receiving
-   * @param {string | undefined} message
-   */
-  createMessage = (receiving, message) => {
+  createMessage = (receiving?: boolean, message?: string) => {
     const messages = (
       <ChatBubble
         key={this.key++}
         badgeColor="info"
         badgeLabel="Joe"
-        message={receiving ? message : this.state.message}
+        message={receiving && message ? message : this.state.message}
         timePassed="7 Days"
         inverted={receiving ? true : false}
       />
@@ -72,16 +75,15 @@ class Conversations extends React.Component {
     this.setState({ messages: messagesState, message: "" });
   };
 
-  handleChange = event =>
-    this.setState({ [event.target.name]: event.target.value });
+  handleChange = (event: any) =>
+    this.setState({ [event.target.name as "message"]: event.target.value });
 
   addMessage = () => {
-    if (this.state.message !== "") {
-      this.messages();
-    }
+    const { message } = this.state;
+    message !== "" && this.createMessage();
   };
 
-  keyPress = e => {
+  keyPress = (e: any) => {
     if (e.keyCode === 13 && this.state.message !== "" && !e.shiftKey) {
       e.preventDefault();
       this.createMessage();
