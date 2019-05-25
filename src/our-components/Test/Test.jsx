@@ -28,6 +28,8 @@ class Test extends React.Component {
     this.state = {
       data: []
     };
+
+    this.socket = socketIo(socketTest);
   }
 
   async componentDidMount() {
