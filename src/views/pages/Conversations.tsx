@@ -33,7 +33,7 @@ class Conversations extends React.Component<{}, State> {
     receiveMessage(messageData => {
       const { message } = messageData;
       console.log(message);
-      this.createMessage(true, message);
+      this.createMessage(message);
     });
 
     if (false) {
@@ -56,19 +56,19 @@ class Conversations extends React.Component<{}, State> {
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
-  createMessage = (receiving?: boolean, message?: string) => {
+  createMessage = (message?: string) => {
     const messages = (
       <ChatBubble
         key={this.key++}
         badgeColor="info"
         badgeLabel="Joe"
-        message={receiving && message ? message : this.state.message}
+        message={message ? message : this.state.message}
         timePassed="7 Days"
-        inverted={receiving ? true : false}
+        inverted={message ? true : false}
       />
     );
     // console.log(receiving, message);
-    !receiving && sendMessage(this.state.message);
+    !message && sendMessage(this.state.message);
     const { messages: messagesState } = this.state;
     messagesState.push(messages);
 
