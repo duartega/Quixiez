@@ -5,23 +5,33 @@ import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 // reactstrap components
 import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
-class Widgets extends React.Component {
-  constructor() {
-    super();
-    this.showNormalBubble = false;
+import { joinRoom, sendMessage, receiveMessage } from "../../sockets/socket";
+
+class Conversations extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      testBubble: [],
+      messages: [],
       message: ""
     };
+
     this.key = 1;
   }
 
   componentDidMount() {
     this.initialScroll();
+    // Joining socket room
+    joinRoom();
+
+    receiveMessage(messageData => {
+      const { message } = messageData;
+      console.log(message);
+      this.createMessage(true, message);
+    });
 
     if (false) {
       setInterval(() => {
-        this.testBubble();
+        this.createMessage();
       }, 2000);
     }
   }
@@ -39,21 +49,27 @@ class Widgets extends React.Component {
     this.scrollToBottom(); // scroll to bottom of screen on mount
   }
 
-  testBubble = () => {
-    const testBubble = (
+  /**
+   * @param {boolean | undefined} receiving
+   * @param {string | undefined} message
+   */
+  createMessage = (receiving, message) => {
+    const messages = (
       <ChatBubble
         key={this.key++}
         badgeColor="info"
         badgeLabel="Joe"
-        message={this.state.message}
+        message={receiving ? message : this.state.message}
         timePassed="7 Days"
-        // inverted
+        inverted={receiving ? true : false}
       />
     );
-    const { testBubble: testBubbleState } = this.state;
-    testBubbleState.push(testBubble);
+    // console.log(receiving, message);
+    !receiving && sendMessage(this.state.message);
+    const { messages: messagesState } = this.state;
+    messagesState.push(messages);
 
-    this.setState({ testBubble: testBubbleState, message: "" });
+    this.setState({ messages: messagesState, message: "" });
   };
 
   handleChange = event =>
@@ -61,14 +77,14 @@ class Widgets extends React.Component {
 
   addMessage = () => {
     if (this.state.message !== "") {
-      this.testBubble();
+      this.messages();
     }
   };
 
   keyPress = e => {
     if (e.keyCode === 13 && this.state.message !== "" && !e.shiftKey) {
       e.preventDefault();
-      this.testBubble();
+      this.createMessage();
     }
   };
 
@@ -98,52 +114,8 @@ class Widgets extends React.Component {
             timePassed="7 Days"
           />
 
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Joe"
-            timePassed="7 Days"
-            inverted
-          />
-
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="Hey Test Bubble"
-            timePassed="7 Days"
-            inverted
-          />
-
-          {this.state.testBubble.map(aTestBubble => {
-            return aTestBubble;
+          {this.state.messages.map(amessages => {
+            return amessages;
           })}
 
           {/* Scroll to bottom of screen on mount
@@ -170,4 +142,4 @@ class Widgets extends React.Component {
     );
   }
 }
-export default Widgets;
+export default Conversations;
