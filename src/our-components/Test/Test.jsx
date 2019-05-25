@@ -38,24 +38,24 @@ class Test extends React.Component {
      * is good for right now is making an
      * api call.
      */
-    const request = await fetch(socketTest);
+    // const request = await fetch(socketTest);
     /**
      * Convert the fetch request to json
      * the .json() returns a promise so we
      * will await.
      */
-    const requestJson = await request.json();
+    // const requestJson = await request.json();
     /**
      * Printing out the json response.
      */
-    console.log(requestJson);
+    // console.log(requestJson);
 
     /**
      * The code above is equivalent to below.
      */
-    fetch(socketTest).then(response =>
-      response.json().then(responseJson => console.log(responseJson))
-    );
+    // fetch(socketTest).then(response =>
+    //   response.json().then(responseJson => console.log(responseJson))
+    // );
 
     /**
      * Begin socket connection.
@@ -118,22 +118,28 @@ class Test extends React.Component {
      * Every one second we are sending the server a test message.
      */
     let i = 0;
-    setInterval(() => {
-      /**
-       * If you look at the data closely (in io.emit) you will see #${++i},
-       * Discard the '#' for a second and we just have ${++i}.
-       * All the ${some_var} is string interpolation. So
-       *
-       * let joesFavoriteDrink = "coffee";
-       * let sentence = `Joe's favorite drink is ${joesFavoriteDrink}`;
-       * sentence is the same thing as
-       * This gets messy though quickly once you start having + + + + everywhere.
-       * let anotherSentence = "Joe's favorite drink is" + joesFavoriteDrink.
-       *
-       * So all the data is saying is This is test message #1, #2, #3, ... #i.
-       */
-      io.emit("test-message", { data: `This is test message #${++i}` });
-    }, 1000);
+    // setInterval(() => {
+    /**
+     * If you look at the data closely (in io.emit) you will see #${++i},
+     * Discard the '#' for a second and we just have ${++i}.
+     * All the ${some_var} is string interpolation. So
+     *
+     * let joesFavoriteDrink = "coffee";
+     * let sentence = `Joe's favorite drink is ${joesFavoriteDrink}`;
+     * sentence is the same thing as
+     * This gets messy though quickly once you start having + + + + everywhere.
+     * let anotherSentence = "Joe's favorite drink is" + joesFavoriteDrink.
+     *
+     * So all the data is saying is This is test message #1, #2, #3, ... #i.
+     */
+    // io.emit("test-message", {
+    // data: `FROM JOE: This is test message #${++i}`
+    // });
+    // }, 1000);
+    io.emit("join", { room: "haku", message: "This is joe" });
+    // io.emit("test-message", {
+    //   data: `FROM JOE: This is test message #${++i}`
+    // });
   }
 
   render() {

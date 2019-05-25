@@ -6,7 +6,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 // import AuthLayout from "layouts/Auth/Auth.jsx";
 import AdminLayout from "../src/our-components/Admin";
 import RTLLayout from "layouts/RTL/RTL.jsx";
-import Test from "layouts/Test/Test.jsx";
+import Test from "../src/our-components/Test/Test";
 
 import "assets/css/nucleo-icons.css";
 import "assets/scss/black-dashboard-pro-react.scss?v=1.0.0";
@@ -29,9 +29,7 @@ import Hours from "views/pages/BusinessHours";
 
 import Conversations from "views/pages/Conversations";
 import AllConversations from "views/pages/AllConversations";
-import List from './our-components/Tables/ConversationsList';
-
-
+import List from "./our-components/Tables/ConversationsList";
 
 const hist = createBrowserHistory();
 
@@ -64,10 +62,7 @@ const Root = ({ store }) => (
           path="/conversations"
           render={props => <Conversations {...props} />}
         />
-        <Route
-          path="/list"
-          render={props => <List {...props} />}
-        />
+        <Route path="/list" render={props => <List {...props} />} />
         <Route
           path="/allconversations"
           render={props => <AllConversations {...props} />}
