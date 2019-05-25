@@ -20,6 +20,8 @@ import { socketTest } from "../../constants/routes";
  * refresh it wont because there haven't been any updates to the
  * file.
  */
+
+/** TEST */
 class Test extends React.Component {
   constructor(props) {
     super(props);
