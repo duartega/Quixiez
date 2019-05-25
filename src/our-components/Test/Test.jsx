@@ -1,27 +1,11 @@
 import React from "react";
-import socketIo from "socket.io-client";
-import { socketTest } from "../../constants/routes";
-
-/**
- * This works.
- *
- * What you need to do is open to screens
- * and connect to localhost:<your_port>/test
- *
- * Once you open up both screens start to refresh on of them
- * and you will see the message of 'Hey'
- *
- * This works because every time you refresh the
- * screen the component sends the message.
- *
- * There isn't anything in this component to actually send a message.
- *
- * If you try to just save a bunch of times thinking the page will
- * refresh it wont because there haven't been any updates to the
- * file.
- */
-
-/** TEST */
+import {
+  joinRoom,
+  sendMessage,
+  receiveMessage,
+  stopListening
+} from "../../sockets/socket";
+import { RECEIVE_MESSAGE } from "../../sockets/events";
 class Test extends React.Component {
   constructor(props) {
     super(props);
@@ -29,26 +13,24 @@ class Test extends React.Component {
       data: []
     };
 
-    this.socket = socketIo(socketTest);
+    // this.socket = socketIo(socketTest);
   }
 
   componentDidMount() {
     /** Join the room */
-    this.socket.emit("join");
-    this.socket.on("client-incoming-message", messageData => {
+    // this.socket.emit("join");
+    joinRoom();
+    sendMessage("Hey!");
+    receiveMessage(messageData => {
       const { data } = this.state;
       const { message } = messageData;
       data.push(message);
       this.setState({ data });
     });
-
-    this.socket.emit("client-send-message", {
-      message: "Hey"
-    });
   }
 
   componentWillUnmount() {
-    this.socket.off("client-incoming-message");
+    stopListening(RECEIVE_MESSAGE);
   }
 
   render() {
