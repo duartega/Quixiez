@@ -8,7 +8,7 @@ import { socketTest } from "../../constants/routes";
  * What you need to do is open to screens
  * and connect to localhost:<your_port>/test
  *
- * Once you open up both screens start to refresh on of them
+ * Once you open up both screens start to refresh one of them
  * and you will see the message of 'Hey'
  *
  * This works because every time you refresh the

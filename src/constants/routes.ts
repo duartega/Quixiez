@@ -1,4 +1,4 @@
-const testing = true;
+const testing = false;
 const baseRoute = testing
   ? "https://api.stage.quixiez.com"
   : "https://api.quixiez.com";

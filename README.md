@@ -1,13 +1,11 @@
-# Company Site
+# Socket Example
 
-This is where the dashboard and everything pertaining to the company will be.
+To see this work run
 
-[Template Docs](Black-Dashboard-Pro-React)
+`git fetch # this will pull all remote branches down`
 
-## ._ files
+`git checkout sockets-example`
 
-To remove run `dot_clean .`
+`npm start`
 
-## References
-
-[Material UI Autofill](https://material-ui.com/demos/autocomplete/)
+The example file (with documentation) can be found in `/src/our-components/Test/Test.jsx`
