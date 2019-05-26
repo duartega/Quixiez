@@ -4,7 +4,6 @@ import { socketTest, socketTestTestNameSpace } from "../constants/routes";
 /** Events */
 import { SEND_MESSAGE, INCOMING_MESSAGE } from "./events/Events";
 
-// export const socket = socketIo(socketTest);
 export const socket = socketIo(socketTestTestNameSpace);
 
 export const joinRoom = () => socket.emit("join");
