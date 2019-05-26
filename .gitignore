@@ -30,3 +30,6 @@ yarn-error.log*
 # vscode
 .vscode/ipch/
 .vscode/c_cpp_properties.json
+
+# submodules
+src/sockets/events

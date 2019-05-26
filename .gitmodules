@@ -1,0 +1,3 @@
+[submodule "src/sockets/events"]
+	path = src/sockets/events
+	url = https://github.com/joemissamore/quixiez-sockets.git

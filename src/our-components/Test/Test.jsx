@@ -4,8 +4,8 @@ import {
   sendMessage,
   receiveMessage,
   stopListening
-} from "../../sockets/socket";
-import { RECEIVE_MESSAGE } from "../../sockets/events";
+} from "../../__sockets/socket";
+import { RECEIVE_MESSAGE } from "../../__sockets/events";
 class Test extends React.Component {
   constructor(props) {
     super(props);

@@ -5,7 +5,7 @@ import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 // reactstrap components
 import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
-import { joinRoom, sendMessage, receiveMessage } from "../../sockets/socket";
+import { joinRoom, sendMessage, receiveMessage } from "../../sockets/Socket";
 
 interface State {
   messages: any[];
