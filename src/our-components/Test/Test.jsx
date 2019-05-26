@@ -4,8 +4,8 @@ import {
   sendMessage,
   receiveMessage,
   stopListening
-} from "../../__sockets/socket";
-import { RECEIVE_MESSAGE } from "../../__sockets/events";
+} from "../../sockets/Socket";
+import { INCOMING_MESSAGE } from "../../sockets/events/Events";
 class Test extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class Test extends React.Component {
   }
 
   componentWillUnmount() {
-    stopListening(RECEIVE_MESSAGE);
+    stopListening(INCOMING_MESSAGE);
   }
 
   render() {

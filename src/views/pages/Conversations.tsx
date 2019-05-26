@@ -32,7 +32,6 @@ class Conversations extends React.Component<{}, State> {
 
     receiveMessage(messageData => {
       const { message } = messageData;
-      console.log(message);
       this.createMessage(message);
     });
 

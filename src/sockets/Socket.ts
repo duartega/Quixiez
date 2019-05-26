@@ -2,7 +2,7 @@ import socketIo from "socket.io-client";
 import { socketTest, socketTestTestNameSpace } from "../constants/routes";
 
 /** Events */
-import { SEND_MESSAGE, RECEIVE_MESSAGE } from "./events/Events";
+import { SEND_MESSAGE, INCOMING_MESSAGE } from "./events/Events";
 
 // export const socket = socketIo(socketTest);
 export const socket = socketIo(socketTestTestNameSpace);
@@ -14,7 +14,8 @@ export const sendMessage = (message: string) => {
 };
 
 export const receiveMessage = (messageDataCb: (messageData: any) => void) => {
-  socket.on(RECEIVE_MESSAGE, (messageData: any) => {
+  socket.on(INCOMING_MESSAGE, (messageData: any) => {
+    console.log("receiving message", messageData);
     messageDataCb(messageData);
   });
 };
