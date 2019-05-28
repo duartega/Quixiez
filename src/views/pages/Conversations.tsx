@@ -150,7 +150,7 @@ class Conversations extends React.Component<
       <>
         <div
           ref={node => (this.chatContainer = node)}
-          style={{ height: this.props.conversationContainerHeight - 50 }}
+          style={{ height: this.props.conversationContainerHeight }}
         >
           <ChatHeader />
 
@@ -173,11 +173,11 @@ class Conversations extends React.Component<
             message="Hey Man Reply!"
             timePassed="7 Days"
           /> */}
-          <div className="h-100">
-            {this.state.messages.map(amessages => {
-              return amessages;
-            })}
-          </div>
+          {/* <div className="h-75"> */}
+          {this.state.messages.map(amessages => {
+            return amessages;
+          })}
+          {/* </div> */}
 
           {/* Scroll to bottom of screen on mount
            * If this div is moved below the chat
