@@ -21,9 +21,8 @@ class AllConversations extends React.Component {
     this.headerHeightWithPadding = 66;
     this.conversationHeight =
       window.innerHeight - this.customHeight - this.headerHeightWithPadding;
-
-    this.conversationContainerHeight =
-      window.outerHeight - this.customHeight - this.headerHeightWithPadding;
+    this.conversationHeight1 =
+      window.outterHeight - this.customHeight - this.headerHeightWithPadding;
   }
 
   render() {
@@ -48,7 +47,7 @@ class AllConversations extends React.Component {
              * - 80 is the height of the footer (for now, the height
              * of the footer might change)
              */
-            conversationContainerHeight={this.conversationContainerHeight - 200}
+            conversationContainerHeight={this.conversationHeight1 - 100}
           />
         </Col>
       </Row>

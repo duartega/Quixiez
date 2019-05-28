@@ -40,6 +40,7 @@ class Conversations extends React.Component<
   private chatContainer: HTMLDivElement | null = null;
   private messagesEnd: HTMLDivElement | null = null;
   private innerHeight: any = null;
+  private timeout: any = null;
 
   componentDidMount() {
     this.initialScroll();
@@ -63,7 +64,9 @@ class Conversations extends React.Component<
         companyUsername
       );
       // if (companyUsername !== "Joe") {
-      this.setState({ companyUserTyping: companyUsername });
+      if (this.state.companyUserTyping === null) {
+        this.setState({ companyUserTyping: companyUsername });
+      }
       // }
     });
 
@@ -99,8 +102,16 @@ class Conversations extends React.Component<
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
-  componentDidUpdate() {
-    this.scrollToBottom(); // scroll to bottom of screen on mount
+  componentDidUpdate(prevProps: any, prevState: State) {
+    /**
+     * Stopping the automatic scroll to bottom
+     * when the user typing changes
+     */
+    if (prevState.companyUserTyping !== this.state.companyUserTyping) {
+    } else if (this.state.companyUserTyping === null) {
+    } else {
+      this.scrollToBottom(); // scroll to bottom of screen on mount
+    }
   }
 
   createMessage = (message?: string) => {
@@ -127,7 +138,10 @@ class Conversations extends React.Component<
     this.setState({ [event.target.name as "message"]: event.target.value });
     handleEmployeeStartedTyping("Joe");
 
-    setTimeout(() => {
+    if (this.timeout) {
+      delete this.timeout;
+    }
+    this.timeout = setTimeout(() => {
       handleEmployeeStoppedTyping("Joe");
     }, 5000);
   };

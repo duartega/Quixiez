@@ -157,7 +157,7 @@ div.chat-header-container {
 /* Chat footer */
 .row.chat-footer-container {
   position: fixed;
-  bottom: 5;
+  bottom: 0;
   width: 50%;
   background-color: #1e1e26;
   /* background-color: #1e1e2f; */
