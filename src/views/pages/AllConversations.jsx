@@ -19,9 +19,12 @@ class AllConversations extends React.Component {
      */
 
     this.headerHeightWithPadding = 66;
+    this.conversationHeight =
+      window.innerHeight - this.customHeight - this.headerHeightWithPadding;
   }
 
   render() {
+    console.log("conversation height", this.conversationHeight);
     return (
       <Row style={{ overflow: "hidden" }} className="content">
         <Col>
@@ -31,13 +34,19 @@ class AllConversations extends React.Component {
         <Col
           style={{
             overflow: "auto",
-            height:
-              window.innerHeight -
-              this.customHeight -
-              this.headerHeightWithPadding
+            height: this.conversationHeight
           }}
         >
-          <Conversations />
+          <Conversations
+            /**
+             * For right now this is ok.
+             * We are setting the conversations container height
+             * To push down the footer.
+             * - 80 is the height of the footer (for now, the height
+             * of the footer might change)
+             */
+            conversationContainerHeight={this.conversationHeight - 80}
+          />
         </Col>
       </Row>
     );

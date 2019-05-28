@@ -23,7 +23,10 @@ interface State {
   companyUserTyping: string | null;
 }
 
-class Conversations extends React.Component<{}, State> {
+class Conversations extends React.Component<
+  { conversationContainerHeight: number },
+  State
+> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -36,6 +39,7 @@ class Conversations extends React.Component<{}, State> {
   private key = 1;
   private chatContainer: HTMLDivElement | null = null;
   private messagesEnd: HTMLDivElement | null = null;
+  private innerHeight: any = null;
 
   componentDidMount() {
     this.initialScroll();
@@ -72,6 +76,12 @@ class Conversations extends React.Component<{}, State> {
       setInterval(() => {
         this.createMessage();
       }, 2000);
+    }
+
+    if (this.chatContainer) {
+      console.log("height", this.chatContainer.clientHeight);
+    } else {
+      console.log("height unavailable");
     }
   }
 
@@ -138,7 +148,10 @@ class Conversations extends React.Component<{}, State> {
     console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
-        <div ref={node => (this.chatContainer = node)}>
+        <div
+          ref={node => (this.chatContainer = node)}
+          style={{ height: this.props.conversationContainerHeight }}
+        >
           <ChatHeader />
 
           {/* <ChatBubble
@@ -160,10 +173,11 @@ class Conversations extends React.Component<{}, State> {
             message="Hey Man Reply!"
             timePassed="7 Days"
           /> */}
-
-          {this.state.messages.map(amessages => {
-            return amessages;
-          })}
+          <div className="h-100">
+            {this.state.messages.map(amessages => {
+              return amessages;
+            })}
+          </div>
 
           {/* Scroll to bottom of screen on mount
            * If this div is moved below the chat

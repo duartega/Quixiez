@@ -31,8 +31,13 @@ export class ChatFooter extends Component<Props> {
         <br />
         <br />
         <br />
-        <p>{whoIsTyping ? `${whoIsTyping} is typing...` : null}</p>
+
         <Row className="chat-footer-container align-items-start">
+          <Row>
+            <Col className="md-12">
+              <p>{whoIsTyping ? `${whoIsTyping} is typing...` : null}</p>
+            </Col>
+          </Row>
           <Row className="w-100 align-items-center">
             <Col className="md-9">
               <Input
