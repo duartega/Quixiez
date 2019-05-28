@@ -2,7 +2,7 @@ import React from "react";
 import { login } from "./constants/routes.ts";
 import SelectCompany from "./views/pages/SelectCompany";
 import { connect } from "react-redux";
-import { setCompanyUserJWT } from "./redux/actions";
+// import { setCompanyUserJWT } from "./redux/actions";
 import { Redirect } from "react-router-dom";
 
 // reactstrap components
@@ -50,6 +50,10 @@ class Login extends React.Component {
   }
   componentDidMount() {
     document.body.classList.toggle("login-page");
+    // const jwt = localStorage.getItem("jwt");
+    // if (jwt) {
+    //   this.setState({ loggedIn: true });
+    // }
   }
 
   componentWillUnmount() {
@@ -70,14 +74,16 @@ class Login extends React.Component {
     axiosPost(login, { email, password })
       .then(result => {
         const { jwt, companies } = result.data;
-        const { setCompanyUserJWT } = this.props;
+        // const { setCompanyUserJWT } = this.props;
 
         this.setState({
           JWT: jwt,
           loggedIn: true,
           allCompanies: companies
         });
-        setCompanyUserJWT(jwt);
+        localStorage.setItem("jwt", jwt);
+        // setCompanyUserJWT(jwt);
+        console.log(companies);
       })
       .catch(err => {
         console.log(err.response);
@@ -231,14 +237,13 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = ({ companyUserReducer }) => ({ companyUserReducer });
+// const mapStateToProps = ({ companyUserReducer }) => ({ companyUserReducer });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setCompanyUserJWT: jwt => dispatch(setCompanyUserJWT(jwt))
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     setCompanyUserJWT: jwt => dispatch(setCompanyUserJWT(jwt))
+//   };
+// };
+export default connect()(Login);
+// mapStateToProps,
+// mapDispatchToProps

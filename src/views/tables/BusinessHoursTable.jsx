@@ -82,7 +82,7 @@ class RegularTables extends React.Component {
   componentDidMount() {
     const { jwt } = this.props;
     // console.log(jwt);
-    axiosGet(companyHoursEndpoint, jwt)
+    axiosGet(companyHoursEndpoint)
       .then(result => {
         const { data } = result;
         if (data !== {}) {

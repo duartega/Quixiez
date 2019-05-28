@@ -60,7 +60,7 @@ class User extends React.Component {
     this.setState({ companyName: this.props.companyUserReducer.companyName });
 
     // Get address information for the settings page
-    axiosGet(getAddress, jwt)
+    axiosGet(getAddress)
       .then(result => {
         const { data } = result;
         delete data.created;
@@ -72,7 +72,7 @@ class User extends React.Component {
       });
 
     // Get social media information for the settings page
-    axiosGet(getSocialMediaLinks, jwt)
+    axiosGet(getSocialMediaLinks)
       .then(socialMedia => {
         this.setState({
           facebook: socialMedia.data["facebookUrl"],
@@ -86,7 +86,7 @@ class User extends React.Component {
       });
 
     // Get company information such as number and email for the settings page
-    axiosGet(getCompanyInfo, jwt)
+    axiosGet(getCompanyInfo)
       .then(result => {
         const { data } = result;
         delete data.created;
@@ -136,11 +136,16 @@ class User extends React.Component {
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
-      axiosPut(
-        putAddress,
-        { street, city, state, zip, showStreet, showCity, showState, showZip },
-        jwt
-      )
+      axiosPut(putAddress, {
+        street,
+        city,
+        state,
+        zip,
+        showStreet,
+        showCity,
+        showState,
+        showZip
+      })
         .then(result => {
           this.setState({ alert: "success" });
         })
@@ -165,11 +170,13 @@ class User extends React.Component {
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
-      axiosPut(
-        putCompanyInfo,
-        { quixiezNumber, phoneNumber, email, websiteUrl, companyName },
-        jwt
-      )
+      axiosPut(putCompanyInfo, {
+        quixiezNumber,
+        phoneNumber,
+        email,
+        websiteUrl,
+        companyName
+      })
         .then(result => {
           this.setState({ alert: "success" });
         })
@@ -193,11 +200,12 @@ class User extends React.Component {
     const jwt = this.props.companyUserReducer.jwt;
 
     if (this.state.hasInfoChanged) {
-      axiosPut(
-        putSocialMediaLinks,
-        { facebookUrl, twitterUsername, snapChatUsername, instagramUsername },
-        jwt
-      )
+      axiosPut(putSocialMediaLinks, {
+        facebookUrl,
+        twitterUsername,
+        snapChatUsername,
+        instagramUsername
+      })
         .then(result => {
           this.setState({ alert: "success" });
         })
