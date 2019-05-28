@@ -28,6 +28,11 @@ class Conversations extends React.Component<{}, State> {
   componentDidMount() {
     this.initialScroll();
     // Joining socket room
+    /**
+     * Effectively joining the room, but nothing is going
+     * on with the room at the moment. All messages are
+     * being sent to the namespace right now.
+     */
     joinRoom();
 
     receiveMessage(messageData => {
@@ -56,6 +61,7 @@ class Conversations extends React.Component<{}, State> {
   }
 
   createMessage = (message?: string) => {
+    message && sendMessage(message);
     const messages = (
       <ChatBubble
         key={this.key++}
@@ -95,7 +101,7 @@ class Conversations extends React.Component<{}, State> {
         <div ref={node => (this.chatContainer = node)}>
           <ChatHeader />
 
-          <ChatBubble
+          {/* <ChatBubble
             badgeColor="warning"
             badgeLabel="Gabe"
             message="A message"
@@ -113,7 +119,7 @@ class Conversations extends React.Component<{}, State> {
             badgeLabel="Joe"
             message="Hey Man Reply!"
             timePassed="7 Days"
-          />
+          /> */}
 
           {this.state.messages.map(amessages => {
             return amessages;
