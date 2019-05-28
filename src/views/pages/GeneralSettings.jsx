@@ -56,8 +56,9 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    const jwt = this.props.companyUserReducer.jwt;
+    // const jwt = this.props.companyUserReducer.jwt;
     this.setState({ companyName: this.props.companyUserReducer.companyName });
+    const authToken = JSON.parse(localStorage.getItem("state.auth.tokens"));
 
     // Get address information for the settings page
     axiosGet(getAddress)
@@ -69,6 +70,7 @@ class User extends React.Component {
       })
       .catch(err => {
         console.log(err, err.response);
+        console.log("Auth token in error: ", authToken);
       });
 
     // Get social media information for the settings page

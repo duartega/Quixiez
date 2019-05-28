@@ -4,6 +4,7 @@ import { getCompanyId, register } from "../../constants/routes.ts";
 import { connect } from "react-redux";
 import { setCompanyUserID } from "../../redux/actions";
 import { Redirect } from "react-router-dom";
+import { Logo } from '../../our-components/Logo';
 
 // reactstrap components
 import {
@@ -297,11 +298,8 @@ class Register extends React.Component {
                 <Col className="mr-auto" md="7">
                   <Card className="card-register card-white">
                     <CardHeader>
-                      <CardImg
-                        alt="..."
-                        src={require("assets/img/card-primary.png")}
-                      />
-                      <CardTitle tag="h4">Register</CardTitle>
+                     
+                      <CardTitle tag="h4" style={{color: "#344675"}}>Register <Logo/></CardTitle>
                     </CardHeader>
                     <CardBody>
                       <Form className="form">

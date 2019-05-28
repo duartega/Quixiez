@@ -44,6 +44,7 @@ class Company extends React.Component {
                 localStorage.setItem("jwt", jwt);
                 setCompanyName(aCompany.companyName);
                 this.setState({ isCompanySelected: true });
+                localStorage.setItem("state.auth.tokens", JSON.stringify((jwt)));
               })
               .catch(err => {
                 console.log(err);
