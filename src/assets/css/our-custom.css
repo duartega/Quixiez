@@ -156,9 +156,9 @@ div.chat-header-container {
 
 /* Chat footer */
 .row.chat-footer-container {
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 50%;
   background-color: #1e1e26;
   /* background-color: #1e1e2f; */
   /* background-color: #27293d; */
