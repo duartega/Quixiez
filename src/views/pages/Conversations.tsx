@@ -150,7 +150,7 @@ class Conversations extends React.Component<
       <>
         <div
           ref={node => (this.chatContainer = node)}
-          style={{ height: this.props.conversationContainerHeight }}
+          style={{ height: this.props.conversationContainerHeight - 50 }}
         >
           <ChatHeader />
 
