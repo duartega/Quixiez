@@ -56,11 +56,12 @@ class User extends React.Component {
   }
 
   componentDidMount() {
-    const jwt = this.props.companyUserReducer.jwt;
+    // const jwt = this.props.companyUserReducer.jwt;
     this.setState({ companyName: this.props.companyUserReducer.companyName });
+    const authToken = JSON.parse(localStorage.getItem("state.auth.tokens"));
 
     // Get address information for the settings page
-    axiosGet(getAddress, jwt)
+    axiosGet(getAddress, authToken)
       .then(result => {
         const { data } = result;
         delete data.created;
@@ -69,10 +70,11 @@ class User extends React.Component {
       })
       .catch(err => {
         console.log(err, err.response);
+        console.log("Auth token in error: ", authToken)
       });
 
     // Get social media information for the settings page
-    axiosGet(getSocialMediaLinks, jwt)
+    axiosGet(getSocialMediaLinks, authToken)
       .then(socialMedia => {
         this.setState({
           facebook: socialMedia.data["facebookUrl"],
@@ -86,7 +88,7 @@ class User extends React.Component {
       });
 
     // Get company information such as number and email for the settings page
-    axiosGet(getCompanyInfo, jwt)
+    axiosGet(getCompanyInfo, authToken)
       .then(result => {
         const { data } = result;
         delete data.created;

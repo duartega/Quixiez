@@ -4,6 +4,7 @@ import SelectCompany from "./views/pages/SelectCompany";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "./redux/actions";
 import { Redirect } from "react-router-dom";
+import { Logo } from './our-components/Logo';
 
 // reactstrap components
 import {
@@ -137,11 +138,10 @@ class Login extends React.Component {
               <Form className="form">
                 <Card className="card-login card-white">
                   <CardHeader>
-                    <img
-                      alt="..."
-                      src={require("assets/img/card-primary.png")}
-                    />
-                    <CardTitle tag="h1">sign-in</CardTitle>
+                  
+                    <CardTitle tag="h1" style={{ color: "#344675" }}>sign-in </CardTitle>
+                    <Logo />
+
                   </CardHeader>
                   <CardBody>
                     <div className={empty_Username}>
@@ -180,7 +180,7 @@ class Login extends React.Component {
                     <Button
                       block
                       className="mb-3"
-                      color="primary"
+                      color="secondary"
                       href="#pablo"
                       onClick={this.handleSubmit}
                       size="lg"
@@ -191,7 +191,8 @@ class Login extends React.Component {
                       <h6>
                         <a
                           className="link footer-link"
-                          href="#pablo"
+                          href="/register"
+                          style={{ color: "#344675" }}
                           onClick={this.createAccount}
                         >
                           Create Account
@@ -203,6 +204,7 @@ class Login extends React.Component {
                         <a
                           className="link footer-link"
                           href="#pablo"
+                          style={{ color: "#344675" }}
                           onClick={e => e.preventDefault()}
                         >
                           Need Help?
