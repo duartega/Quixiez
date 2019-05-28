@@ -5,7 +5,8 @@ import { socketTest, socketTestTestNameSpace } from "../constants/routes";
 import {
   SEND_MESSAGE,
   INCOMING_MESSAGE,
-  EMPLOYEE_START_TYPING
+  EMPLOYEE_START_TYPING,
+  EMPLOYEE_STOP_TYPING
 } from "./events/Events";
 
 export const socket = socketIo(socketTestTestNameSpace);
@@ -35,6 +36,19 @@ export const handleIncomingEmployeeStartedTyping = (
     const { companyUsername } = data;
     callback(companyUsername);
   });
+};
+
+export const handleIncomingEmployeeStoppedTyping = (
+  callback: (companyUsername: string) => void
+) => {
+  socket.on(EMPLOYEE_STOP_TYPING, (data: any) => {
+    const { companyUsername } = data;
+    callback(companyUsername);
+  });
+};
+
+export const handleEmployeeStoppedTyping = (companyUsername: string) => {
+  socket.emit(EMPLOYEE_STOP_TYPING, { companyUsername });
 };
 
 export const stopListening = (eventName: string) => {

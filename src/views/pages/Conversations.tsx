@@ -11,7 +11,9 @@ import {
   receiveMessage,
   handleEmployeeStartedTyping,
   handleIncomingEmployeeStartedTyping,
-  stopListening
+  stopListening,
+  handleIncomingEmployeeStoppedTyping,
+  handleEmployeeStoppedTyping
 } from "../../sockets/Socket";
 import { INCOMING_MESSAGE, EMPLOYEE_START_TYPING } from "sockets/events/Events";
 
@@ -59,6 +61,11 @@ class Conversations extends React.Component<{}, State> {
       // if (companyUsername !== "Joe") {
       this.setState({ companyUserTyping: companyUsername });
       // }
+    });
+
+    handleIncomingEmployeeStoppedTyping(companyUsername => {
+      console.log("Incoming STOPPED typing", companyUsername);
+      this.setState({ companyUserTyping: null });
     });
 
     if (false) {
@@ -109,6 +116,10 @@ class Conversations extends React.Component<{}, State> {
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
     handleEmployeeStartedTyping("Joe");
+
+    setTimeout(() => {
+      handleEmployeeStoppedTyping("Joe");
+    }, 5000);
   };
 
   addMessage = () => {
