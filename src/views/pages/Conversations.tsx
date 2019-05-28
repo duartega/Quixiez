@@ -5,11 +5,18 @@ import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 // reactstrap components
 import { Badge, Card, CardBody, Row, Col } from "reactstrap";
 
-import { joinRoom, sendMessage, receiveMessage } from "../../sockets/Socket";
+import {
+  joinRoom,
+  sendMessage,
+  receiveMessage,
+  handleEmployeeStartedTyping,
+  handleIncomingEmployeeStartedTyping
+} from "../../sockets/Socket";
 
 interface State {
   messages: any[];
   message: string;
+  companyUserTyping: string | null;
 }
 
 class Conversations extends React.Component<{}, State> {
@@ -17,7 +24,8 @@ class Conversations extends React.Component<{}, State> {
     super(props);
     this.state = {
       messages: [],
-      message: ""
+      message: "",
+      companyUserTyping: null
     };
   }
 
@@ -36,8 +44,13 @@ class Conversations extends React.Component<{}, State> {
     joinRoom();
 
     receiveMessage(messageData => {
+      console.log("messageData", messageData);
       const { message } = messageData;
       this.createMessage(message);
+    });
+
+    handleIncomingEmployeeStartedTyping(companyUsername => {
+      this.setState({ companyUserTyping: companyUsername });
     });
 
     if (false) {
@@ -80,8 +93,10 @@ class Conversations extends React.Component<{}, State> {
     this.setState({ messages: messagesState, message: "" });
   };
 
-  handleChange = (event: any) =>
+  handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
+    handleEmployeeStartedTyping("Joe");
+  };
 
   addMessage = () => {
     const { message } = this.state;
@@ -96,6 +111,7 @@ class Conversations extends React.Component<{}, State> {
   };
 
   render() {
+    console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
         <div ref={node => (this.chatContainer = node)}>
@@ -137,6 +153,9 @@ class Conversations extends React.Component<{}, State> {
           {/* </div> */}
         </div>
         <ChatFooter
+          whoIsTyping={
+            this.state.companyUserTyping ? this.state.companyUserTyping : null
+          }
           inputPlaceHolder="Enter Message"
           inputOnChange={this.handleChange}
           inputName="message"

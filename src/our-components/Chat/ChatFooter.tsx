@@ -11,6 +11,7 @@ interface Props {
    * Button
    */
   buttonOnClick?: (event: React.MouseEvent<any, MouseEvent>) => void;
+  whoIsTyping: string | null;
 }
 
 export class ChatFooter extends Component<Props> {
@@ -22,14 +23,15 @@ export class ChatFooter extends Component<Props> {
       inputOnChange,
       inputOnKeyDown,
       inputStyle,
-      buttonOnClick
+      buttonOnClick,
+      whoIsTyping
     } = this.props;
     return (
       <>
         <br />
         <br />
         <br />
-
+        <p>{whoIsTyping ? `${whoIsTyping} is typing...` : null}</p>
         <Row className="chat-footer-container align-items-start">
           <Row className="w-100 align-items-center">
             <Col className="md-9">

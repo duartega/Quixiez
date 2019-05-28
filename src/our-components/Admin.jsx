@@ -15,6 +15,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 import routes from "../our-components/routes";
 
 import logo from "assets/img/react-logo.png";
+import { receiveMessage } from "sockets/Socket";
 
 var ps;
 
@@ -39,6 +40,21 @@ class Admin extends React.Component {
       }
     }
     window.addEventListener("scroll", this.showNavbarButton);
+
+    // OUR CODE
+    receiveMessage(data => {
+      // let notifyMessage = "";
+      let options = {};
+      options = {
+        place: "tr",
+        message: "New Message!",
+        type: "primary",
+        icon: "tim-icons icon-bell-55",
+        autoDismiss: 7
+      };
+
+      this.refs.notificationAlert.notificationAlert(options);
+    });
   }
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -172,7 +188,8 @@ class Admin extends React.Component {
           routes={routes}
           activeColor={this.state.activeColor}
           logo={{
-            outterLink: "https://demos.creative-tim.com/black-dashboard-pro-react/?&_ga=2.12442612.1976718851.1558454868-563319751.1556902745#/documentation/tutorial",
+            outterLink:
+              "https://demos.creative-tim.com/black-dashboard-pro-react/?&_ga=2.12442612.1976718851.1558454868-563319751.1556902745#/documentation/tutorial",
             text: "Documentation",
             imgSrc: logo
           }}
