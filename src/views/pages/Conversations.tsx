@@ -10,8 +10,10 @@ import {
   sendMessage,
   receiveMessage,
   handleEmployeeStartedTyping,
-  handleIncomingEmployeeStartedTyping
+  handleIncomingEmployeeStartedTyping,
+  stopListening
 } from "../../sockets/Socket";
+import { INCOMING_MESSAGE, EMPLOYEE_START_TYPING } from "sockets/events/Events";
 
 interface State {
   messages: any[];
@@ -50,7 +52,13 @@ class Conversations extends React.Component<{}, State> {
     });
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
+      console.log(
+        "Incoming Employee Started Typing (updating the state)",
+        companyUsername
+      );
+      // if (companyUsername !== "Joe") {
       this.setState({ companyUserTyping: companyUsername });
+      // }
     });
 
     if (false) {
@@ -58,6 +66,11 @@ class Conversations extends React.Component<{}, State> {
         this.createMessage();
       }, 2000);
     }
+  }
+
+  componentWillUnmount() {
+    stopListening(INCOMING_MESSAGE);
+    stopListening(EMPLOYEE_START_TYPING);
   }
 
   initialScroll = () => {
