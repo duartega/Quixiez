@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
-import { format, getMinutes, getHours } from "date-fns";
+import { format, getMinutes, getHours, utcToZonedTime, listTimeZones, getTime } from "date-fns";
 
 import {
   Card,
@@ -36,29 +36,6 @@ class ReactTables extends Component {
     super(props);
 
     this.state = {
-      // data: dataTable.map((prop, idx) => {
-      //   return {
-      //     orderStatus: "IN_COMPLETE",
-      //     id: idx,
-      //     name: prop[0],
-      //     message: prop[1],
-      //     received: prop[2],
-      //     status: (
-      //       <Button className="btn-simple" color="success" disabled>
-      //         {prop[3]}
-      //       </Button>
-      //     ),
-      //     actions: (
-      //       // we've added some custom button actions
-      //       <div className="actions-right">
-      //         <PopOverLeft
-      //           idx={idx}
-      //           onOrderCompleteClick={this.handleOrderComplete}
-      //         />
-      //       </div>
-      //     )
-      //   };
-      // }),
       conversations: [],
       data: null
     };
@@ -96,19 +73,40 @@ class ReactTables extends Component {
       });
 
     let messagesArrStorage = sessionStorage.getItem("messages");
-    // let messagesArrJSON: any;
     if (messagesArrStorage) {
-      // messagesArrJSON = JSON.parse(messagesArrStorage)
       this.setState({ conversations: JSON.parse(messagesArrStorage) });
     }
-    // console.log("Array of messages: ", messagesArrStorage)
-    // [ ["Joe Missamore", "Order Delivered.", "10:20 AM", "Pending"], ]
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.conversations !== this.state.conversations) {
       this.mapConversationsToTable();
     }
+  }
+
+  changeStatusMessage = (status, statusColor) => {
+    if (status === "CONSTRUCT_ORDER") {
+      status = "PENDING";
+      statusColor = "primary";
+    } else if (status === "COMPLETE") {
+      status = "NEW ORDER";
+      statusColor = "success";
+    } else if (status === "IN_PROGRESS") {
+      status = "IN PROGRESS";
+      statusColor = "warning";
+    } else if (status === "CONSUMER_CANCELLED") {
+      status = "CANCELLED";
+      statusColor = "warning";
+    } else if (status === "COMPANY_REJECTED") {
+      status = "REJECTED";
+      statusColor = "danger";
+    } else if (status === "COMPANY_COMPLETE") {
+      status = "COMPLETE";
+      statusColor = "success";
+    } else {
+      status = "ERROR";
+    };
+    return [status, statusColor];
   }
 
   mapConversationsToTable = () => {
@@ -119,21 +117,28 @@ class ReactTables extends Component {
       let { consumerUser, messages } = aConversation;
       let fname = consumerUser.firstName + " " + consumerUser.lastName;
       let lastMessage = messages[messages.length - 1].content;
-      let timeRecieved = messages[messages.length - 1].created; // to be fixed
+      let timeRecieved = messages[messages.length - 1].created;
       let status = aConversation.phase;
 
+      // Set the status message and the status color
+      let statusColor = "";
+      let statusValue = this.changeStatusMessage(status, statusColor);
+      status = statusValue[0]; 
+      statusColor = statusValue[1];
+
+      // Using Date-FNS, it automatically converts the UTC to your local time zone
       let hour = getHours(new Date(timeRecieved));
       let minutes = getMinutes(new Date(timeRecieved));
-
-      // Convert the time format to 12 hour format
-      if (hour > 12) {
-        hour %= 12;
-      }
 
       let amPm = false;
       // Set the PM tag to true if it is 12 PM
       if (hour > 11) {
         amPm = true;
+      }
+
+      // Convert the time format to 12 hour format
+      if (hour > 12) {
+        hour %= 12;
       }
 
       // Format minutes to show 10:07 instead of 10:7
@@ -155,13 +160,14 @@ class ReactTables extends Component {
         message: lastMessage,
         received: time,
         status: (
-          <Button className="btn-simple" color="success" disabled>
+          <Button className="btn-simple" color={statusColor} disabled>
             {status}
           </Button>
+          
         ),
         actions: (
           // we've added some custom button actions
-          <div className="actions-left">
+          <div className="actions-right">
             <PopOverLeft
               idx={idx}
               onOrderCompleteClick={this.handleOrderComplete}
@@ -209,7 +215,6 @@ class ReactTables extends Component {
                         // headerClassName: "text-center"
                       },
                       {
-                        // Header: "Actions",
                         accessor: "actions",
                         sortable: false,
                         filterable: false
@@ -219,17 +224,6 @@ class ReactTables extends Component {
                     showPaginationTop
                     showPaginationBottom={false}
                     className="-striped -highlight"
-                    // getTrProps={(state, rowInfo) => {
-                    //   console.log("trprops");
-                    //   // if (rowInfo && rowInfo.row) {
-                    //   //   return {
-                    //   //     onClick: e => {
-                    //   //       console.log("CLICKED!!");
-                    //   //     },
-                    //   //     style: {}
-                    //   //   };
-                    //   // }
-                    // }}
                   />
                 </CardBody>
               </Card>
