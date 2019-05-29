@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
-import { format, getMinutes, getHours, utcToZonedTime, listTimeZones, getTime } from "date-fns";
+import { format, getMinutes, getHours } from "date-fns";
 
 import {
   Card,
@@ -15,21 +15,6 @@ import {
   Col,
   Button
 } from "reactstrap";
-
-const dataTable = [
-  ["Joe Missamore", "Order Delivered.", "10:20 AM", "Pending"],
-  ["Alexis Solano", "Order Delivered.", "10:00 AM", "Complete"],
-  ["Ashton Cox", "Order Delivered.", "9:50 AM", "Complete"],
-  ["Bradley Greer", "Thank you for your order.", "9:30 AM", "Complete"],
-  ["Brenden Wagner", "Your order has been cancelled.", "9:29 AM", "Cancelled"],
-  [
-    "Briel Williamson",
-    "Your order has been cancelled.",
-    "8:00 AM",
-    "Cancelled"
-  ],
-  ["Caesar Vance", "Your order has been rejected.", "7:30 AM", "Rejected"]
-];
 
 class ReactTables extends Component {
   constructor(props) {
@@ -42,25 +27,26 @@ class ReactTables extends Component {
   }
 
   handleOrderComplete = idx => {
+    // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
     data[idx].status = "COMPLETE";
     this.setState({ data });
   };
 
-  renderStatus = idx => {
-    if (
-      this.state &&
-      this.state.data &&
-      this.state.data[idx].orderStatus !== "INCOMPLETE"
-    ) {
-      return <p>COMPLETE</p>;
-    }
-    return <p>Incomplete</p>;
-  };
+  // renderStatus = idx => {
+  //   if (
+  //     this.state &&
+  //     this.state.data &&
+  //     this.state.data[idx].orderStatus !== "INCOMPLETE"
+  //   ) {
+  //     return <p>COMPLETE</p>;
+  //   }
+  //   return <p>Incomplete</p>;
+  // };
 
-  centerTableHeaderName = name => {
-    return <div style={{ textAlign: "center" }}>{name}</div>;
-  };
+  // centerTableHeaderName = name => {
+  //   return <div style={{ textAlign: "center" }}>{name}</div>;
+  // };
 
   componentDidMount() {
     // Get all conversations for the company
@@ -72,6 +58,7 @@ class ReactTables extends Component {
         console.log(err, err.response);
       });
 
+    // Store the messages in the session storage
     let messagesArrStorage = sessionStorage.getItem("messages");
     if (messagesArrStorage) {
       this.setState({ conversations: JSON.parse(messagesArrStorage) });
@@ -79,12 +66,14 @@ class ReactTables extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // Map our conversations to the table
     if (prevState.conversations !== this.state.conversations) {
       this.mapConversationsToTable();
     }
   }
 
   changeStatusMessage = (status, statusColor) => {
+    // Set the status message and the status color
     if (status === "CONSTRUCT_ORDER") {
       status = "PENDING";
       statusColor = "primary";
@@ -112,7 +101,8 @@ class ReactTables extends Component {
   mapConversationsToTable = () => {
     let conversationsArray = [];
     const { conversations } = this.state;
-    console.log(conversations);
+
+    // Create an array for our conversations
     conversationsArray = conversations.map((aConversation, idx) => {
       let { consumerUser, messages } = aConversation;
       let fname = consumerUser.firstName + " " + consumerUser.lastName;
@@ -160,13 +150,14 @@ class ReactTables extends Component {
         message: lastMessage,
         received: time,
         status: (
+          // Add the status for each conversation
           <Button className="btn-simple" color={statusColor} disabled>
             {status}
           </Button>
           
         ),
         actions: (
-          // we've added some custom button actions
+          // We've added some custom button actions
           <div className="actions-right">
             <PopOverLeft
               idx={idx}
@@ -176,6 +167,8 @@ class ReactTables extends Component {
         )
       };
     });
+
+    // Set the state so we can render our conversations
     this.setState({ data: conversationsArray });
   };
 
