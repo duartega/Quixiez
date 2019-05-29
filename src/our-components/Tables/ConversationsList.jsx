@@ -2,7 +2,9 @@ import React, { Component } from "react";
 // react component for creating dynamic tables
 import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
-
+import { axiosPost, axiosGet } from "../../network/ApiCalls";
+import { getAllConversations } from "../../constants/routes";
+import { format, getMinutes, getHours } from 'date-fns';
 import {
   Card,
   CardBody,
@@ -33,29 +35,30 @@ class ReactTables extends Component {
     super(props);
 
     this.state = {
-      data: dataTable.map((prop, idx) => {
-        return {
-          orderStatus: "IN_COMPLETE",
-          id: idx,
-          name: prop[0],
-          message: prop[1],
-          received: prop[2],
-          status: (
-            <Button className="btn-simple" color="success" disabled>
-              {prop[3]}
-            </Button>
-          ),
-          actions: (
-            // we've added some custom button actions
-            <div className="actions-right">
-              <PopOverLeft
-                idx={idx}
-                onOrderCompleteClick={this.handleOrderComplete}
-              />
-            </div>
-          )
-        };
-      })
+      // data: dataTable.map((prop, idx) => {
+      //   return {
+      //     orderStatus: "IN_COMPLETE",
+      //     id: idx,
+      //     name: prop[0],
+      //     message: prop[1],
+      //     received: prop[2],
+      //     status: (
+      //       <Button className="btn-simple" color="success" disabled>
+      //         {prop[3]}
+      //       </Button>
+      //     ),
+      //     actions: (
+      //       // we've added some custom button actions
+      //       <div className="actions-right">
+      //         <PopOverLeft
+      //           idx={idx}
+      //           onOrderCompleteClick={this.handleOrderComplete}
+      //         />
+      //       </div>
+      //     )
+      //   };
+      // }),
+      conversations: []
     };
   }
 
@@ -80,7 +83,95 @@ class ReactTables extends Component {
     return <div style={{ textAlign: "center" }}>{name}</div>;
   };
 
+  componentDidMount() {
+        // Get all conversations for the company
+        axiosGet(getAllConversations).then(result => {
+          sessionStorage.setItem('messages', JSON.stringify(result.data))
+        }).catch(err =>{
+          console.log(err, err.response)
+        })
+    
+        let messagesArrStorage = sessionStorage.getItem('messages')
+        // let messagesArrJSON: any;
+        if (messagesArrStorage) { 
+          // messagesArrJSON = JSON.parse(messagesArrStorage) 
+          this.setState({ conversations: JSON.parse(messagesArrStorage) })
+          }
+        // console.log("Array of messages: ", messagesArrStorage)
+        // [ ["Joe Missamore", "Order Delivered.", "10:20 AM", "Pending"], ]
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.conversations !== this.state.conversations) {
+      this.mapConversationsToTable();
+    }
+  }
+
+  mapConversationsToTable = () => {
+    let conversationsArray = [];
+    const { conversations } = this.state;
+    console.log(conversations)
+    conversationsArray = conversations.map((aConversation, idx) => {
+      let { consumerUser, messages } = aConversation;
+      let fname = consumerUser.firstName + " " + consumerUser.lastName;
+      let lastMessage = messages[messages.length - 1].content;
+      let timeRecieved = messages[messages.length - 1].created; // to be fixed
+      let status = aConversation.phase;
+      
+      let hour = getHours(new Date(timeRecieved))
+      let minutes = getMinutes(new Date(timeRecieved))
+
+      // Convert the time format to 12 hour format
+      if (hour > 12) {
+        hour %= 12
+      }
+
+      let amPm = false;
+      // Set the PM tag to true if it is 12 PM
+      if (hour > 11) {
+        amPm = true
+      }
+
+      // Format minutes to show 10:07 instead of 10:7
+      minutes = format(new Date(timeRecieved), 'mm')
+
+      // Finally put together the timestamp
+      let time = hour + ":" + minutes;
+
+      // Append the AM or PM based on the time bool
+      if (amPm) {
+        time += " PM"
+      } else {
+        time += " AM"
+      }
+
+      return {
+        id: idx,
+        name: fname,
+        message: lastMessage,
+        received: time,
+        status:
+          (
+            <Button className="btn-simple" color="success" disabled>
+              {status}
+            </Button>
+          ),
+        actions: (
+          // we've added some custom button actions
+          <div className="actions-right">
+            <PopOverLeft
+              idx={idx}
+              onOrderCompleteClick={this.handleOrderComplete}
+            />
+          </div>
+        )
+      };
+    });
+    this.setState({ data: conversationsArray });
+  }
+
   render() {
+    // console.log(this.state.conversations)
     return (
       <>
         <div className="content">

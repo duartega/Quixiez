@@ -2,8 +2,8 @@ import React from "react";
 import { ChatBubble } from "../../our-components/Chat/ChatBubble";
 import { ChatFooter } from "../../our-components/Chat/ChatFooter";
 import { ChatHeader } from "../../our-components/Chat/ChatHeader";
-// reactstrap components
-import { Badge, Card, CardBody, Row, Col } from "reactstrap";
+import { axiosPost, axiosGet } from "../../network/ApiCalls";
+import { getAllConversations } from "../../constants/routes";
 
 import {
   joinRoom,
@@ -32,7 +32,7 @@ class Conversations extends React.Component<
     this.state = {
       messages: [],
       message: "",
-      companyUserTyping: null
+      companyUserTyping: null,
     };
   }
 
@@ -86,6 +86,8 @@ class Conversations extends React.Component<
     } else {
       console.log("height unavailable");
     }
+
+
   }
 
   componentWillUnmount() {
@@ -116,6 +118,8 @@ class Conversations extends React.Component<
 
   createMessage = (message?: string) => {
     message && sendMessage(message);
+    // will do axiosPost here
+   
     const messages = (
       <ChatBubble
         key={this.key++}
