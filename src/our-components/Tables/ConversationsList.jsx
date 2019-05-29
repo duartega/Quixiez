@@ -5,6 +5,8 @@ import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
 import { format, getMinutes, getHours } from "date-fns";
+import { connect } from "react-redux";
+import { setConversation } from "../../redux/actions/conversations";
 
 import {
   Card,
@@ -164,6 +166,7 @@ class ReactTables extends Component {
           <div className="actions-left">
             <PopOverLeft
               idx={idx}
+              onViewConversationClick={this.handleViewConversation}
               onOrderCompleteClick={this.handleOrderComplete}
             />
           </div>
@@ -171,6 +174,15 @@ class ReactTables extends Component {
       };
     });
     this.setState({ data: conversationsArray });
+  };
+
+  handleViewConversation = idx => {
+    const { setMessages } = this.props;
+    const messages = sessionStorage.getItem("messages");
+    const messagesJSON = JSON.parse(messages);
+    // console.log(idx);
+    // console.log(messagesJSON[idx]);
+    setMessages(messagesJSON[idx]);
   };
 
   render() {
@@ -241,4 +253,11 @@ class ReactTables extends Component {
   }
 }
 
-export default ReactTables;
+const mapDispatchToProps = dispatch => ({
+  setMessages: messages => dispatch(setConversation(messages))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(ReactTables);

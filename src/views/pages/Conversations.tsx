@@ -4,6 +4,7 @@ import { ChatFooter } from "../../our-components/Chat/ChatFooter";
 import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
+import { connect } from "react-redux";
 
 import {
   joinRoom,
@@ -22,22 +23,24 @@ import {
   UPDATED_QUE_TEXT
 } from "sockets/events/Events";
 
-interface State {
+type Props = {
+  messages: any[];
+  conversationContainerHeight: number;
+};
+
+type State = {
   messages: any[];
   message: string;
   companyUserTyping: string | null;
-}
+};
 
-class Conversations extends React.Component<
-  { conversationContainerHeight: number },
-  State
-> {
+class Conversations extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.state = {
       messages: [],
       message: "",
-      companyUserTyping: null,
+      companyUserTyping: null
     };
   }
 
@@ -57,15 +60,21 @@ class Conversations extends React.Component<
      */
     joinRoom();
 
-    handleIncomingQueText(queText => {
-      console.log("updated queText", queText);
-    });
+    /**
+     * Get the messages from sessionStorage
+     */
+    // const messages = sessionStorage.getItem("messages");
+    // console.log("messages", messages);
 
-    receiveMessage(messageData => {
-      console.log("messageData", messageData);
-      const { message } = messageData;
-      this.createMessage(message);
-    });
+    // handleIncomingQueText(queText => {
+    //   console.log("updated queText", queText);
+    // });
+
+    // receiveMessage(messageData => {
+    //   console.log("messageData", messageData);
+    //   const { message } = messageData;
+    //   this.createMessage(message);
+    // });
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
       console.log(
@@ -95,8 +104,6 @@ class Conversations extends React.Component<
     } else {
       console.log("height unavailable");
     }
-
-
   }
 
   componentWillUnmount() {
@@ -129,7 +136,7 @@ class Conversations extends React.Component<
   createMessage = (message?: string) => {
     message && sendMessage(message);
     // will do axiosPost here
-   
+
     const messages = (
       <ChatBubble
         key={this.key++}
@@ -234,4 +241,7 @@ class Conversations extends React.Component<
     );
   }
 }
-export default Conversations;
+
+const mapStateToProps = {};
+
+export default connect()(Conversations);
