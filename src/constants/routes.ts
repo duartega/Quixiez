@@ -21,3 +21,4 @@ export const getSocialMediaLinks = `${baseRoute}/company/socialMedia/`;
 export const companyHours = `${baseRoute}/company/hours/`;
 export const putSocialMediaLinks = `${baseRoute}/company/socialMedia/`;
 export const getAllConversations = `${baseRoute}/quetext/`
+export const updatePhase = (quetextID:string ) => `${baseRoute}/quetext/${quetextID}`

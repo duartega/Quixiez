@@ -2,8 +2,8 @@ import React, { Component } from "react";
 // react component for creating dynamic tables
 import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
-import { axiosPost, axiosGet } from "../../network/ApiCalls";
-import { getAllConversations } from "../../constants/routes";
+import { axiosPost, axiosGet, axiosPut } from "../../network/ApiCalls";
+import { getAllConversations, updatePhase } from "../../constants/routes";
 import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
 import { setConversation } from "../../redux/actions/conversations";
@@ -30,8 +30,16 @@ class ReactTables extends Component {
   handleOrderActionButton = (idx, status) => {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
+    const messages = JSON.parse(sessionStorage.getItem('messages')); 
+    const quetextID = messages[idx].id;
+
     let statusValue = StatusInfo.changeStatusMessage(status);
     data[idx].status = StatusInfo.updateButton(statusValue);
+
+    axiosPut(updatePhase(quetextID), {phase: statusValue[0]}).then(result => {
+      console.log(result.data)
+    })
+
     this.setState({ data });
   };
 

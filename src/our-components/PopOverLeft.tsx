@@ -122,6 +122,16 @@ export class PopOverLeft extends React.Component<Props, State> {
                   <p style={{ color: "black" }}>Cancel Order</p>
                 </Button>
               </Row>
+              <Row>
+                <Button
+                  color="link"
+                  onClick={() =>
+                    this.props.onOrderActionClick(this.props.idx, "COMPANY_REJECTED")
+                  }
+                >
+                  <p style={{ color: "black" }}>Reject Order</p>
+                </Button>
+              </Row>
               {/* </Col> */}
             </PopoverBody>
           </div>
