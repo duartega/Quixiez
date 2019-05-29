@@ -4,7 +4,7 @@ import { Button, Popover, PopoverBody, Row, Col } from "reactstrap";
 
 type Props = {
   idx: number;
-  onOrderCompleteClick: (idx: number) => void;
+  onOrderActionClick: (idx: number, status: string) => void;
   onViewConversationClick: (idx: number) => void;
 };
 
@@ -96,14 +96,29 @@ export class PopOverLeft extends React.Component<Props, State> {
                 <Button
                   color="link"
                   onClick={() =>
-                    this.props.onOrderCompleteClick(this.props.idx)
+                    this.props.onOrderActionClick(this.props.idx, "IN_PROGRESS")
+                  }
+                >
+                  <p style={{ color: "black" }}>Order In Progress</p>
+                </Button>
+              </Row>
+              <Row>
+                <Button
+                  color="link"
+                  onClick={() =>
+                    this.props.onOrderActionClick(this.props.idx, "COMPANY_COMPLETE")
                   }
                 >
                   <p style={{ color: "black" }}>Order Complete</p>
                 </Button>
               </Row>
               <Row>
-                <Button color="link">
+                <Button
+                  color="link"
+                  onClick={() =>
+                    this.props.onOrderActionClick(this.props.idx, "CONSUMER_CANCELLED")
+                  }
+                >
                   <p style={{ color: "black" }}>Cancel Order</p>
                 </Button>
               </Row>

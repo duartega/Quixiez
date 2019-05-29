@@ -4,10 +4,10 @@ import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
-import { format, getMinutes, getHours } from "date-fns";
+import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
 import { setConversation } from "../../redux/actions/conversations";
-
+import * as StatusInfo from '../Tables/StatusInfo';
 import {
   Card,
   CardBody,
@@ -15,7 +15,6 @@ import {
   CardTitle,
   Row,
   Col,
-  Button
 } from "reactstrap";
 
 class ReactTables extends Component {
@@ -28,32 +27,13 @@ class ReactTables extends Component {
     };
   }
 
-  handleOrderComplete = idx => {
+  handleOrderActionButton = (idx, status) => {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
-    let statusValue = this.changeStatusMessage("COMPANY_COMPLETE", "success");
-    data[idx].status = (
-      <Button className="btn-simple" color={statusValue[1]} disabled>
-      {statusValue[0]}
-    </Button>
-    )
+    let statusValue = StatusInfo.changeStatusMessage(status);
+    data[idx].status = StatusInfo.updateButton(statusValue);
     this.setState({ data });
   };
-
-  // renderStatus = idx => {
-  //   if (
-  //     this.state &&
-  //     this.state.data &&
-  //     this.state.data[idx].orderStatus !== "INCOMPLETE"
-  //   ) {
-  //     return <p>COMPLETE</p>;
-  //   }
-  //   return <p>Incomplete</p>;
-  // };
-
-  // centerTableHeaderName = name => {
-  //   return <div style={{ textAlign: "center" }}>{name}</div>;
-  // };
 
   componentDidMount() {
     // Get all conversations for the company
@@ -79,32 +59,6 @@ class ReactTables extends Component {
     }
   }
 
-  changeStatusMessage = (status, statusColor) => {
-    // Set the status message and the status color
-    if (status === "CONSTRUCT_ORDER") {
-      status = "PENDING";
-      statusColor = "primary";
-    } else if (status === "COMPLETE") {
-      status = "NEW ORDER";
-      statusColor = "success";
-    } else if (status === "IN_PROGRESS") {
-      status = "IN PROGRESS";
-      statusColor = "warning";
-    } else if (status === "CONSUMER_CANCELLED") {
-      status = "CANCELLED";
-      statusColor = "warning";
-    } else if (status === "COMPANY_REJECTED") {
-      status = "REJECTED";
-      statusColor = "danger";
-    } else if (status === "COMPANY_COMPLETE") {
-      status = "COMPLETE";
-      statusColor = "success";
-    } else {
-      status = "ERROR";
-    };
-    return [status, statusColor];
-  }
-
   mapConversationsToTable = () => {
     let conversationsArray = [];
     const { conversations } = this.state;
@@ -118,58 +72,25 @@ class ReactTables extends Component {
       let status = aConversation.phase;
 
       // Set the status message and the status color
-      let statusColor = "";
-      let statusValue = this.changeStatusMessage(status, statusColor);
+      let statusValue = StatusInfo.changeStatusMessage(status);
       status = statusValue[0]; 
-      statusColor = statusValue[1];
+      let statusColor = statusValue[1];
 
-      // Using Date-FNS, it automatically converts the UTC to your local time zone
-      let hour = getHours(new Date(timeRecieved));
-      let minutes = getMinutes(new Date(timeRecieved));
-
-      let amPm = false;
-      // Set the PM tag to true if it is 12 PM
-      if (hour > 11) {
-        amPm = true;
-      }
-
-      // Convert the time format to 12 hour format
-      if (hour > 12) {
-        hour %= 12;
-      }
-
-      // Format minutes to show 10:07 instead of 10:7
-      minutes = format(new Date(timeRecieved), "mm");
-
-      // Finally put together the timestamp
-      let time = hour + ":" + minutes;
-
-      // Append the AM or PM based on the time bool
-      if (amPm) {
-        time += " PM";
-      } else {
-        time += " AM";
-      }
+      let time = StatusInfo.calculateTime(timeRecieved);
 
       return {
         id: idx,
         name: fname,
         message: lastMessage,
         received: time,
-        status: (
-          // Add the status for each conversation
-          <Button className="btn-simple" color={statusColor} disabled>
-            {status}
-          </Button>
-          
-        ),
+        status: StatusInfo.updateButton(statusValue),
         actions: (
           // We've added some custom button actions
           <div className="actions-right">
             <PopOverLeft
               idx={idx}
               onViewConversationClick={this.handleViewConversation}
-              onOrderCompleteClick={this.handleOrderComplete}
+              onOrderActionClick={this.handleOrderActionButton}
             />
           </div>
         )
@@ -184,8 +105,6 @@ class ReactTables extends Component {
     const { setMessages } = this.props;
     const messages = sessionStorage.getItem("messages");
     const messagesJSON = JSON.parse(messages);
-    // console.log(idx);
-    // console.log(messagesJSON[idx]);
     setMessages(messagesJSON[idx]);
   };
 
