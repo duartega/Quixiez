@@ -29,7 +29,12 @@ class ReactTables extends Component {
   handleOrderComplete = idx => {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
-    data[idx].status = "COMPLETE";
+    let statusValue = this.changeStatusMessage("COMPANY_COMPLETE", "success");
+    data[idx].status = (
+      <Button className="btn-simple" color={statusValue[1]} disabled>
+      {statusValue[0]}
+    </Button>
+    )
     this.setState({ data });
   };
 
