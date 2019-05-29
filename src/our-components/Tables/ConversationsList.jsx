@@ -30,28 +30,28 @@ class ReactTables extends Component {
   handleOrderActionButton = (idx, status) => {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
-    const messages = JSON.parse(sessionStorage.getItem('messages')); 
+    const messages = JSON.parse(sessionStorage.getItem('messages'));
     const quetextID = messages[idx].id;
 
     let statusValue = StatusInfo.changeStatusMessage(status);
     data[idx].status = StatusInfo.updateButton(statusValue);
 
-    axiosPut(updatePhase(quetextID), {phase: statusValue[0]}).then(result => {
+    axiosPut(updatePhase(quetextID), { phase: statusValue[0] }).then(result => {
       console.log(result.data)
-    })
+    }).catch(err => {
+      console.log(err, err.response)
+    });
 
     this.setState({ data });
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     // Get all conversations for the company
-    axiosGet(getAllConversations)
-      .then(result => {
-        sessionStorage.setItem("messages", JSON.stringify(result.data));
-      })
-      .catch(err => {
-        console.log(err, err.response);
-      });
+    await axiosGet(getAllConversations).then(result => {
+      sessionStorage.setItem("messages", JSON.stringify(result.data));
+    }).catch(err => {
+      console.log(err, err.response);
+    });
 
     // Store the messages in the session storage
     let messagesArrStorage = sessionStorage.getItem("messages");
@@ -81,7 +81,7 @@ class ReactTables extends Component {
 
       // Set the status message and the status color
       let statusValue = StatusInfo.changeStatusMessage(status);
-      status = statusValue[0]; 
+      status = statusValue[0];
       let statusColor = statusValue[1];
 
       let time = StatusInfo.calculateTime(timeRecieved);

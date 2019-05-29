@@ -46,15 +46,31 @@ export const changeStatusMessage = (status: Status): ReturnType => {
     convertString = "REJECTED";
     statusColor = "danger";
   } else if (status === "COMPANY_COMPLETE") {
-    convertString = "COMPLETE";
+    convertString = "COMPLETED";
     statusColor = "success";
-  } else {
+  }  
+  // When the component re-renders, keep the correct status
+  else if (status === "COMPLETED") {
+    convertString = "COMPLETED";
+    statusColor = "success";
+  } else if (status === "CANCELLED") {
+    convertString = "CANCELLED";
+    statusColor = "warning";
+  } else if (status === "REJECTED") {
+    convertString = "REJECTED";
+    statusColor = "danger";
+  } else if (status === "IN PROGRESS") {
+    convertString = "IN PROGRESS";
+    statusColor = "warning";
+  }
+  // This should never happen 
+  else {
     convertString = "ERROR";
     statusColor = "danger";
+    console.log("Incorrect Phase. Acceptable phases are: CONSTRUCT_ORDER | COMPLETE | COMPANY_COMPLETE | IN_PROGRESS | CONSUMER_CANCELLED | COMPANY_REJECTED", )
   };
   return [convertString, statusColor];
 }
-
 
 export const updateButton = (status: Status) => {
   return (
