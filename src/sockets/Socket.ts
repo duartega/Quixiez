@@ -6,7 +6,8 @@ import {
   SEND_MESSAGE,
   INCOMING_MESSAGE,
   EMPLOYEE_START_TYPING,
-  EMPLOYEE_STOP_TYPING
+  EMPLOYEE_STOP_TYPING,
+  INCOMING_QUE_TEXT
 } from "./events/Events";
 
 export const socket = socketIo(socketTestTestNameSpace);
@@ -53,4 +54,10 @@ export const handleEmployeeStoppedTyping = (companyUsername: string) => {
 
 export const stopListening = (eventName: string) => {
   socket.off(eventName);
+};
+
+export const handleIncomingQueText = (callback: (queText: any) => void) => {
+  socket.on(INCOMING_QUE_TEXT, (data: any) => {
+    callback(data);
+  });
 };
