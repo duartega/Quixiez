@@ -13,9 +13,14 @@ import {
   handleIncomingEmployeeStartedTyping,
   stopListening,
   handleIncomingEmployeeStoppedTyping,
-  handleEmployeeStoppedTyping
+  handleEmployeeStoppedTyping,
+  handleIncomingQueText
 } from "../../sockets/Socket";
-import { INCOMING_MESSAGE, EMPLOYEE_START_TYPING } from "sockets/events/Events";
+import {
+  INCOMING_MESSAGE,
+  EMPLOYEE_START_TYPING,
+  UPDATED_QUE_TEXT
+} from "sockets/events/Events";
 
 interface State {
   messages: any[];
@@ -51,6 +56,10 @@ class Conversations extends React.Component<
      * being sent to the namespace right now.
      */
     joinRoom();
+
+    handleIncomingQueText(queText => {
+      console.log("updated queText", queText);
+    });
 
     receiveMessage(messageData => {
       console.log("messageData", messageData);
@@ -93,6 +102,7 @@ class Conversations extends React.Component<
   componentWillUnmount() {
     stopListening(INCOMING_MESSAGE);
     stopListening(EMPLOYEE_START_TYPING);
+    stopListening(UPDATED_QUE_TEXT);
   }
 
   initialScroll = () => {
