@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
-import { format, getMinutes, getHours } from 'date-fns';
+import { format, getMinutes, getHours } from "date-fns";
 
 import {
   Card,
@@ -59,7 +59,8 @@ class ReactTables extends Component {
       //     )
       //   };
       // }),
-      conversations: []
+      conversations: [],
+      data: null
     };
   }
 
@@ -85,21 +86,23 @@ class ReactTables extends Component {
   };
 
   componentDidMount() {
-        // Get all conversations for the company
-        axiosGet(getAllConversations).then(result => {
-          sessionStorage.setItem('messages', JSON.stringify(result.data))
-        }).catch(err =>{
-          console.log(err, err.response)
-        })
-    
-        let messagesArrStorage = sessionStorage.getItem('messages')
-        // let messagesArrJSON: any;
-        if (messagesArrStorage) { 
-          // messagesArrJSON = JSON.parse(messagesArrStorage) 
-          this.setState({ conversations: JSON.parse(messagesArrStorage) })
-          }
-        // console.log("Array of messages: ", messagesArrStorage)
-        // [ ["Joe Missamore", "Order Delivered.", "10:20 AM", "Pending"], ]
+    // Get all conversations for the company
+    axiosGet(getAllConversations)
+      .then(result => {
+        sessionStorage.setItem("messages", JSON.stringify(result.data));
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
+
+    let messagesArrStorage = sessionStorage.getItem("messages");
+    // let messagesArrJSON: any;
+    if (messagesArrStorage) {
+      // messagesArrJSON = JSON.parse(messagesArrStorage)
+      this.setState({ conversations: JSON.parse(messagesArrStorage) });
+    }
+    // console.log("Array of messages: ", messagesArrStorage)
+    // [ ["Joe Missamore", "Order Delivered.", "10:20 AM", "Pending"], ]
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -111,39 +114,39 @@ class ReactTables extends Component {
   mapConversationsToTable = () => {
     let conversationsArray = [];
     const { conversations } = this.state;
-    console.log(conversations)
+    console.log(conversations);
     conversationsArray = conversations.map((aConversation, idx) => {
       let { consumerUser, messages } = aConversation;
       let fname = consumerUser.firstName + " " + consumerUser.lastName;
       let lastMessage = messages[messages.length - 1].content;
       let timeRecieved = messages[messages.length - 1].created; // to be fixed
       let status = aConversation.phase;
-      
-      let hour = getHours(new Date(timeRecieved))
-      let minutes = getMinutes(new Date(timeRecieved))
+
+      let hour = getHours(new Date(timeRecieved));
+      let minutes = getMinutes(new Date(timeRecieved));
 
       // Convert the time format to 12 hour format
       if (hour > 12) {
-        hour %= 12
+        hour %= 12;
       }
 
       let amPm = false;
       // Set the PM tag to true if it is 12 PM
       if (hour > 11) {
-        amPm = true
+        amPm = true;
       }
 
       // Format minutes to show 10:07 instead of 10:7
-      minutes = format(new Date(timeRecieved), 'mm')
+      minutes = format(new Date(timeRecieved), "mm");
 
       // Finally put together the timestamp
       let time = hour + ":" + minutes;
 
       // Append the AM or PM based on the time bool
       if (amPm) {
-        time += " PM"
+        time += " PM";
       } else {
-        time += " AM"
+        time += " AM";
       }
 
       return {
@@ -151,15 +154,14 @@ class ReactTables extends Component {
         name: fname,
         message: lastMessage,
         received: time,
-        status:
-          (
-            <Button className="btn-simple" color="success" disabled>
-              {status}
-            </Button>
-          ),
+        status: (
+          <Button className="btn-simple" color="success" disabled>
+            {status}
+          </Button>
+        ),
         actions: (
           // we've added some custom button actions
-          <div className="actions-right">
+          <div className="actions-left">
             <PopOverLeft
               idx={idx}
               onOrderCompleteClick={this.handleOrderComplete}
@@ -169,11 +171,11 @@ class ReactTables extends Component {
       };
     });
     this.setState({ data: conversationsArray });
-  }
+  };
 
   render() {
-    console.log("render called")
-    return (
+    console.log("render called");
+    return this.state.data ? (
       <>
         <div className="content">
           <Row className="mt-5">
@@ -217,6 +219,17 @@ class ReactTables extends Component {
                     showPaginationTop
                     showPaginationBottom={false}
                     className="-striped -highlight"
+                    // getTrProps={(state, rowInfo) => {
+                    //   console.log("trprops");
+                    //   // if (rowInfo && rowInfo.row) {
+                    //   //   return {
+                    //   //     onClick: e => {
+                    //   //       console.log("CLICKED!!");
+                    //   //     },
+                    //   //     style: {}
+                    //   //   };
+                    //   // }
+                    // }}
                   />
                 </CardBody>
               </Card>
@@ -224,7 +237,7 @@ class ReactTables extends Component {
           </Row>
         </div>
       </>
-    );
+    ) : null;
   }
 }
 
