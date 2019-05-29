@@ -5,6 +5,7 @@ import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
 import { format, getMinutes, getHours } from 'date-fns';
+
 import {
   Card,
   CardBody,
@@ -171,7 +172,7 @@ class ReactTables extends Component {
   }
 
   render() {
-    // console.log(this.state.conversations)
+    console.log("render called")
     return (
       <>
         <div className="content">

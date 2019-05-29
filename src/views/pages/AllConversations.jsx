@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "reactstrap";
 import Conversations from "./Conversations";
 import ConversationsList from "../../our-components/Tables/ConversationsList";
-
+import Panel from '../../our-components/Chat/ConversationsPanel';
 class AllConversations extends React.Component {
   constructor(props) {
     super(props);
@@ -30,6 +30,7 @@ class AllConversations extends React.Component {
     return (
       <Row style={{ overflow: "hidden" }} className="content">
         <Col>
+          <Panel />
           <ConversationsList />
         </Col>
 
