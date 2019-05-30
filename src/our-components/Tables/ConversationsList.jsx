@@ -15,6 +15,7 @@ import {
   CardTitle,
   Row,
   Col,
+  Toast,
 } from "reactstrap";
 
 class ReactTables extends Component {
@@ -38,6 +39,7 @@ class ReactTables extends Component {
 
     axiosPut(updatePhase(quetextID), { phase: statusValue[0] }).then(result => {
       console.log(result.data)
+
     }).catch(err => {
       console.log(err, err.response)
     });

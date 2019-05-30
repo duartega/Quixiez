@@ -74,7 +74,7 @@ export const changeStatusMessage = (status: Status): ReturnType => {
 
 export const updateButton = (status: Status) => {
   return (
-    <Button className="btn-simple" color={status[1]} disabled>
+    <Button className="btn-simple" color={status[1]} disabled style={{maxWidth: "300px", minWidth: "150px"}}>
       {status[0]}
     </Button>
   )
