@@ -1,5 +1,5 @@
 import React from "react";
-import Conversations from '../Tables/ConversationsList';
+import ConversationsTable from "../Tables/ConversationsTable";
 
 // reactstrap components
 import {
@@ -17,7 +17,7 @@ import {
   Col
 } from "reactstrap";
 
-class Panels extends React.Component {
+class ConversationsPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,16 +56,9 @@ class Panels extends React.Component {
       <>
         <div className="content">
           <Row>
-            <Col className="ml-auto mr-auto" md="8">
+            <Col className="ml-auto mr-auto">
               <Card className="card-plain card-subcategories">
-                <CardHeader>
-                  <CardTitle className="text-center mt-5" tag="h4">
-                    Conversations
-                  </CardTitle>
-                  <br />
-                </CardHeader>
                 <CardBody>
-                  {/* color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger" */}
                   <Nav
                     className="nav-pills-info nav-pills-icons justify-content-center "
                     pills
@@ -121,8 +114,7 @@ class Panels extends React.Component {
                     activeTab={this.state.pageTabs}
                   >
                     <TabPane tabId="home">
-                      <Conversations />
-                      <div>test</div>
+                      <ConversationsTable history={this.props.history} />
                     </TabPane>
                     <TabPane tabId="messages">
                       Efficiently unleash cross-media information without
@@ -151,4 +143,4 @@ class Panels extends React.Component {
   }
 }
 
-export default Panels;
+export default ConversationsPanel;

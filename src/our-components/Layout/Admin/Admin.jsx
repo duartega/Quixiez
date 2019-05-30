@@ -8,7 +8,7 @@ import NotificationAlert from "react-notification-alert";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
 // import Footer from "components/Footer/Footer.jsx";
-import Sidebar from "our-components/Sidebar";
+import Sidebar from "our-components/Layout/Admin/Sidebar";
 // This is the settings button on the side
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 

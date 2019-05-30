@@ -4,7 +4,7 @@ import { getCompanyId, register } from "../../network/routes.ts";
 import { connect } from "react-redux";
 import { setCompanyUserID } from "../../redux/actions";
 import { Redirect } from "react-router-dom";
-import { Logo } from "../../our-components/Logo";
+import { Logo } from "../../our-components/Components/Logo";
 
 // reactstrap components
 import {

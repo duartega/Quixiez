@@ -14,7 +14,7 @@ import "assets/demo/demo.css";
 import "react-notification-alert/dist/animate.css";
 import "assets/css/our-custom.css";
 import "routes.js";
-import Login from "Login";
+import Login from "our-components/Pages/Login";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 

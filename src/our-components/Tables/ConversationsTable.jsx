@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 // react component for creating dynamic tables
 import ReactTable from "react-table";
-import { PopOverLeft } from "../PopOverLeft";
+import { PopOverLeft } from "../Components/PopOverLeft";
 import { axiosPost, axiosGet, axiosPut } from "../../network/ApiCalls";
 import { getAllConversations, updatePhase } from "../../network/routes";
 import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
 import { setConversationToRender } from "../../redux/actions/conversations";
-import * as StatusInfo from "../Tables/StatusInfo";
+import * as StatusInfo from "./StatusInfo";
 // import { Route, Switch, Redirect } from "react-router-dom";
 
 import {
@@ -128,53 +128,57 @@ class ReactTables extends Component {
   render() {
     return this.state.tableData ? (
       <>
-        <div className="content">
-          <Row className="mt-5">
-            <Col xs={12} md={12}>
-              <Card>
-                <CardHeader>
-                  <CardTitle tag="h4">Inbox</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <ReactTable
-                    data={this.state.tableData}
-                    sortable={false}
-                    resizable={false}
-                    columns={[
-                      {
-                        Header: "Name",
-                        accessor: "name"
-                      },
-                      {
-                        Header: "Message",
-                        accessor: "message"
-                      },
-                      {
-                        Header: "Received",
-                        accessor: "received"
-                      },
-                      {
-                        Header: "Status",
-                        accessor: "status"
-                        // For Centering header text
-                        // headerClassName: "text-center"
-                      },
-                      {
-                        accessor: "actions",
-                        sortable: false,
-                        filterable: false
-                      }
-                    ]}
-                    defaultPageSize={5}
-                    showPaginationTop
-                    showPaginationBottom={false}
-                    className="-striped -highlight"
-                  />
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+        {/* 
+        IF YOU DECIDE TO RENDER THIS
+        ONLY UN-NOTE THE LINE BELOW
+        */}
+        {/* <div className="content"> */}
+        <Row className="mt-5">
+          <Col xs={12} md={12}>
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Inbox</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <ReactTable
+                  data={this.state.tableData}
+                  sortable={false}
+                  resizable={false}
+                  columns={[
+                    {
+                      Header: "Name",
+                      accessor: "name"
+                    },
+                    {
+                      Header: "Message",
+                      accessor: "message"
+                    },
+                    {
+                      Header: "Received",
+                      accessor: "received"
+                    },
+                    {
+                      Header: "Status",
+                      accessor: "status"
+                      // For Centering header text
+                      // headerClassName: "text-center"
+                    },
+                    {
+                      accessor: "actions",
+                      sortable: false,
+                      filterable: false
+                    }
+                  ]}
+                  defaultPageSize={5}
+                  showPaginationTop
+                  showPaginationBottom={false}
+                  className="-striped -highlight"
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        {/* </div> */}
       </>
     ) : null;
   }

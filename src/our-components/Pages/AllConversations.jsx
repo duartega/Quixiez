@@ -1,8 +1,8 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 import Conversation from "./Conversation";
-import ConversationsList from "../Tables/ConversationsList";
-import Panel from "../Chat/ConversationsPanel";
+import ConversationsList from "../Tables/ConversationsTable";
+import Panel from "./ConversationsPanel";
 class AllConversations extends React.Component {
   constructor(props) {
     super(props);

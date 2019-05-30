@@ -1,10 +1,10 @@
 import React from "react";
-import { login } from "./network/routes.ts";
-import SelectCompany from "./our-components/Pages/SelectCompany";
+
+import SelectCompany from "./SelectCompany";
 import { connect } from "react-redux";
-// import { setCompanyUserJWT } from "./redux/actions";
+
 import { Redirect } from "react-router-dom";
-import { Logo } from "./our-components/Logo";
+import { Logo } from "../Components/Logo";
 
 // reactstrap components
 import {
@@ -23,7 +23,9 @@ import {
   Col,
   Row
 } from "reactstrap";
-import { axiosPost } from "./network/ApiCalls";
+
+import { login } from ".../../network/routes.ts";
+import { axiosPost } from "../../network/ApiCalls";
 
 class Login extends React.Component {
   constructor(props) {

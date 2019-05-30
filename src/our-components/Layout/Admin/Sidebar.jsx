@@ -96,7 +96,11 @@ class Sidebar extends React.Component {
       }
       return (
         <li className={this.activeRoute(prop.layout + prop.path)} key={key}>
-          <NavLink to={prop.layout + prop.path} activeClassName="" onClick={this.props.closeSidebar}>
+          <NavLink
+            to={prop.layout + prop.path}
+            activeClassName=""
+            onClick={this.props.closeSidebar}
+          >
             {prop.icon !== undefined ? (
               <>
                 <i className={prop.icon} />

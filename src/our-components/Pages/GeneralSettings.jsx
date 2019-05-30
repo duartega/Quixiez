@@ -14,9 +14,9 @@ import ReactBSAlert from "react-bootstrap-sweetalert";
 
 // reactstrap components
 import { Row } from "reactstrap";
-import { SocialMedia } from "our-components/Settings/SocialMedia";
-import { Address } from "our-components/Settings/Address";
-import { General } from "our-components/Settings/General";
+import { SocialMedia } from "our-components/Components/Settings/SocialMedia";
+import { Address } from "our-components/Components/Settings/Address";
+import { General } from "our-components/Components/Settings/General";
 
 class User extends React.Component {
   constructor(props) {

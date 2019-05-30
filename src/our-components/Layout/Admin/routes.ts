@@ -1,24 +1,14 @@
 import Dashboard from "../../Views/Dashboard";
-import AllConversations from "../../Pages/AllConversations";
 import Settings from "../../Pages/GeneralSettings";
 import Conversation from "our-components/Pages/Conversation";
-import ConversationsList from "our-components/Tables/ConversationsList";
-
-interface RoutesI {
-  path: String;
-  exact?: boolean;
-  name: String;
-  rtlName?: String;
-  icon?: String;
-  component: React.Component;
-  layout: String;
-}
+import ConversationsList from "our-components/Tables/ConversationsTable";
+import { RoutesI } from "../../Types/RoutesI";
+import ConversationsPanel from "../../Pages/ConversationsPanel";
 
 const routes: RoutesI[] = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    rtlName: "لوحة القيادة",
     icon: "tim-icons icon-chart-pie-36",
     component: Dashboard,
     layout: "/admin"
@@ -32,17 +22,17 @@ const routes: RoutesI[] = [
     path: "/conversations/messages",
     exact: true,
     name: "Messages",
-    rtlName: "لوحة القيادة",
     icon: "tim-icons icon-email-85",
     component: Conversation,
-    layout: "/admin"
+    layout: "/admin",
+    redirect: true
   },
   {
     path: "/conversations",
     name: "Conversations",
-    rtlName: "لوحة القيادة",
     icon: "tim-icons icon-email-85",
-    component: ConversationsList,
+    // component: ConversationsList,
+    component: ConversationsPanel,
     layout: "/admin"
   },
 
