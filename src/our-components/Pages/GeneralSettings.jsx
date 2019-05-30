@@ -7,7 +7,7 @@ import {
   putAddress,
   getCompanyInfo,
   putCompanyInfo
-} from "../../constants/routes";
+} from "../../network/routes";
 import { connect } from "react-redux";
 import { setCompanyUserJWT } from "../../redux/actions";
 import ReactBSAlert from "react-bootstrap-sweetalert";

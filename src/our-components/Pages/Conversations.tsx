@@ -3,9 +3,9 @@ import { ChatBubble } from "../Chat/ChatBubble";
 import { ChatFooter } from "../Chat/ChatFooter";
 import { ChatHeader } from "../Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
-import { getAllConversations } from "../../constants/routes";
+import { getAllConversations } from "../../network/routes";
 import { connect } from "react-redux";
-import { sendMessage } from "../../constants/routes";
+import { sendMessage } from "../../network/routes";
 import {
   joinRoom,
   // sendMessage,
@@ -53,28 +53,6 @@ class Conversations extends React.Component<Props, State> {
   private timeout: any = null;
 
   componentDidMount() {
-    //   // this.initialScroll();
-    //   // Joining socket room
-    //   /**
-    //    * Effectively joining the room, but nothing is going
-    //    * on with the room at the moment. All messages are
-    //    * being sent to the namespace right now.
-    //    */
-    //   joinRoom();
-    //   /**
-    //    * Get the messages from sessionStorage
-    //    */
-    //   // const messages = sessionStorage.getItem("messages");
-    //   // console.log("messages", messages);
-    //   // handleIncomingQueText(queText => {
-    //   //   console.log("updated queText", queText);
-    //   // });
-    //   // receiveMessage(messageData => {
-    //   //   console.log("messageData", messageData);
-    //   //   const { message } = messageData;
-    //   //   this.createMessage(message);
-    //   // });
-    //   console.log("this.props.conversation", this.props.conversation);
     handleIncomingEmployeeStartedTyping(companyUsername => {
       console.log(
         "Incoming Employee Started Typing (updating the state)",
@@ -90,16 +68,6 @@ class Conversations extends React.Component<Props, State> {
       console.log("Incoming STOPPED typing", companyUsername);
       this.setState({ companyUserTyping: null });
     });
-    //   // if (false) {
-    //   //   setInterval(() => {
-    //   //     this.createMessage();
-    //   //   }, 2000);
-    //   // }
-    //   if (this.chatContainer) {
-    //     console.log("height", this.chatContainer.clientHeight);
-    //   } else {
-    //     console.log("height unavailable");
-    //   }
   }
 
   componentWillUnmount() {
@@ -147,7 +115,6 @@ class Conversations extends React.Component<Props, State> {
           conversation: { messages, consumerUser }
         } = this.props;
         if (messages && messages.length > 0) {
-          console.log(this.props.conversation);
           const stateMessages = messages.map((aMessage: any) =>
             this.createMessageBubble(aMessage, consumerUser.firstName)
           );
@@ -278,8 +245,16 @@ class Conversations extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ conversation }: { conversation: any }) => ({
-  conversation
-});
+const mapStateToProps = ({ conversation }: { conversation: any }) => {
+  const { idxOfConversationToRender, allConversations } = conversation;
+  if (allConversations && allConversations[idxOfConversationToRender]) {
+    return {
+      conversation: allConversations[idxOfConversationToRender]
+    };
+  }
+  return {
+    conversation: null
+  };
+};
 
 export default connect(mapStateToProps)(Conversations);

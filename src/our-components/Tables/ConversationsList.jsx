@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import ReactTable from "react-table";
 import { PopOverLeft } from "../PopOverLeft";
 import { axiosPost, axiosGet, axiosPut } from "../../network/ApiCalls";
-import { getAllConversations, updatePhase } from "../../constants/routes";
+import { getAllConversations, updatePhase } from "../../network/routes";
 import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
-import { setConversation } from "../../redux/actions/conversations";
+import { setConversationToRender } from "../../redux/actions/conversations";
 import * as StatusInfo from "../Tables/StatusInfo";
 import {
   Card,
@@ -24,20 +24,19 @@ class ReactTables extends Component {
     super(props);
 
     this.state = {
-      conversations: [],
-      data: null
+      tableData: null
     };
   }
 
   handleOrderActionButton = (idx, status) => {
     // Temporarily set the status to complete. Will change when we use axiosPut
-    const { data } = this.state;
+    const { tableData } = this.state;
 
     const messages = JSON.parse(sessionStorage.getItem("messages"));
     const quetextID = messages[idx].id;
 
     let statusValue = StatusInfo.changeStatusMessage(status);
-    data[idx].status = StatusInfo.updateButton(statusValue);
+    tableData[idx].status = StatusInfo.updateButton(statusValue);
     console.log(statusValue[0]);
 
     axiosPut(updatePhase(quetextID), { phase: status })
@@ -48,31 +47,14 @@ class ReactTables extends Component {
         console.log(err, err.response);
       });
 
-    this.setState({ data });
+    this.setState({ tableData });
   };
 
-  async componentDidMount() {
-    console.log("conversationsList DID MOUNT");
-    handleIncomingQueText(queText => {
-      console.log("INCOMING QUETEXT", queText);
-    });
-    // Get all conversations for the company
-    await axiosGet(getAllConversations)
-      .then(result => {
-        const { data } = result;
-        sessionStorage.setItem("messages", JSON.stringify(data));
-        if (data && data.length > 0) {
-          this.renderInitialConversation(data[0]);
-        }
-      })
-      .catch(err => {
-        console.log(err, err.response);
-      });
-
-    // Store the messages in the session storage
-    let messagesArrStorage = sessionStorage.getItem("messages");
-    if (messagesArrStorage) {
-      this.setState({ conversations: JSON.parse(messagesArrStorage) });
+  componentDidMount() {
+    const { allConversations } = this.props;
+    console.log("allConversations in componentDidMount", allConversations);
+    if (allConversations) {
+      this.mapConversationsToTable();
     }
   }
 
@@ -80,24 +62,28 @@ class ReactTables extends Component {
     console.log("conversationList WILL UNMOUNT");
   }
   // component
-  renderInitialConversation = conversation => {
-    const { setConversation } = this.props;
-    setConversation(conversation);
+  renderInitialConversation = idx => {
+    const { setConversationToRender } = this.props;
+    setConversationToRender(idx);
   };
 
   componentDidUpdate(prevProps, prevState) {
     // Map our conversations to the table
-    if (prevState.conversations !== this.state.conversations) {
+    /**
+     * All the conversations are coming from redux
+     */
+    if (prevProps.allConversations !== this.props.allConversations) {
       this.mapConversationsToTable();
     }
   }
 
   mapConversationsToTable = () => {
     let conversationsArray = [];
-    const { conversations } = this.state;
+    // const { conversations } = this.state;
+    const { allConversations } = this.props;
 
     // Create an array for our conversations
-    conversationsArray = conversations.map((aConversation, idx) => {
+    conversationsArray = allConversations.map((aConversation, idx) => {
       let { consumerUser, messages } = aConversation;
       let fname = consumerUser.firstName + " " + consumerUser.lastName;
       let lastMessage = messages[messages.length - 1].content;
@@ -131,20 +117,21 @@ class ReactTables extends Component {
     });
 
     // Set the state so we can render our conversations
-    this.setState({ data: conversationsArray });
+    this.setState({ tableData: conversationsArray });
   };
 
   handleViewConversation = idx => {
-    const { setConversation } = this.props;
-    const messages = sessionStorage.getItem("messages");
-    const messagesJSON = JSON.parse(messages);
+    const { setConversationToRender } = this.props;
+    setConversationToRender(idx);
+    // const messages = sessionStorage.getItem("messages");
+    // const messagesJSON = JSON.parse(messages);
 
-    setConversation(messagesJSON[idx]);
+    // setConversation(messagesJSON[idx]);
   };
 
   render() {
     console.log("render called");
-    return this.state.data ? (
+    return this.state.tableData ? (
       <>
         <div className="content">
           <Row className="mt-5">
@@ -155,7 +142,7 @@ class ReactTables extends Component {
                 </CardHeader>
                 <CardBody>
                   <ReactTable
-                    data={this.state.data}
+                    data={this.state.tableData}
                     sortable={false}
                     resizable={false}
                     columns={[
@@ -198,11 +185,15 @@ class ReactTables extends Component {
   }
 }
 
+const mapStateToProps = ({ conversation: { allConversations } }) => ({
+  allConversations
+});
+
 const mapDispatchToProps = dispatch => ({
-  setConversation: conversation => dispatch(setConversation(conversation))
+  setConversationToRender: idx => dispatch(setConversationToRender(idx))
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ReactTables);

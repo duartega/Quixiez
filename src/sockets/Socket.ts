@@ -1,5 +1,5 @@
 import socketIo from "socket.io-client";
-import { socketTest, socketTestTestNameSpace } from "../constants/routes";
+import { socketTest, socketTestTestNameSpace } from "../network/routes";
 
 /** Events */
 import {

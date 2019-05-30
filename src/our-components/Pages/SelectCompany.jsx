@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 // reactstrap components
 import { Button } from "reactstrap";
-import { selectCompany } from "../../constants/routes";
+import { selectCompany } from "../../network/routes";
 import { connect } from "react-redux";
 import { setCompanyUserJWT, setCompanyName } from "redux/actions";
 import { axiosPost } from "../../network/ApiCalls";
@@ -44,7 +44,7 @@ class Company extends React.Component {
                 localStorage.setItem("jwt", jwt);
                 setCompanyName(aCompany.companyName);
                 this.setState({ isCompanySelected: true });
-                localStorage.setItem("state.auth.tokens", JSON.stringify((jwt)));
+                localStorage.setItem("state.auth.tokens", JSON.stringify(jwt));
               })
               .catch(err => {
                 console.log(err);

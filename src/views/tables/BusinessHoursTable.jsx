@@ -3,7 +3,7 @@ import React from "react";
 // reactstrap components
 import { Card, CardBody, Row, Col, Table, Input, FormGroup } from "reactstrap";
 import { axiosGet } from "../../network/ApiCalls";
-import { companyHours as companyHoursEndpoint } from "../../constants/routes";
+import { companyHours as companyHoursEndpoint } from "../../network/routes";
 import { connect } from "react-redux";
 import moment from "moment";
 import DateTime from "react-datetime";

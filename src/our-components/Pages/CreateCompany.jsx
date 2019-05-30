@@ -3,7 +3,7 @@ import React from "react";
 import Axios from "axios";
 import ReactBSAlert from "react-bootstrap-sweetalert";
 import Complete from "./RegistrationComplete";
-import { createCompany } from "../../constants/routes";
+import { createCompany } from "../../network/routes";
 import { connect } from "react-redux";
 
 // reactstrap components

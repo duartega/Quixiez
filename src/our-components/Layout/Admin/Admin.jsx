@@ -12,10 +12,18 @@ import Sidebar from "our-components/Sidebar";
 // This is the settings button on the side
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
-import routes from "../../routes";
+import routes from "./routes";
 
 import logo from "assets/img/react-logo.png";
 import { receiveMessage } from "sockets/Socket";
+import { axiosGet } from "../../../network/ApiCalls";
+import { getAllConversations } from "../../../network/routes";
+/**
+ * Redux imports
+ */
+
+import { connect } from "react-redux";
+import { setAllConversations } from "../../../redux/actions/conversations";
 
 var ps;
 
@@ -41,6 +49,19 @@ class Admin extends React.Component {
       }
     }
     window.addEventListener("scroll", this.showNavbarButton);
+
+    axiosGet(getAllConversations)
+      .then(result => {
+        const { data } = result;
+        const { setAllConversations } = this.props;
+        sessionStorage.setItem("conversations", JSON.stringify(data));
+        setAllConversations(data);
+
+        // console.log(data);
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
 
     // OUR CODE
     receiveMessage(data => {
@@ -227,4 +248,12 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+const mapDispatchToProps = dispatch => ({
+  setAllConversations: conversations =>
+    dispatch(setAllConversations(conversations))
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Admin);
