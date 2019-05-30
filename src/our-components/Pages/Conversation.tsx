@@ -28,6 +28,7 @@ import { conversation } from "redux/reducers/conversations";
 type Props = {
   conversation: any;
   conversationContainerHeight: number;
+  history: any;
 };
 
 type State = {
@@ -54,7 +55,16 @@ class Conversations extends React.Component<Props, State> {
 
   componentDidMount() {
     const { conversation } = this.props;
-    console.log("Conversation component did mount", conversation);
+    /**
+     * If there aren't any conversation to render
+     * thats because the page was refreshed and
+     * we will reroute the user to the conversation
+     * page
+     */
+    if (!conversation) {
+      const { history } = this.props;
+      history.replace("/admin/conversations");
+    }
     this.handleRenderConversation();
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
@@ -216,18 +226,12 @@ class Conversations extends React.Component<Props, State> {
     console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
-        <div
-          // ref={node => (this.chatContainer = node)}
-          // style={{ height: this.props.conversationContainerHeight }}
-          className="content"
-        >
+        <div className="content">
           <ChatHeader />
 
-          {/* <div className="h-75"> */}
           {this.state.messages.map(aMessage => {
             return aMessage;
           })}
-          {/* </div> */}
 
           {/* Scroll to bottom of screen on mount
            * If this div is moved below the chat
@@ -238,7 +242,7 @@ class Conversations extends React.Component<Props, State> {
               this.messagesEnd = el;
             }}
           />
-          {/* </div> */}
+
           <ChatFooter
             whoIsTyping={
               this.state.companyUserTyping ? this.state.companyUserTyping : null
