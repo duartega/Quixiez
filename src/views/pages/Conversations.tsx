@@ -5,10 +5,10 @@ import { ChatHeader } from "../../our-components/Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
 import { connect } from "react-redux";
-
+import { sendMessage } from "../../constants/routes";
 import {
   joinRoom,
-  sendMessage,
+  // sendMessage,
   receiveMessage,
   handleEmployeeStartedTyping,
   handleIncomingEmployeeStartedTyping,
@@ -22,9 +22,11 @@ import {
   EMPLOYEE_START_TYPING,
   UPDATED_QUE_TEXT
 } from "sockets/events/Events";
+import { bigIntLiteral } from "@babel/types";
+import { conversation } from "redux/reducers/conversations";
 
 type Props = {
-  messages: any[];
+  conversation: any;
   conversationContainerHeight: number;
 };
 
@@ -51,31 +53,28 @@ class Conversations extends React.Component<Props, State> {
   private timeout: any = null;
 
   componentDidMount() {
-    this.initialScroll();
-    // Joining socket room
-    /**
-     * Effectively joining the room, but nothing is going
-     * on with the room at the moment. All messages are
-     * being sent to the namespace right now.
-     */
-    joinRoom();
-
-    /**
-     * Get the messages from sessionStorage
-     */
-    // const messages = sessionStorage.getItem("messages");
-    // console.log("messages", messages);
-
-    // handleIncomingQueText(queText => {
-    //   console.log("updated queText", queText);
-    // });
-
-    // receiveMessage(messageData => {
-    //   console.log("messageData", messageData);
-    //   const { message } = messageData;
-    //   this.createMessage(message);
-    // });
-
+    //   // this.initialScroll();
+    //   // Joining socket room
+    //   /**
+    //    * Effectively joining the room, but nothing is going
+    //    * on with the room at the moment. All messages are
+    //    * being sent to the namespace right now.
+    //    */
+    //   joinRoom();
+    //   /**
+    //    * Get the messages from sessionStorage
+    //    */
+    //   // const messages = sessionStorage.getItem("messages");
+    //   // console.log("messages", messages);
+    //   // handleIncomingQueText(queText => {
+    //   //   console.log("updated queText", queText);
+    //   // });
+    //   // receiveMessage(messageData => {
+    //   //   console.log("messageData", messageData);
+    //   //   const { message } = messageData;
+    //   //   this.createMessage(message);
+    //   // });
+    //   console.log("this.props.conversation", this.props.conversation);
     handleIncomingEmployeeStartedTyping(companyUsername => {
       console.log(
         "Incoming Employee Started Typing (updating the state)",
@@ -85,75 +84,121 @@ class Conversations extends React.Component<Props, State> {
       if (this.state.companyUserTyping === null) {
         this.setState({ companyUserTyping: companyUsername });
       }
-      // }
     });
 
     handleIncomingEmployeeStoppedTyping(companyUsername => {
       console.log("Incoming STOPPED typing", companyUsername);
       this.setState({ companyUserTyping: null });
     });
-
-    if (false) {
-      setInterval(() => {
-        this.createMessage();
-      }, 2000);
-    }
-
-    if (this.chatContainer) {
-      console.log("height", this.chatContainer.clientHeight);
-    } else {
-      console.log("height unavailable");
-    }
+    //   // if (false) {
+    //   //   setInterval(() => {
+    //   //     this.createMessage();
+    //   //   }, 2000);
+    //   // }
+    //   if (this.chatContainer) {
+    //     console.log("height", this.chatContainer.clientHeight);
+    //   } else {
+    //     console.log("height unavailable");
+    //   }
   }
 
   componentWillUnmount() {
-    stopListening(INCOMING_MESSAGE);
+    //   stopListening(INCOMING_MESSAGE);
     stopListening(EMPLOYEE_START_TYPING);
-    stopListening(UPDATED_QUE_TEXT);
+    //   stopListening(UPDATED_QUE_TEXT);
   }
 
   initialScroll = () => {
+    console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
+    console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
-  componentDidUpdate(prevProps: any, prevState: State) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     /**
-     * Stopping the automatic scroll to bottom
-     * when the user typing changes
+     * Handling state & scrolling
      */
-    if (prevState.companyUserTyping !== this.state.companyUserTyping) {
-    } else if (this.state.companyUserTyping === null) {
-    } else {
-      this.scrollToBottom(); // scroll to bottom of screen on mount
+    switch (true) {
+      case prevState.messages !== this.state.messages:
+        this.initialScroll();
+        break;
+      case prevState.companyUserTyping !== this.state.companyUserTyping:
+        // Do nothing
+        break;
+      case this.state.companyUserTyping === null:
+        // Do nothing
+        break;
+
+      default:
+      // Do nothing
+    }
+
+    /**
+     * Handling props & new messages
+     */
+    switch (true) {
+      case prevProps.conversation !== this.props.conversation:
+        const {
+          conversation: { messages, consumerUser }
+        } = this.props;
+        if (messages && messages.length > 0) {
+          console.log(this.props.conversation);
+          const stateMessages = messages.map((aMessage: any) =>
+            this.createMessageBubble(aMessage, consumerUser.firstName)
+          );
+
+          this.setState({ messages: stateMessages });
+        }
+        break;
+      default:
+      // Do nothing
     }
   }
 
-  createMessage = (message?: string) => {
-    message && sendMessage(message);
-    // will do axiosPost here
-
-    const messages = (
+  /**
+   * TODO: First name isn't working 100% need to return sentBy from backend
+   */
+  createMessageBubble = (conversation: any, firstName: string) => {
+    const { content } = conversation;
+    return (
       <ChatBubble
         key={this.key++}
         badgeColor="info"
-        badgeLabel="Joe"
-        message={message ? message : this.state.message}
+        badgeLabel={firstName}
+        message={content}
         timePassed="7 Days"
-        inverted={message ? true : false}
+        inverted={true}
       />
     );
-    // console.log(receiving, message);
-    !message && sendMessage(this.state.message);
-    const { messages: messagesState } = this.state;
-    messagesState.push(messages);
-
-    this.setState({ messages: messagesState, message: "" });
   };
+
+  // createMessage = (message?: string) => {
+  //   // message && sendMessage(message);
+  //   // will do axiosPost here
+
+  //   const messages = (
+  //     <ChatBubble
+  //       key={this.key++}
+  //       badgeColor="info"
+  //       badgeLabel="Joe"
+  //       message={message ? message : this.state.message}
+  //       timePassed="7 Days"
+  //       inverted={message ? true : false}
+  //     />
+  //   );
+
+  //   // console.log(receiving, message);
+  //   // !message && sendMessage(this.state.message);
+  //   // const { messages: messagesState } = this.state;
+  //   // messagesState.push(messages);
+
+  //   // this.setState({ messages: messagesState, message: "" });
+  // };
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
@@ -167,15 +212,25 @@ class Conversations extends React.Component<Props, State> {
     }, 5000);
   };
 
-  addMessage = () => {
+  // addMessage = () => {
+  //   const { message } = this.state;
+  //   message !== "" && this.createMessage();
+  // };
+
+  sendMessage = () => {
+    const { id } = this.props.conversation;
+
     const { message } = this.state;
-    message !== "" && this.createMessage();
+    if (message !== "") {
+      axiosPost(sendMessage(id as string), { message: this.state.message });
+      this.setState({ message: "" });
+    }
   };
 
   keyPress = (e: any) => {
-    if (e.keyCode === 13 && this.state.message !== "" && !e.shiftKey) {
+    if (e.keyCode === 13 && !e.shiftKey) {
       e.preventDefault();
-      this.createMessage();
+      this.sendMessage();
     }
   };
 
@@ -189,28 +244,9 @@ class Conversations extends React.Component<Props, State> {
         >
           <ChatHeader />
 
-          {/* <ChatBubble
-            badgeColor="warning"
-            badgeLabel="Gabe"
-            message="A message"
-            timePassed="10 hours"
-            inverted
-          />
-          <ChatBubble
-            badgeColor="info"
-            badgeLabel="Joe"
-            message="What's up Gabe?"
-            timePassed="7 Days"
-          />
-          <ChatBubble
-            badgeColor="info"
-            badgeLabel="Joe"
-            message="Hey Man Reply!"
-            timePassed="7 Days"
-          /> */}
           {/* <div className="h-75"> */}
-          {this.state.messages.map(amessages => {
-            return amessages;
+          {this.state.messages.map(aMessage => {
+            return aMessage;
           })}
           {/* </div> */}
 
@@ -235,13 +271,15 @@ class Conversations extends React.Component<Props, State> {
           inputValue={this.state.message}
           inputOnKeyDown={this.keyPress}
           inputStyle={{ backgroundColor: "#27293d" }}
-          buttonOnClick={this.addMessage}
+          buttonOnClick={this.sendMessage}
         />
       </>
     );
   }
 }
 
-const mapStateToProps = {};
+const mapStateToProps = ({ conversation }: { conversation: any }) => ({
+  conversation
+});
 
-export default connect()(Conversations);
+export default connect(mapStateToProps)(Conversations);

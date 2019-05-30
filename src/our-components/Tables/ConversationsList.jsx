@@ -17,6 +17,7 @@ import {
   Col,
   Button
 } from "reactstrap";
+import { handleIncomingQueText } from "sockets/Socket";
 
 class ReactTables extends Component {
   constructor(props) {
@@ -34,9 +35,9 @@ class ReactTables extends Component {
     let statusValue = this.changeStatusMessage("COMPANY_COMPLETE", "success");
     data[idx].status = (
       <Button className="btn-simple" color={statusValue[1]} disabled>
-      {statusValue[0]}
-    </Button>
-    )
+        {statusValue[0]}
+      </Button>
+    );
     this.setState({ data });
   };
 
@@ -56,14 +57,24 @@ class ReactTables extends Component {
   // };
 
   componentDidMount() {
+    handleIncomingQueText(queText => {
+      console.log("INCOMING QUETEXT", queText);
+    });
+    // let conversations;
     // Get all conversations for the company
     axiosGet(getAllConversations)
       .then(result => {
-        sessionStorage.setItem("messages", JSON.stringify(result.data));
+        const { data } = result;
+        // console.log("inside then...");
+        sessionStorage.setItem("messages", JSON.stringify(data));
+        if (data && data.length > 0) {
+          this.renderInitialConversation(data[0]);
+        }
       })
       .catch(err => {
         console.log(err, err.response);
       });
+    console.log("outside of then...");
 
     // Store the messages in the session storage
     let messagesArrStorage = sessionStorage.getItem("messages");
@@ -71,6 +82,11 @@ class ReactTables extends Component {
       this.setState({ conversations: JSON.parse(messagesArrStorage) });
     }
   }
+
+  renderInitialConversation = conversation => {
+    const { setConversation } = this.props;
+    setConversation(conversation);
+  };
 
   componentDidUpdate(prevProps, prevState) {
     // Map our conversations to the table
@@ -101,9 +117,9 @@ class ReactTables extends Component {
       statusColor = "success";
     } else {
       status = "ERROR";
-    };
+    }
     return [status, statusColor];
-  }
+  };
 
   mapConversationsToTable = () => {
     let conversationsArray = [];
@@ -120,7 +136,7 @@ class ReactTables extends Component {
       // Set the status message and the status color
       let statusColor = "";
       let statusValue = this.changeStatusMessage(status, statusColor);
-      status = statusValue[0]; 
+      status = statusValue[0];
       statusColor = statusValue[1];
 
       // Using Date-FNS, it automatically converts the UTC to your local time zone
@@ -161,7 +177,6 @@ class ReactTables extends Component {
           <Button className="btn-simple" color={statusColor} disabled>
             {status}
           </Button>
-          
         ),
         actions: (
           // We've added some custom button actions
@@ -181,12 +196,12 @@ class ReactTables extends Component {
   };
 
   handleViewConversation = idx => {
-    const { setMessages } = this.props;
+    const { setConversation } = this.props;
     const messages = sessionStorage.getItem("messages");
     const messagesJSON = JSON.parse(messages);
     // console.log(idx);
     // console.log(messagesJSON[idx]);
-    setMessages(messagesJSON[idx]);
+    setConversation(messagesJSON[idx]);
   };
 
   render() {
@@ -246,7 +261,7 @@ class ReactTables extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setMessages: messages => dispatch(setConversation(messages))
+  setConversation: conversation => dispatch(setConversation(conversation))
 });
 
 export default connect(
