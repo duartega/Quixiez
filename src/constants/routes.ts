@@ -23,3 +23,5 @@ export const putSocialMediaLinks = `${baseRoute}/company/socialMedia/`;
 export const getAllConversations = `${baseRoute}/quetext/`;
 export const sendMessage = (queTextId: string) =>
   `${baseRoute}/quetext/${queTextId}`;
+export const updatePhase = (quetextID:string ) => `${baseRoute}/quetext/${quetextID}`
+
