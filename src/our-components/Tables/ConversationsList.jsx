@@ -38,8 +38,9 @@ class ReactTables extends Component {
 
     let statusValue = StatusInfo.changeStatusMessage(status);
     data[idx].status = StatusInfo.updateButton(statusValue);
+    console.log(statusValue[0])
 
-    axiosPut(updatePhase(quetextID), { phase: statusValue[0] }).then(result => {
+    axiosPut(updatePhase(quetextID), { phase: status }).then(result => {
       console.log(result.data)
 
     }).catch(err => {
