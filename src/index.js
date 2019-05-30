@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // import AuthLayout from "layouts/Auth/Auth.jsx";
-import AdminLayout from "../src/our-components/Admin";
+import AdminLayout from "./our-components/Layout/Admin";
 import RTLLayout from "layouts/RTL/RTL.jsx";
 import Test from "../src/our-components/Test/Test";
 
@@ -37,40 +37,41 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <Router history={hist}>
       <Switch>
+        {/*
+         * Auth is for handling login...
+         */}
         <Route path="/auth" render={props => <Login {...props} />} />
+        {/*
+         * HIT THE ADMIN LAYOUT (PRIMARY LAYOUT)
+         */}
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
-        <Route path="/rtl" render={props => <RTLLayout {...props} />} />
+
+        {/* <Route path="/rtl" render={props => <RTLLayout {...props} />} /> */}
         <Route path="/test" render={props => <Test {...props} />} />
+        {/*  */}
         <Route path="/register" render={props => <Register {...props} />} />
+
+        {/* After registering from /register you are directed here */}
         <Route
           path="/registerCompany"
           render={props => <RegisterCompany {...props} />}
         />
+        {/* A result of what you pick */}
         <Route
           path="/registerACompany"
           render={props => <RegisterACompany {...props} />}
         />
+        {/* A result of what you pick */}
         <Route
           path="/registerWithCompany"
           render={props => <RegisterWithCompany {...props} />}
         />
-        <Route path="/dashboard" render={props => <DashBoard {...props} />} />
-        <Route path="/settings" render={props => <Settings {...props} />} />
-        <Route path="/hours" render={props => <Hours {...props} />} />
-        <Route path="/invite" render={props => <Invite {...props} />} />
-        <Route
-          path="/conversations"
-          render={props => <Conversations {...props} />}
-        />
-        <Route path="/list" render={props => <List {...props} />} />
-        <Route
-          path="/allconversations"
-          render={props => <AllConversations {...props} />}
-        />
-        {/* <Route path="/registerWithCompany" render={props => <RegisterCompany {...props} />} /> */}
-        <Redirect from="/" to="/admin/dashboard" />
 
-        <Route path="/auth" render={props => <Login />} />
+        {/* TODO: We need to include this in the layout... */}
+        <Route path="/invite" render={props => <Invite {...props} />} />
+
+        {/* Redirect the user to login */}
+        <Redirect from="/" to="/auth" />
       </Switch>
     </Router>
   </Provider>
