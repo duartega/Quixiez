@@ -7,7 +7,7 @@ import { getAllConversations, updatePhase } from "../../constants/routes";
 import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
 import { setConversation } from "../../redux/actions/conversations";
-import * as StatusInfo from '../Tables/StatusInfo';
+import * as StatusInfo from "../Tables/StatusInfo";
 import {
   Card,
   CardBody,
@@ -15,7 +15,7 @@ import {
   CardTitle,
   Row,
   Col,
-  Toast,
+  Toast
 } from "reactstrap";
 import { handleIncomingQueText } from "sockets/Socket";
 
@@ -33,37 +33,41 @@ class ReactTables extends Component {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
 
-    const messages = JSON.parse(sessionStorage.getItem('messages'));
+    const messages = JSON.parse(sessionStorage.getItem("messages"));
     const quetextID = messages[idx].id;
 
     let statusValue = StatusInfo.changeStatusMessage(status);
     data[idx].status = StatusInfo.updateButton(statusValue);
-    console.log(statusValue[0])
+    console.log(statusValue[0]);
 
-    axiosPut(updatePhase(quetextID), { phase: status }).then(result => {
-      console.log(result.data)
-
-    }).catch(err => {
-      console.log(err, err.response)
-    });
+    axiosPut(updatePhase(quetextID), { phase: status })
+      .then(result => {
+        console.log(result.data);
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
 
     this.setState({ data });
   };
 
   async componentDidMount() {
-      handleIncomingQueText(queText => {
+    console.log("conversationsList DID MOUNT");
+    handleIncomingQueText(queText => {
       console.log("INCOMING QUETEXT", queText);
     });
     // Get all conversations for the company
-    await axiosGet(getAllConversations).then(result => {
-              const { data } = result;
-      sessionStorage.setItem("messages", JSON.stringify(data));
-       if (data && data.length > 0) {
+    await axiosGet(getAllConversations)
+      .then(result => {
+        const { data } = result;
+        sessionStorage.setItem("messages", JSON.stringify(data));
+        if (data && data.length > 0) {
           this.renderInitialConversation(data[0]);
         }
-    }).catch(err => {
-      console.log(err, err.response);
-    });
+      })
+      .catch(err => {
+        console.log(err, err.response);
+      });
 
     // Store the messages in the session storage
     let messagesArrStorage = sessionStorage.getItem("messages");
@@ -72,6 +76,10 @@ class ReactTables extends Component {
     }
   }
 
+  componentWillUnmount() {
+    console.log("conversationList WILL UNMOUNT");
+  }
+  // component
   renderInitialConversation = conversation => {
     const { setConversation } = this.props;
     setConversation(conversation);
@@ -83,7 +91,6 @@ class ReactTables extends Component {
       this.mapConversationsToTable();
     }
   }
-
 
   mapConversationsToTable = () => {
     let conversationsArray = [];
@@ -131,9 +138,8 @@ class ReactTables extends Component {
     const { setConversation } = this.props;
     const messages = sessionStorage.getItem("messages");
     const messagesJSON = JSON.parse(messages);
-    
-    setConversation(messagesJSON[idx]);
 
+    setConversation(messagesJSON[idx]);
   };
 
   render() {

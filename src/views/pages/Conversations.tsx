@@ -177,28 +177,28 @@ class Conversations extends React.Component<Props, State> {
     );
   };
 
-  // createMessage = (message?: string) => {
-  //   // message && sendMessage(message);
-  //   // will do axiosPost here
+  createMessage = (message?: string) => {
+    // message && sendMessage(message);
+    // will do axiosPost here
 
-  //   const messages = (
-  //     <ChatBubble
-  //       key={this.key++}
-  //       badgeColor="info"
-  //       badgeLabel="Joe"
-  //       message={message ? message : this.state.message}
-  //       timePassed="7 Days"
-  //       inverted={message ? true : false}
-  //     />
-  //   );
+    const messages = (
+      <ChatBubble
+        key={this.key++}
+        badgeColor="info"
+        badgeLabel="Joe"
+        message={message ? message : this.state.message}
+        timePassed="7 Days"
+        inverted={message ? true : false}
+      />
+    );
 
-  //   // console.log(receiving, message);
-  //   // !message && sendMessage(this.state.message);
-  //   // const { messages: messagesState } = this.state;
-  //   // messagesState.push(messages);
+    // console.log(receiving, message);
+    // !message && sendMessage(this.state.message);
+    const { messages: messagesState } = this.state;
+    messagesState.push(messages);
 
-  //   // this.setState({ messages: messagesState, message: "" });
-  // };
+    this.setState({ messages: messagesState, message: "" });
+  };
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
@@ -218,13 +218,13 @@ class Conversations extends React.Component<Props, State> {
   // };
 
   sendMessage = () => {
-    const { id } = this.props.conversation;
-
-    const { message } = this.state;
-    if (message !== "") {
-      axiosPost(sendMessage(id as string), { message: this.state.message });
-      this.setState({ message: "" });
-    }
+    // const { id } = this.props.conversation;
+    // const { message } = this.state;
+    // if (message !== "") {
+    //   axiosPost(sendMessage(id as string), { message: this.state.message });
+    //   this.setState({ message: "" });
+    // }
+    this.createMessage();
   };
 
   keyPress = (e: any) => {

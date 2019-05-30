@@ -12,7 +12,7 @@ import Sidebar from "our-components/Sidebar";
 // This is the settings button on the side
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
-import routes from "../our-components/routes";
+import routes from "../routes";
 
 import logo from "assets/img/react-logo.png";
 import { receiveMessage } from "sockets/Socket";
@@ -30,6 +30,7 @@ class Admin extends React.Component {
     };
   }
   componentDidMount() {
+    console.log("OUR ADMIN LAYOUT WILL MOUNT");
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
       document.documentElement.classList.remove("perfect-scrollbar-off");
@@ -57,6 +58,7 @@ class Admin extends React.Component {
     });
   }
   componentWillUnmount() {
+    console.log("OUR ADMIN LAYOUR WILL UNMOUNT");
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
       document.documentElement.className += " perfect-scrollbar-off";
