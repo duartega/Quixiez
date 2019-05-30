@@ -4,7 +4,7 @@ import { createBrowserHistory } from "history";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // import AuthLayout from "layouts/Auth/Auth.jsx";
-import AdminLayout from "./our-components/Layout/Admin";
+import AdminLayout from "./our-components/Layout/Admin/Admin";
 import RTLLayout from "layouts/RTL/RTL.jsx";
 import Test from "../src/our-components/Test/Test";
 

@@ -12,7 +12,7 @@ import Sidebar from "our-components/Sidebar";
 // This is the settings button on the side
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 
-import routes from "../routes";
+import routes from "../../routes";
 
 import logo from "assets/img/react-logo.png";
 import { receiveMessage } from "sockets/Socket";
