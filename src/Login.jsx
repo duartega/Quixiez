@@ -1,10 +1,10 @@
 import React from "react";
 import { login } from "./constants/routes.ts";
-import SelectCompany from "./views/pages/SelectCompany";
+import SelectCompany from "./our-components/Pages/SelectCompany";
 import { connect } from "react-redux";
 // import { setCompanyUserJWT } from "./redux/actions";
 import { Redirect } from "react-router-dom";
-import { Logo } from './our-components/Logo';
+import { Logo } from "./our-components/Logo";
 
 // reactstrap components
 import {
@@ -144,10 +144,10 @@ class Login extends React.Component {
               <Form className="form">
                 <Card className="card-login card-white">
                   <CardHeader>
-                  
-                    <CardTitle tag="h1" style={{ color: "#344675" }}>sign-in </CardTitle>
+                    <CardTitle tag="h1" style={{ color: "#344675" }}>
+                      sign-in{" "}
+                    </CardTitle>
                     <Logo />
-
                   </CardHeader>
                   <CardBody>
                     <div className={empty_Username}>

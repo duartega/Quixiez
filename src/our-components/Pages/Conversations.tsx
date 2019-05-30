@@ -1,7 +1,7 @@
 import React from "react";
-import { ChatBubble } from "../../our-components/Chat/ChatBubble";
-import { ChatFooter } from "../../our-components/Chat/ChatFooter";
-import { ChatHeader } from "../../our-components/Chat/ChatHeader";
+import { ChatBubble } from "../Chat/ChatBubble";
+import { ChatFooter } from "../Chat/ChatFooter";
+import { ChatHeader } from "../Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../constants/routes";
 import { connect } from "react-redux";

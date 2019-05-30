@@ -1,5 +1,5 @@
 import React from "react";
-import BusinessHoursTable from "../tables/BusinessHoursTable";
+import BusinessHoursTable from "../../views/tables/BusinessHoursTable";
 
 // reactstrap components
 import {
