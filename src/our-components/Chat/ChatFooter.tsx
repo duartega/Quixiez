@@ -32,40 +32,44 @@ export class ChatFooter extends Component<Props> {
         <br />
         <br />
 
-        <Row className="chat-footer-container align-items-start">
-          <Row>
-            <Col className="md-12">
-              <p>{whoIsTyping ? `${whoIsTyping} is typing...` : null}</p>
-            </Col>
-          </Row>
-          <Row className="w-100 align-items-center">
-            <Col className="md-9">
-              <Input
-                placeholder={inputPlaceHolder}
-                onChange={inputOnChange}
-                name={inputName}
-                value={inputValue}
-                onKeyDown={inputOnKeyDown}
-                autoFocus
-                style={inputStyle}
-                type="textarea"
-                className="px-2"
-              />
-            </Col>
-            <Col
-              lg={{ size: 3 }}
-              className="d-flex justify-content-center align-items-center h-100"
-            >
-              <Col className="p-0">
-                <Button onClick={buttonOnClick} className="mt-0 ">
-                  <Row className="align-item-center">
-                    Send
-                    <i className="tim-icons icon-send pl-1 " />
-                  </Row>
-                </Button>
+        <Row className="chat-footer-container justify-content-center w-100">
+          <div className="w-50 align-items-center chat-box-container">
+            {/* <div> */}
+            <Row>
+              <Col style={{ height: "26px" }}>
+                <p>{whoIsTyping ? `${whoIsTyping} is typing...` : ""}</p>
               </Col>
-            </Col>
-          </Row>
+            </Row>
+            {/* </div> */}
+            <Row>
+              <Col className="md-9">
+                <Input
+                  placeholder={inputPlaceHolder}
+                  onChange={inputOnChange}
+                  name={inputName}
+                  value={inputValue}
+                  onKeyDown={inputOnKeyDown}
+                  autoFocus
+                  style={inputStyle}
+                  type="textarea"
+                  className="px-2"
+                />
+              </Col>
+              <Col
+                lg={{ size: 3 }}
+                className="d-flex justify-content-center align-items-center h-100"
+              >
+                <Col className="p-0">
+                  <Button onClick={buttonOnClick} className="mt-0 ">
+                    <Row className="align-item-center">
+                      Send
+                      <i className="tim-icons icon-send pl-1 " />
+                    </Row>
+                  </Button>
+                </Col>
+              </Col>
+            </Row>
+          </div>
         </Row>
       </>
     );

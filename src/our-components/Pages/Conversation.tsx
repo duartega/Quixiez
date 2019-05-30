@@ -47,12 +47,16 @@ class Conversations extends React.Component<Props, State> {
   }
 
   private key = 1;
-  private chatContainer: HTMLDivElement | null = null;
+  // private chatContainer: HTMLDivElement | null = null;
   private messagesEnd: HTMLDivElement | null = null;
   private innerHeight: any = null;
   private timeout: any = null;
 
   componentDidMount() {
+    const { conversation } = this.props;
+    console.log("Conversation component did mount", conversation);
+    this.handleRenderConversation();
+
     handleIncomingEmployeeStartedTyping(companyUsername => {
       console.log(
         "Incoming Employee Started Typing (updating the state)",
@@ -111,21 +115,28 @@ class Conversations extends React.Component<Props, State> {
      */
     switch (true) {
       case prevProps.conversation !== this.props.conversation:
-        const {
-          conversation: { messages, consumerUser }
-        } = this.props;
-        if (messages && messages.length > 0) {
-          const stateMessages = messages.map((aMessage: any) =>
-            this.createMessageBubble(aMessage, consumerUser.firstName)
-          );
-
-          this.setState({ messages: stateMessages });
-        }
+        this.handleRenderConversation();
         break;
       default:
       // Do nothing
     }
   }
+
+  handleRenderConversation = () => {
+    const { conversation } = this.props;
+    if (
+      conversation &&
+      conversation.messages &&
+      conversation.messages.length > 0
+    ) {
+      const { messages, consumerUser } = conversation;
+      const stateMessages = messages.map((aMessage: any) =>
+        this.createMessageBubble(aMessage, consumerUser.firstName)
+      );
+
+      this.setState({ messages: stateMessages });
+    }
+  };
 
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
@@ -206,8 +217,9 @@ class Conversations extends React.Component<Props, State> {
     return (
       <>
         <div
-          ref={node => (this.chatContainer = node)}
-          style={{ height: this.props.conversationContainerHeight }}
+          // ref={node => (this.chatContainer = node)}
+          // style={{ height: this.props.conversationContainerHeight }}
+          className="content"
         >
           <ChatHeader />
 
@@ -227,19 +239,19 @@ class Conversations extends React.Component<Props, State> {
             }}
           />
           {/* </div> */}
+          <ChatFooter
+            whoIsTyping={
+              this.state.companyUserTyping ? this.state.companyUserTyping : null
+            }
+            inputPlaceHolder="Enter Message"
+            inputOnChange={this.handleChange}
+            inputName="message"
+            inputValue={this.state.message}
+            inputOnKeyDown={this.keyPress}
+            inputStyle={{ backgroundColor: "#27293d" }}
+            buttonOnClick={this.sendMessage}
+          />
         </div>
-        <ChatFooter
-          whoIsTyping={
-            this.state.companyUserTyping ? this.state.companyUserTyping : null
-          }
-          inputPlaceHolder="Enter Message"
-          inputOnChange={this.handleChange}
-          inputName="message"
-          inputValue={this.state.message}
-          inputOnKeyDown={this.keyPress}
-          inputStyle={{ backgroundColor: "#27293d" }}
-          buttonOnClick={this.sendMessage}
-        />
       </>
     );
   }

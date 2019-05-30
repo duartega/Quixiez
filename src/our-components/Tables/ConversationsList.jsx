@@ -8,6 +8,8 @@ import { format, getMinutes, getHours, getTime } from "date-fns";
 import { connect } from "react-redux";
 import { setConversationToRender } from "../../redux/actions/conversations";
 import * as StatusInfo from "../Tables/StatusInfo";
+// import { Route, Switch, Redirect } from "react-router-dom";
+
 import {
   Card,
   CardBody,
@@ -24,7 +26,8 @@ class ReactTables extends Component {
     super(props);
 
     this.state = {
-      tableData: null
+      tableData: null,
+      renderConversation: false
     };
   }
 
@@ -61,11 +64,6 @@ class ReactTables extends Component {
   componentWillUnmount() {
     console.log("conversationList WILL UNMOUNT");
   }
-  // component
-  renderInitialConversation = idx => {
-    const { setConversationToRender } = this.props;
-    setConversationToRender(idx);
-  };
 
   componentDidUpdate(prevProps, prevState) {
     // Map our conversations to the table
@@ -79,7 +77,7 @@ class ReactTables extends Component {
 
   mapConversationsToTable = () => {
     let conversationsArray = [];
-    // const { conversations } = this.state;
+
     const { allConversations } = this.props;
 
     // Create an array for our conversations
@@ -123,14 +121,11 @@ class ReactTables extends Component {
   handleViewConversation = idx => {
     const { setConversationToRender } = this.props;
     setConversationToRender(idx);
-    // const messages = sessionStorage.getItem("messages");
-    // const messagesJSON = JSON.parse(messages);
-
-    // setConversation(messagesJSON[idx]);
+    const { history } = this.props;
+    history.push("/admin/conversations/messages");
   };
 
   render() {
-    console.log("render called");
     return this.state.tableData ? (
       <>
         <div className="content">

@@ -157,10 +157,16 @@ div.chat-header-container {
 /* Chat footer */
 .row.chat-footer-container {
   position: fixed;
-  bottom: 0;
+  /* bottom: 20px; */
+  bottom: 0px;
   width: 50%;
   background-color: #1e1e26;
+  /* margin-bottom: 20px; */
   /* background-color: #1e1e2f; */
   /* background-color: #27293d; */
-  height: 80px;
+  /* height: 100px; */
+}
+
+.chat-box-container {
+  padding-bottom: 20px;
 }

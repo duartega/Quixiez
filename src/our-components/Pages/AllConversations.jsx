@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
-import Conversations from "./Conversations";
+import Conversation from "./Conversation";
 import ConversationsList from "../Tables/ConversationsList";
 import Panel from "../Chat/ConversationsPanel";
 class AllConversations extends React.Component {
@@ -28,32 +28,42 @@ class AllConversations extends React.Component {
   render() {
     console.log("conversation height", this.conversationHeight);
     return (
-      <Row style={{ overflow: "hidden" }} className="content">
-        <Col>
-          {/* <Panel /> */}
-          <ConversationsList />
-        </Col>
-
-        <Col
-          style={{
-            overflow: "auto",
-            height: this.conversationHeight
-          }}
-        >
-          <Conversations
-            /**
-             * For right now this is ok.
-             * We are setting the conversations container height
-             * To push down the footer.
-             * - 80 is the height of the footer (for now, the height
-             * of the footer might change)
-             */
-            conversationContainerHeight={this.conversationHeight1 - 100}
-          />
-        </Col>
-      </Row>
+      <>
+        {/* <Panel /> */}
+        <ConversationsList />
+      </>
     );
   }
 }
 
 export default AllConversations;
+{
+  /* <Row style={{ overflow: "hidden" }} className="content">
+        <Col> */
+}
+{
+  /* <Panel /> */
+}
+// <ConversationsList />
+// </Col>
+// </Row>
+
+{
+  /* <Col
+          style={{
+            overflow: "auto",
+            height: this.conversationHeight
+          }}
+        >
+          <Conversations*/
+}
+/**
+ * For right now this is ok.
+ * We are setting the conversations container height
+ * To push down the footer.
+ * - 80 is the height of the footer (for now, the height
+ * of the footer might change)
+ */
+// conversationContainerHeight={this.conversationHeight1 - 100}
+// />
+//  </Col>

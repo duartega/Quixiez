@@ -54,10 +54,8 @@ class Admin extends React.Component {
       .then(result => {
         const { data } = result;
         const { setAllConversations } = this.props;
-        sessionStorage.setItem("conversations", JSON.stringify(data));
+        // sessionStorage.setItem("conversations", JSON.stringify(data));
         setAllConversations(data);
-
-        // console.log(data);
       })
       .catch(err => {
         console.log(err, err.response);
@@ -123,6 +121,7 @@ class Admin extends React.Component {
       if (prop.layout === "/admin") {
         return (
           <Route
+            exact={prop.exact ? prop.exact : false}
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}

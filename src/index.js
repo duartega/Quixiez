@@ -22,14 +22,7 @@ import Register from "views/pages/Register";
 import RegisterCompany from "our-components/Pages/RegisterCompany";
 import RegisterWithCompany from "our-components/Pages/RegisterWithCompany";
 import RegisterACompany from "our-components/Pages/CreateCompany";
-import DashBoard from "views/Dashboard";
-import Settings from "our-components/Pages/GeneralSettings";
 import Invite from "our-components/Pages/InviteEmployee";
-import Hours from "our-components/Pages/BusinessHours";
-
-import Conversations from "our-components/Pages/Conversations";
-import AllConversations from "our-components/Pages/AllConversations";
-import List from "./our-components/Tables/ConversationsList";
 
 const hist = createBrowserHistory();
 
