@@ -17,6 +17,7 @@ import {
   Col,
   Toast,
 } from "reactstrap";
+import { handleIncomingQueText } from "sockets/Socket";
 
 class ReactTables extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class ReactTables extends Component {
   handleOrderActionButton = (idx, status) => {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { data } = this.state;
+
     const messages = JSON.parse(sessionStorage.getItem('messages'));
     const quetextID = messages[idx].id;
 
@@ -48,9 +50,16 @@ class ReactTables extends Component {
   };
 
   async componentDidMount() {
+      handleIncomingQueText(queText => {
+      console.log("INCOMING QUETEXT", queText);
+    });
     // Get all conversations for the company
     await axiosGet(getAllConversations).then(result => {
-      sessionStorage.setItem("messages", JSON.stringify(result.data));
+              const { data } = result;
+      sessionStorage.setItem("messages", JSON.stringify(data));
+       if (data && data.length > 0) {
+          this.renderInitialConversation(data[0]);
+        }
     }).catch(err => {
       console.log(err, err.response);
     });
@@ -62,12 +71,18 @@ class ReactTables extends Component {
     }
   }
 
+  renderInitialConversation = conversation => {
+    const { setConversation } = this.props;
+    setConversation(conversation);
+  };
+
   componentDidUpdate(prevProps, prevState) {
     // Map our conversations to the table
     if (prevState.conversations !== this.state.conversations) {
       this.mapConversationsToTable();
     }
   }
+
 
   mapConversationsToTable = () => {
     let conversationsArray = [];
@@ -112,10 +127,12 @@ class ReactTables extends Component {
   };
 
   handleViewConversation = idx => {
-    const { setMessages } = this.props;
+    const { setConversation } = this.props;
     const messages = sessionStorage.getItem("messages");
     const messagesJSON = JSON.parse(messages);
-    setMessages(messagesJSON[idx]);
+    
+    setConversation(messagesJSON[idx]);
+
   };
 
   render() {
@@ -175,7 +192,7 @@ class ReactTables extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setMessages: messages => dispatch(setConversation(messages))
+  setConversation: conversation => dispatch(setConversation(conversation))
 });
 
 export default connect(

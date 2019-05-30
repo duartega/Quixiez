@@ -1,4 +1,4 @@
-const testing = false;
+const testing = true;
 const baseRoute = testing
   ? "https://api.stage.quixiez.com"
   : "https://api.quixiez.com";
@@ -20,5 +20,8 @@ export const putAddress = `${baseRoute}/address/`;
 export const getSocialMediaLinks = `${baseRoute}/company/socialMedia/`;
 export const companyHours = `${baseRoute}/company/hours/`;
 export const putSocialMediaLinks = `${baseRoute}/company/socialMedia/`;
-export const getAllConversations = `${baseRoute}/quetext/`
+export const getAllConversations = `${baseRoute}/quetext/`;
+export const sendMessage = (queTextId: string) =>
+  `${baseRoute}/quetext/${queTextId}`;
 export const updatePhase = (quetextID:string ) => `${baseRoute}/quetext/${quetextID}`
+

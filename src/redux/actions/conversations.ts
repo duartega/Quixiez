@@ -4,9 +4,9 @@
 
 import { SET_CONVERSATION } from "../ActionTypes";
 
-export const setConversation = (messages: any[]) => {
+export const setConversation = (conversation: any[]) => {
   return {
     type: SET_CONVERSATION,
-    messages
+    conversation
   };
 };
