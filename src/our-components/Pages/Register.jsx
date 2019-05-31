@@ -4,7 +4,7 @@ import { getCompanyId, register } from "../../network/routes.ts";
 import { connect } from "react-redux";
 import { setCompanyUserID } from "../../redux/actions";
 import { Redirect } from "react-router-dom";
-import { Logo } from "../../our-components/Components/Logo";
+import { Logo } from "../Components/Logo";
 
 // reactstrap components
 import {
@@ -101,7 +101,7 @@ class Register extends React.Component {
         wrongPassword: false,
         passwordsMatch: true,
         passwordErrorMesssage: ""
-      });
+      })
     }
   }
 
@@ -141,13 +141,7 @@ class Register extends React.Component {
         passwordsMatch: false
       });
     } else if (
-      (email ||
-        password ||
-        confirmPassword ||
-        phoneNumber ||
-        firstName ||
-        lastName) !== ""
-    ) {
+      (email || password || confirmPassword || phoneNumber || firstName || lastName) !== "") {
       Axios.post(register, {
         email,
         password,
@@ -242,12 +236,6 @@ class Register extends React.Component {
       wrongPass = error;
     } else {
       passwordErrorMesssage = "";
-    }
-
-    if (this.state.passwordsMatch) {
-      wrongPass = "has-success form-group";
-    } else {
-      wrongPass = "";
     }
 
     if (this.state.readyToSubmit === false) {
@@ -411,19 +399,7 @@ class Register extends React.Component {
                             />
                           </InputGroup>
                         </div>
-                        {/* <InputGroup>  */}
-                        {/* <InputGroupAddon addonType="prepend"> */}
-                        {/* <InputGroupText> */}
-                        {/* <i className="tim-icons icon-bank" /> */}
-                        {/* </InputGroupText> */}
-                        {/* </InputGroupAddon> */}
-                        {/* <AutoSuggestion */}
-                        {/* name="Company" */}
-                        {/* onChange={this.handleChange} */}
-                        {/* action={this.handleCompany} */}
-                        {/* isCompanyValid={this.isCompanyValid */}
-                        {/* } /> */}
-                        {/* </InputGroup> */}
+
                         <FormGroup check className="text-left">
                           <Label check>
                             <Input type="checkbox" />

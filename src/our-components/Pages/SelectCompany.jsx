@@ -27,7 +27,7 @@ class Company extends React.Component {
     const { companies: propCompanies } = this.props;
 
     let { companiesElementsToRender: stateCompanies } = this.state;
-    const { setCompanyName, setCompanyUserJWT } = this.props;
+    const { setCompanyName } = this.props;
 
     stateCompanies = propCompanies.map((aCompany, idx) => {
       return (
@@ -35,11 +35,12 @@ class Company extends React.Component {
           key={idx}
           onClick={e => {
             e.preventDefault();
-            // console.log(aCompany.companyName);
+
+            localStorage.setItem("companyName", aCompany.companyName)
             axiosPost(selectCompany, { companyId: aCompany.id })
               .then(response => {
                 const { jwt } = response.data;
-                // setCompanyUserJWT(jwt);
+
                 // Updating the jwt token in local storage
                 localStorage.setItem("jwt", jwt);
                 setCompanyName(aCompany.companyName);

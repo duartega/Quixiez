@@ -20,7 +20,7 @@ import Typography from "views/components/Typography.jsx";
 import Panels from "views/components/Panels.jsx";
 import Icons from "views/components/Icons.jsx";
 import Pricing from "views/pages/Pricing.jsx";
-import Register from "views/pages/Register.jsx";
+import Register from "our-components/Pages/Register.jsx";
 import Timeline from "views/pages/Timeline.jsx";
 import User from "views/pages/User.jsx";
 import Login from "views/pages/Login.jsx";

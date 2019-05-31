@@ -18,7 +18,7 @@ import Login from "our-components/Pages/Login";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 
-import Register from "views/pages/Register";
+import Register from "our-components/Pages/Register";
 import RegisterCompany from "our-components/Pages/RegisterCompany";
 import RegisterWithCompany from "our-components/Pages/RegisterWithCompany";
 import RegisterACompany from "our-components/Pages/CreateCompany";

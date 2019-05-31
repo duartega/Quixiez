@@ -63,6 +63,24 @@ export const changeStatusMessage = (status: Status): ReturnType => {
     convertString = "IN PROGRESS";
     statusColor = "warning";
   }
+  // These are the phases for account creation
+  else if (status === 
+      
+      "NOT_STARTED" || 
+      "FIRST_NAME" || 
+      "LAST_NAME" || 
+      "ADDRESS" ||
+      "CONSUMER_TYPE" ||
+      "DL_IMAGE" ||
+      "REC_IMAGE"
+      
+    ) {
+    convertString = "CREATING ACCOUNT";
+    statusColor = "primary";
+  } else if (status === "CREATING ACCOUNT") {
+    convertString = "CONSTRUCT_ORDER";
+    statusColor = "primary";
+  }
   // This should never happen 
   else {
     convertString = "ERROR";
