@@ -43,7 +43,8 @@ class User extends React.Component {
       companyName: "",
       alert: "",
       hasInfoChanged: false,
-      method: ""
+      method: "",
+      loading: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,6 +62,8 @@ class User extends React.Component {
     const authToken = JSON.parse(localStorage.getItem("state.auth.tokens"));
 
     // Get address information for the settings page
+    this.autoCloseAlert();
+    // setTimeout(this.hideAlert, 2000); // Example of auto close
     axiosGet(getAddress)
       .then(result => {
         const { data } = result;
@@ -96,10 +99,12 @@ class User extends React.Component {
         delete data.id;
         delete data.companyName;
         this.setState({ ...data });
+        this.hideAutoAlert();
       })
       .catch(err => {
         console.log(err, err.response);
       });
+    
   }
 
   handleChange = event => {
@@ -221,6 +226,29 @@ class User extends React.Component {
     }
   }
 
+  autoCloseAlert = () => {
+    console.log(("LOADING ALERT SHOULD BE DISPLAYING"))
+    this.setState({
+      loading: (
+        <ReactBSAlert
+          loading
+          style={{ display: "block", marginTop: "-100px" }}
+          title="Your info is loading..."
+          onConfirm={() => this.hideAutoAlert()}
+          showConfirm={false}
+        >
+          This may take a few seconds...
+        </ReactBSAlert>
+      )
+    });
+  };
+
+  hideAutoAlert = () => {
+    this.setState({
+      loading: null
+    });
+  };
+
   hideAlert = () => this.setState({ alert: "" });
 
   render() {
@@ -228,6 +256,7 @@ class User extends React.Component {
       return (
         <>
           <div className="content">
+            {this.state.loading}
             <General
               companyNameDefaultValue={this.state.companyName}
               quixiezNumberDefaultValue={this.state.quixiezNumber}
