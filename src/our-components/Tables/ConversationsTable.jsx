@@ -70,7 +70,10 @@ class ReactTables extends Component {
     /**
      * All the conversations are coming from redux
      */
-    if (prevProps.allConversations !== this.props.allConversations) {
+    if (
+      this.props.allConversations !== null &&
+      prevProps.allConversations !== this.props.allConversations
+    ) {
       this.mapConversationsToTable();
     }
   }

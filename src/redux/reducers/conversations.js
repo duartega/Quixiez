@@ -6,7 +6,11 @@ import {
   SET_CONVERSATION_TO_RENDER,
   SET_ALL_CONVERSATIONS
 } from "../ActionTypes";
-const conversationsState = {};
+
+const conversationsState = {
+  idxOfConversationToRender: null,
+  allConversations: null
+};
 
 export const conversation = (state = conversationsState, action) => {
   switch (action.type) {

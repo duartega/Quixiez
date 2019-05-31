@@ -15,7 +15,11 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.jsx";
 import routes from "./routes";
 
 import logo from "assets/img/react-logo.png";
-import { receiveMessage } from "sockets/Socket";
+import {
+  receiveMessage,
+  handleIncomingQueText,
+  stopListening
+} from "sockets/Socket";
 import { axiosGet } from "../../../network/ApiCalls";
 import { getAllConversations } from "../../../network/routes";
 /**
@@ -23,7 +27,11 @@ import { getAllConversations } from "../../../network/routes";
  */
 
 import { connect } from "react-redux";
-import { setAllConversations } from "../../../redux/actions/conversations";
+import {
+  setAllConversations,
+  updateConversations
+} from "../../../redux/actions/conversations";
+import { INCOMING_QUE_TEXT } from "sockets/events/Events";
 
 var ps;
 
@@ -50,12 +58,20 @@ class Admin extends React.Component {
     }
     window.addEventListener("scroll", this.showNavbarButton);
 
+    handleIncomingQueText(queText => {
+      console.log("INCOMING QUETEXT...");
+      const { updateConversations } = this.props;
+      updateConversations(queText);
+    });
+
     axiosGet(getAllConversations)
       .then(result => {
         const { data } = result;
-        const { setAllConversations } = this.props;
+        const { setAllConversations, updateConversations } = this.props;
+
         // sessionStorage.setItem("conversations", JSON.stringify(data));
         setAllConversations(data);
+        // updateConversations(data);
       })
       .catch(err => {
         console.log(err, err.response);
@@ -78,6 +94,7 @@ class Admin extends React.Component {
   }
   componentWillUnmount() {
     console.log("OUR ADMIN LAYOUR WILL UNMOUNT");
+    stopListening(INCOMING_QUE_TEXT);
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
       document.documentElement.className += " perfect-scrollbar-off";
@@ -249,7 +266,9 @@ class Admin extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setAllConversations: conversations =>
-    dispatch(setAllConversations(conversations))
+    dispatch(setAllConversations(conversations)),
+  updateConversations: conversation =>
+    dispatch(updateConversations(conversation))
 });
 
 export default connect(

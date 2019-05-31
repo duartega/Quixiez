@@ -37,7 +37,7 @@ type State = {
   companyUserTyping: string | null;
 };
 
-class Conversations extends React.Component<Props, State> {
+class Conversation extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -52,6 +52,8 @@ class Conversations extends React.Component<Props, State> {
   private messagesEnd: HTMLDivElement | null = null;
   private innerHeight: any = null;
   private timeout: any = null;
+  private initScroll = true;
+  private updatedMessages = false;
 
   componentDidMount() {
     const { conversation } = this.props;
@@ -66,6 +68,7 @@ class Conversations extends React.Component<Props, State> {
       history.replace("/admin/conversations");
     }
     this.handleRenderConversation();
+    // this.initialScroll();
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
       console.log(
@@ -105,19 +108,20 @@ class Conversations extends React.Component<Props, State> {
     /**
      * Handling state & scrolling
      */
-    switch (true) {
-      case prevState.messages !== this.state.messages:
-        this.initialScroll();
-        break;
-      case prevState.companyUserTyping !== this.state.companyUserTyping:
-        // Do nothing
-        break;
-      case this.state.companyUserTyping === null:
-        // Do nothing
-        break;
+    // console.log("COMPONENT DID UPDATE");
 
-      default:
-      // Do nothing
+    if (this.initScroll && prevState.messages !== this.state.messages) {
+      console.log(
+        "this.initScroll && prevState.messages !== this.state.messages"
+      );
+      this.initialScroll();
+      this.initScroll = false;
+    } else if (this.updatedMessages) {
+      this.scrollToBottom();
+      this.updatedMessages = false;
+    } else {
+      console.log(prevState.messages);
+      console.log(this.state.messages);
     }
 
     /**
@@ -125,7 +129,29 @@ class Conversations extends React.Component<Props, State> {
      */
     switch (true) {
       case prevProps.conversation !== this.props.conversation:
-        this.handleRenderConversation();
+        console.log("Conversation has been updated");
+        // this.handleRenderConversation();
+        // this.scrollToBottom();
+        console.log(
+          "this.props.conversation.messages.length - prevProps.conversation.messages.length",
+          this.props.conversation.messages.length -
+            prevProps.conversation.messages.length
+        );
+        if (
+          this.props.conversation.messages.length -
+            prevProps.conversation.messages.length ===
+          1
+        ) {
+          const conversation = this.props.conversation.messages[
+            this.props.conversation.messages.length - 1
+          ];
+          const messageBubble = this.createMessageBubble(conversation, "Joe");
+          // const { messages } = this.state;
+          const messages = this.state.messages;
+          messages.push(messageBubble);
+          this.setState({ messages });
+          this.updatedMessages = true;
+        }
         break;
       default:
       // Do nothing
@@ -190,14 +216,14 @@ class Conversations extends React.Component<Props, State> {
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
-    handleEmployeeStartedTyping("Joe");
+    // handleEmployeeStartedTyping("Joe");
 
-    if (this.timeout) {
-      delete this.timeout;
-    }
-    this.timeout = setTimeout(() => {
-      handleEmployeeStoppedTyping("Joe");
-    }, 5000);
+    // if (this.timeout) {
+    //   delete this.timeout;
+    // }
+    // this.timeout = setTimeout(() => {
+    //   handleEmployeeStoppedTyping("Joe");
+    // }, 5000);
   };
 
   // addMessage = () => {
@@ -206,13 +232,13 @@ class Conversations extends React.Component<Props, State> {
   // };
 
   sendMessage = () => {
-    // const { id } = this.props.conversation;
-    // const { message } = this.state;
-    // if (message !== "") {
-    //   axiosPost(sendMessage(id as string), { message: this.state.message });
-    //   this.setState({ message: "" });
-    // }
-    this.createMessage();
+    const { id } = this.props.conversation;
+    const { message } = this.state;
+    if (message !== "") {
+      axiosPost(sendMessage(id as string), { message: this.state.message });
+      this.setState({ message: "" });
+    }
+    // this.createMessage();
   };
 
   keyPress = (e: any) => {
@@ -273,4 +299,4 @@ const mapStateToProps = ({ conversation }: { conversation: any }) => {
   };
 };
 
-export default connect(mapStateToProps)(Conversations);
+export default connect(mapStateToProps)(Conversation);
