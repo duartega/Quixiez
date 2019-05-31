@@ -2,6 +2,10 @@
  * actions/conversations
  */
 
+//  import {  Dispatch} from "redux";
+//  import {stat} from "redux-thunk"
+// import { Thunk } from "redux-thunk";
+
 import {
   SET_CONVERSATION_TO_RENDER,
   SET_ALL_CONVERSATIONS
@@ -37,13 +41,21 @@ export const updateConversations = (conversation: any) => (
     conversationsExist = false;
   }
 
-  const idxOfConvoToUpdate = conversationsExist
+  const idxOfConvoToUpdate: number | null = conversationsExist
     ? allConversations.findIndex((aConversation: any) => {
+        console.log(
+          "conversation.id",
+          conversation.id,
+          " === ",
+          "aConversation.id",
+          aConversation.id
+        );
         return conversation.id === aConversation.id;
       })
     : null;
 
-  if (idxOfConvoToUpdate) {
+  if (idxOfConvoToUpdate !== null) {
+    console.log("if (idxOfConvoToUpdate)");
     allConversations[idxOfConvoToUpdate] = conversation;
     return dispatch(setAllConversations(allConversations));
   }

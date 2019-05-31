@@ -16,88 +16,76 @@ type Props = {
   id: number;
   Minutes: string;
   Hours: string;
-}
+};
 
-type Status = "CONSTRUCT_ORDER" | "COMPLETE" | "IN_PROGRESS" |
-"CONSUMER_CANCELLED" | "COMPANY_REJECTED" | "COMPANY_COMPLETE" ;
+type Status =
+  | "CONSTRUCT_ORDER"
+  | "COMPLETE"
+  | "IN_PROGRESS"
+  | "CONSUMER_CANCELLED"
+  | "COMPANY_REJECTED"
+  | "COMPANY_COMPLETE";
 
-type Color = "primary" | "warning" | "danger" | "success" ;
-type ReturnType = [string, Color]
+type CreatingAccountStatus =
+  | "NOT_STARTED"
+  | "FIRST_NAME"
+  | "LAST_NAME"
+  | "ADDRESS"
+  | "CONSUMER_TYPE"
+  | "DL_IMAGE"
+  | "REC_IMAGE";
 
+type Color = "primary" | "warning" | "danger" | "success";
+type ReturnType = [string, Color];
 
-  
-export const changeStatusMessage = (status: Status): ReturnType => {
-  // Set the status message and the status color
-  let convertString: string = "";
-  let statusColor: Color;
-  if (status === "CONSTRUCT_ORDER") {
-    convertString = "PENDING";
-    statusColor = "primary";
-  } else if (status === "COMPLETE") {
-    convertString = "NEW ORDER";
-    statusColor = "success";
-  } else if (status === "IN_PROGRESS") {
-    convertString = "IN PROGRESS";
-    statusColor = "warning";
-  } else if (status === "CONSUMER_CANCELLED") {
-    convertString = "CANCELLED";
-    statusColor = "warning";
-  } else if (status === "COMPANY_REJECTED") {
-    convertString = "REJECTED";
-    statusColor = "danger";
-  } else if (status === "COMPANY_COMPLETE") {
-    convertString = "COMPLETED";
-    statusColor = "success";
-  }  
-  // When the component re-renders, keep the correct status
-  else if (status === "COMPLETED") {
-    convertString = "COMPLETED";
-    statusColor = "success";
-  } else if (status === "CANCELLED") {
-    convertString = "CANCELLED";
-    statusColor = "warning";
-  } else if (status === "REJECTED") {
-    convertString = "REJECTED";
-    statusColor = "danger";
-  } else if (status === "IN PROGRESS") {
-    convertString = "IN PROGRESS";
-    statusColor = "warning";
-  }
-  // These are the phases for account creation
-  else if (status === 
-      
-      "NOT_STARTED" || 
-      "FIRST_NAME" || 
-      "LAST_NAME" || 
+const isCreatingAccount = (status: CreatingAccountStatus): boolean => {
+  return (
+    status ===
+    ("NOT_STARTED" ||
+      "FIRST_NAME" ||
+      "LAST_NAME" ||
       "ADDRESS" ||
       "CONSUMER_TYPE" ||
       "DL_IMAGE" ||
-      "REC_IMAGE"
-      
-    ) {
-    convertString = "CREATING ACCOUNT";
-    statusColor = "primary";
-  } else if (status === "CREATING ACCOUNT") {
-    convertString = "CONSTRUCT_ORDER";
-    statusColor = "primary";
+      "REC_IMAGE")
+  );
+};
+
+export const changeStatusMessage = (
+  status: Status | CreatingAccountStatus
+): ReturnType => {
+  switch (status) {
+    case "CONSTRUCT_ORDER":
+      return ["PENDING", "primary"];
+    case "COMPLETE":
+      return ["NEW ORDER", "success"];
+    case "IN_PROGRESS":
+      return ["IN PROGRESS", "warning"];
+    case "CONSUMER_CANCELLED":
+      return ["CANCELLED", "warning"];
+    case "COMPANY_REJECTED":
+      return ["REJECTED", "danger"];
+    case "COMPANY_COMPLETE":
+      return ["COMPLETED", "success"];
+    default:
+      return isCreatingAccount(status)
+        ? ["CREATING ACCOUNT", "primary"]
+        : ["ERROR", "danger"];
   }
-  // This should never happen 
-  else {
-    convertString = "ERROR";
-    statusColor = "danger";
-    console.log("Incorrect Phase. Acceptable phases are: CONSTRUCT_ORDER | COMPLETE | COMPANY_COMPLETE | IN_PROGRESS | CONSUMER_CANCELLED | COMPANY_REJECTED", )
-  };
-  return [convertString, statusColor];
-}
+};
 
 export const updateButton = (status: Status) => {
   return (
-    <Button className="btn-simple" color={status[1]} disabled style={{maxWidth: "300px", minWidth: "150px"}}>
+    <Button
+      className="btn-simple"
+      color={status[1]}
+      disabled
+      style={{ maxWidth: "300px", minWidth: "150px" }}
+    >
       {status[0]}
     </Button>
-  )
-}
-
+  );
+};
 
 export const calculateTime = (timeReceived: string) => {
   // Using Date-FNS, it automatically converts the UTC to your local time zone
@@ -128,4 +116,4 @@ export const calculateTime = (timeReceived: string) => {
     time += " AM";
   }
   return time;
-}
+};

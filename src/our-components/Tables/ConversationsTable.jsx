@@ -35,14 +35,10 @@ class ReactTables extends Component {
     // Temporarily set the status to complete. Will change when we use axiosPut
     const { tableData } = this.state;
 
-    const messages = JSON.parse(sessionStorage.getItem("messages"));
-    const quetextID = messages[idx].id;
+    const queText = this.props.allConversations[idx];
+    const queTextId = queText.id;
 
-    let statusValue = StatusInfo.changeStatusMessage(status);
-    tableData[idx].status = StatusInfo.updateButton(statusValue);
-    console.log(statusValue[0]);
-
-    axiosPut(updatePhase(quetextID), { phase: status })
+    axiosPut(updatePhase(queTextId), { phase: status })
       .then(result => {
         console.log(result.data);
       })
@@ -50,7 +46,7 @@ class ReactTables extends Component {
         console.log(err, err.response);
       });
 
-    this.setState({ tableData });
+    // this.setState({ tableData });
   };
 
   componentDidMount() {
@@ -69,9 +65,14 @@ class ReactTables extends Component {
     // Map our conversations to the table
     /**
      * All the conversations are coming from redux
+     *
+     * TODO: LEFT OFF HERE
      */
+    if (prevProps !== this.props) {
+      console.log("PROPS CHANGED");
+    }
     if (
-      this.props.allConversations !== null &&
+      this.props.allConversations &&
       prevProps.allConversations !== this.props.allConversations
     ) {
       this.mapConversationsToTable();
