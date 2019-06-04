@@ -32,7 +32,10 @@ class AllConversations extends React.Component {
     return (
       <div className="content">
         <Row>
-          <Col sm="4">
+          <Col sm="4" style={{
+            overflow: "auto",
+            height: this.conversationHeight
+          }}>
             <ConversationList/>
           </Col>
           <Col sm="1"/> {/* Making a divider */}
