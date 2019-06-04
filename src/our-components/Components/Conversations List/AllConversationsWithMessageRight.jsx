@@ -1,18 +1,16 @@
 import React from 'react';
 import ConversationList from '../Conversations List/ConversationList';
-import { Row, Col } from 'reactstrap';
+import {Row, Col} from 'reactstrap';
 import Conversation from '../../Pages/Conversation';
 
 class AllConversations extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state ={
+    this.state = {};
 
-        };
-
-            /** Our custom height we are taking out */
+    /** Our custom height we are taking out */
     this.customHeight = 50;
     /**
      * Taking into account the header total size
@@ -25,31 +23,31 @@ class AllConversations extends React.Component {
      */
 
     this.headerHeightWithPadding = 66;
-    this.conversationHeight =
-      window.innerHeight - this.customHeight - this.headerHeightWithPadding;
-    this.conversationHeight1 =
-      window.outterHeight - this.customHeight - this.headerHeightWithPadding;
+    this.conversationHeight = window.innerHeight - this.customHeight - this.headerHeightWithPadding;
+    this.conversationHeight1 = window.outterHeight - this.customHeight - this.headerHeightWithPadding;
 
-    }
+  }
 
-    render() {
-        return (
-            <div className="content">
-            <Row>
-                <Col>
-                    <ConversationList />
-                </Col>
-                <Col style={{
+  render() {
+    return (
+      <div className="content">
+        <Row>
+          <Col sm="4">
+            <ConversationList/>
+          </Col>
+          <Col sm="1"/> {/* Making a divider */}
+          <Col
+            md="7"
+            style={{
             overflow: "auto",
             height: this.conversationHeight
           }}>
-                    <Conversation />
-                </Col>
-            </Row>
-                
-            </div>
-        )
-    };
+            <Conversation/>
+          </Col>
+        </Row>
+      </div>
+    )
+  };
 };
 
 export default AllConversations;

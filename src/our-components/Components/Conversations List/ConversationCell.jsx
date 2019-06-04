@@ -5,72 +5,65 @@ import { Card, Row, Col, CardHeader, CardBody } from 'reactstrap';
 
 class ConversationCell extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      rowColor: "",
+      active: false
+    };
+  }
+
   render() {
     const {props} = this.props;
     let readIndicator = props.unread;    
 
-    return ( <> <Row style={{marginLeft: "0px"}} onClick={() => this.props.renderConvo(props.id)}>
-      <Card className="card-timeline" style={{
+    return ( <> 
+      <Card className="card-cell" style={{
+        background: this.state.active ? "orange": "", 
         marginBottom: "0px",
         boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)"
-      }}>
-        <ul
-          className="timeline timeline-simple"
-          style={{
-          marginBottom: "0px",
-          paddingBottom: "0px",
-          paddingTop: "0px"
-        }}>
-          <li
-            className="timeline-inverted"
-            style={{
-            marginBottom: "0px"
-          }}>
-            <div className="timeline-badge info">
-              {props.firstInitial}
-            </div>
+      }}> 
+      <Row style={{marginLeft: "0px"}} onClick={() => { this.props.renderConvo(props.id); this.setState({active: true})}}>
 
-            <div
-              className="timeline-panel"
-              style={{
-              boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)",
-              float: "none",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginBottom: "0px"
-            }}>
-
-              <div className="timeline-body">
-                <CardHeader
-                  style={{
-                  paddingTop: "0px",
-                  paddingLeft: "0px"
-                }}>
-                  <Row>
-                    <Col>
-                    {readIndicator ? <span className="newMessageDot"></span> : null}
-                      {props.name}
-                    </Col>
-                    <h6>
-                      <i className="ti-time"/> {props.time}
-                    </h6>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  <p>
-                    {props.message}
-                  </p>
-                </CardBody>
+          <Row className="messageListContainer">
+              <div className="nameCircle">
+                {props.firstInitial}
               </div>
-            </div>
-          </li>
-        </ul>
+          </Row>
+
+          {/** right side of messagelist */}
+          <Col >
+            <Row style={{ paddingTop: "30px", marginRight: "15px"}}>
+                    <Col md="7" >
+                    {readIndicator ? <span className="newMessageDot"></span> : null}
+                      <p>
+                        {props.name}
+                      </p>
+                    </Col>
+                    <Col md="5" style={{paddingRight: "0px", textAlign: "right"}}>
+                      <i className="ti-time"/> {props.time}
+                    </Col>
+                  </Row>
+                <Row>
+                  <CardBody style={{
+                    paddingTop: "0px",
+                    paddingLeft: "15px"
+                  }}>
+                    <p>
+                      {props.message}
+                    </p>
+                  </CardBody>
+                </Row>
+        </Col>
+        </Row>
       </Card>
+      {/** row seperator */}
       <Card style={{backgroundColor: '#303245', marginBottom: "0px",
         boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)"}} >
         <CardBody style={{padding: "2px"}}></CardBody> 
       </Card>
-    </Row> </>
+     </>
         );
     }
 }

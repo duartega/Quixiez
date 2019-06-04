@@ -72,9 +72,7 @@ class ConversationList extends React.Component {
             <>
             <div className="content">
                 {this.state.tableData.map((data, idx)=>
-
                     <ConversationCell key={idx} props={data} renderConvo={this.handleViewConversation} />
-
                 )}
             </div>
                 
