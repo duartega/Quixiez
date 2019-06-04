@@ -18,13 +18,29 @@ class ConversationList extends React.Component {
       firstInitial: "",
       tableData: []
     };
+
+    this.initialRenderOfMessages = false;
   }
+
+  handleInitialRender = () => {
+    this.handleViewConversation(0);
+    this.initialRenderOfMessages = true;
+  };
 
   componentDidMount() {
     const { allConversations } = this.props;
     if (allConversations) {
       this.mapConversationsToTable();
+
+      !this.initialRenderOfMessages && this.handleInitialRender();
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.allConversations !== this.props.allConversations) {
+      this.mapConversationsToTable();
+    }
+    !this.initialRenderOfMessages && this.handleInitialRender();
   }
 
   mapConversationsToTable = () => {
@@ -50,23 +66,17 @@ class ConversationList extends React.Component {
         firstInitial: firstInitial
       };
     });
-    console.log("THIS IS THE ARRAY: ", conversationsArray);
+    // console.log("THIS IS THE ARRAY: ", conversationsArray);
     // Set the state so we can render our conversations
     this.setState({ tableData: conversationsArray });
   };
 
   handleViewConversation = idx => {
-    console.log("IDX: ", idx);
     const { setConversationToRender } = this.props;
     setConversationToRender(idx);
-    // const { history } = this.props;
-    // console.log("HISTORY: ", history)
-    // history.push("/admin/conversations/messages");
   };
 
   render() {
-    // Fix dot using testData
-    console.log("CONVERSATION LIST MOUNTED");
     return (
       <>
         <div className="content">

@@ -1,8 +1,9 @@
 import React from "react";
 import { Row, Col, Card, CardBody, Badge } from "reactstrap";
 import Slide from "@material-ui/core/Slide";
+import { badgeColor } from "./Types";
 interface Props {
-  badgeColor: "primary" | "info" | "success" | "warning" | "danger";
+  badgeColor: badgeColor;
   badgeLabel: string;
   message: string;
   timePassed: string;

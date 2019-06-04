@@ -19,7 +19,7 @@ export const setConversationToRender = (idx: number) => {
 };
 
 export const setAllConversations = (conversations: any[]) => {
-  console.log("setting all conversations...");
+  // console.log("setting all conversations...");
   return {
     type: SET_ALL_CONVERSATIONS,
     conversations

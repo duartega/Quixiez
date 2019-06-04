@@ -24,6 +24,7 @@ import {
 } from "sockets/events/Events";
 import { bigIntLiteral } from "@babel/types";
 import { conversation } from "redux/reducers/conversations";
+import { badgeColor } from "our-components/Components/Chat/Types";
 
 type Props = {
   conversation: any;
@@ -56,7 +57,7 @@ class Conversation extends React.Component<Props, State> {
   private updatedMessages = false;
 
   componentDidMount() {
-    const { conversation } = this.props;
+    // const { conversation } = this.props;
     /**
      * If there aren't any conversation to render
      * thats because the page was refreshed and
@@ -71,10 +72,10 @@ class Conversation extends React.Component<Props, State> {
     // this.initialScroll();
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
-      console.log(
-        "Incoming Employee Started Typing (updating the state)",
-        companyUsername
-      );
+      // console.log(
+      //   "Incoming Employee Started Typing (updating the state)",
+      //   companyUsername
+      // );
       // if (companyUsername !== "Joe") {
       if (this.state.companyUserTyping === null) {
         this.setState({ companyUserTyping: companyUsername });
@@ -82,7 +83,7 @@ class Conversation extends React.Component<Props, State> {
     });
 
     handleIncomingEmployeeStoppedTyping(companyUsername => {
-      console.log("Incoming STOPPED typing", companyUsername);
+      // console.log("Incoming STOPPED typing", companyUsername);
       this.setState({ companyUserTyping: null });
     });
   }
@@ -94,52 +95,62 @@ class Conversation extends React.Component<Props, State> {
   }
 
   initialScroll = () => {
-    console.log("initialScroll called");
+    // console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    console.log("scrollToBottom called");
+    // console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
-  newMessageCameIn = (prevProps: any) => {
-    return ( prevProps.conversation && prevProps.conversation.messages &&
-    this.props.conversation.messages.length -
-      prevProps.conversation.messages.length === 1
-    )
-  }
+  newMessageCameIn = (prevProps: Props) => {
+    return (
+      prevProps.conversation &&
+      prevProps.conversation.messages &&
+      this.props.conversation.messages.length -
+        prevProps.conversation.messages.length ===
+        1
+    );
+  };
 
   conversationDidUpdate = (prevProps: any) =>
     prevProps.conversation !== this.props.conversation;
 
+  /**
+   * TODO: When a conversation changes sometimes
+   * the conversation does NOT scroll to the bottom
+   * of all the conversation bubbles
+   */
   componentDidUpdate(prevProps: Props, prevState: State) {
     /**
      * Handling state & scrolling
      */
-    // console.log("COMPONENT DID UPDATE");
+    if (prevState.messages !== this.state.messages) {
+      // console.log("MESSAGES HAVE CHANGED");
+    }
 
     if (this.initScroll && prevState.messages !== this.state.messages) {
-      console.log(
-        "this.initScroll && prevState.messages !== this.state.messages"
-      );
+      // console.log("initialscroll() calling from compDidUpdate");
       this.initialScroll();
       this.initScroll = false;
     } else if (this.updatedMessages) {
       this.scrollToBottom();
       this.updatedMessages = false;
     } else {
-      console.log(prevState.messages);
-      console.log(this.state.messages);
+      // console.log(prevState.messages);
+      // console.log(this.state.messages);
     }
 
     /**
      * Handling props & new messages
      */
     switch (true) {
-      case prevProps.conversation && this.conversationDidUpdate(prevProps) && this.newMessageCameIn(prevProps):
-        console.log("Conversation has been updated");
+      case prevProps.conversation &&
+        this.conversationDidUpdate(prevProps) &&
+        this.newMessageCameIn(prevProps):
+        // console.log("Conversation has been updated");
         // this.handleRenderConversation();
         // this.scrollToBottom();
 
@@ -148,28 +159,28 @@ class Conversation extends React.Component<Props, State> {
         //   this.props.conversation.messages.length -
         //     prevProps.conversation.messages.length
         // );
-          
-          const conversation = this.props.conversation.messages[
-            this.props.conversation.messages.length - 1
-          ];
-          const messageBubble = this.createMessageBubble(conversation, "Joe");
-          // const { messages } = this.state;
-          const messages = this.state.messages;
-          messages.push(messageBubble);
-          this.setState({ messages });
-          this.updatedMessages = true;
-        
+
+        const conversation = this.props.conversation.messages[
+          this.props.conversation.messages.length - 1
+        ];
+        const messageBubble = this.createMessageBubble(conversation, "Joe");
+        // const { messages } = this.state;
+        const messages = this.state.messages;
+        messages.push(messageBubble);
+        this.setState({ messages });
+        this.updatedMessages = true;
+
         break;
-        case this.conversationDidUpdate(prevProps):
-          this.handleRenderConversation();
-      default: 
+      case this.conversationDidUpdate(prevProps):
+        this.handleRenderConversation();
+      default:
       // Do nothing
     }
   }
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
-    console.log("CONVOS: ", conversation)
+    // console.log("CONVOS: ", conversation)
     if (
       conversation &&
       conversation.messages &&
@@ -188,15 +199,32 @@ class Conversation extends React.Component<Props, State> {
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
   createMessageBubble = (conversation: any, firstName: string) => {
-    const { content } = conversation;
+    const { content, sentBy } = conversation;
+    console.log("conversation", conversation);
+    let sentByLabel = null;
+    let badgedColor: badgeColor;
+
+    if (sentBy) {
+      const { firstName: sentByFirstName } = sentBy;
+      sentByLabel = sentByFirstName;
+      if (sentByFirstName === "Bot") {
+        badgedColor = "info";
+      } else {
+        badgedColor = "success";
+      }
+    } else {
+      sentByLabel = firstName;
+      badgedColor = "warning";
+    }
+
     return (
       <ChatBubble
         key={this.key++}
-        badgeColor="info"
-        badgeLabel={firstName}
+        badgeColor={badgedColor}
+        badgeLabel={sentByLabel}
         message={content}
         timePassed="7 Days"
-        inverted={true}
+        inverted={sentBy ? false : true}
       />
     );
   };

@@ -10,16 +10,26 @@ class ConversationCell extends React.Component {
     super(props);
 
     this.state = {
-      rowColor: "",
       active: false
     };
   }
 
   componentDidMount() {
-    console.log("CONVERSATIONCELL DID MOUNT", this.props.idx);
+    /**
+     * When the component does initially mount
+     * ConversationList is giving the idxOfConversationToRender
+     * and we need to set that ConversationCell to be active.
+     */
+    if (
+      this.state.active === false &&
+      this.props.idxOfConversationToRender === this.props.idx
+    ) {
+      this.setState({ active: true });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // console.log("CONVERSATION CELL DID UPDATE");
     if (
       this.state.active === false &&
       this.props.idxOfConversationToRender === this.props.idx
