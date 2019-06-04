@@ -19,7 +19,7 @@ export const setConversationToRender = (idx: number) => {
 };
 
 export const setAllConversations = (conversations: any[]) => {
-  // console.log("setting all conversations...");
+  console.log("setting all conversations...");
   return {
     type: SET_ALL_CONVERSATIONS,
     conversations
@@ -34,6 +34,7 @@ export const updateConversations = (conversation: any) => (
     conversation: { allConversations }
   } = getState();
   console.log("UPDATE CONVERSATION CALLED");
+  console.log("conversation", conversation);
 
   let conversationsExist = true;
   if (allConversations === null || allConversations.length === 0) {

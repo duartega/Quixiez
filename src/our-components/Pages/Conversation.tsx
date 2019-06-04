@@ -160,10 +160,14 @@ class Conversation extends React.Component<Props, State> {
         //     prevProps.conversation.messages.length
         // );
 
-        const conversation = this.props.conversation.messages[
-          this.props.conversation.messages.length - 1
+        const { conversation } = this.props;
+        const {
+          consumerUser: { firstName }
+        } = conversation;
+        const lastMessage = this.props.conversation.messages[
+          conversation.messages.length - 1
         ];
-        const messageBubble = this.createMessageBubble(conversation, "Joe");
+        const messageBubble = this.createMessageBubble(lastMessage, firstName);
         // const { messages } = this.state;
         const messages = this.state.messages;
         messages.push(messageBubble);
@@ -200,7 +204,7 @@ class Conversation extends React.Component<Props, State> {
    */
   createMessageBubble = (conversation: any, firstName: string) => {
     const { content, sentBy } = conversation;
-    console.log("conversation", conversation);
+    // console.log("conversation", conversation);
     let sentByLabel = null;
     let badgedColor: badgeColor;
 

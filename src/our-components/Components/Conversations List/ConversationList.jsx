@@ -37,6 +37,10 @@ class ConversationList extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      console.log("ConversationList UPDATED!!");
+    }
+
     if (prevProps.allConversations !== this.props.allConversations) {
       this.mapConversationsToTable();
     }
@@ -99,9 +103,19 @@ class ConversationList extends React.Component {
 
 // export default ConversationList;
 
-const mapStateToProps = ({ conversation: { allConversations } }) => ({
-  allConversations
-});
+const mapStateToProps = ({ conversation: { allConversations } }) => {
+  if (allConversations === null) {
+    return {
+      allConversations
+    };
+  }
+  // return {
+  //   allConversations
+  // };
+  return {
+    allConversations: [...allConversations]
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   setConversationToRender: idx => dispatch(setConversationToRender(idx))
