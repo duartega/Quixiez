@@ -42,6 +42,7 @@ class ConversationList extends React.Component {
     }
 
     if (prevProps.allConversations !== this.props.allConversations) {
+      console.log("Map Updated");
       this.mapConversationsToTable();
     }
     !this.initialRenderOfMessages && this.handleInitialRender();
@@ -72,6 +73,11 @@ class ConversationList extends React.Component {
     });
     // console.log("THIS IS THE ARRAY: ", conversationsArray);
     // Set the state so we can render our conversations
+    console.log(
+      "updating state... length of conversationsArray",
+      conversationsArray.length
+    );
+    console.log("length of allConversations", allConversations.length);
     this.setState({ tableData: conversationsArray });
   };
 

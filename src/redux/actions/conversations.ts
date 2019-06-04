@@ -42,7 +42,7 @@ export const updateConversations = (conversation: any) => (
     conversationsExist = false;
   }
 
-  const idxOfConvoToUpdate: number | null = conversationsExist
+  const idxOfConvoToUpdate: number = conversationsExist
     ? allConversations.findIndex((aConversation: any) => {
         console.log(
           "conversation.id",
@@ -55,12 +55,18 @@ export const updateConversations = (conversation: any) => (
       })
     : null;
 
-  if (idxOfConvoToUpdate !== null) {
+  console.log("idxOfConvoToUpdate", idxOfConvoToUpdate);
+
+  if (idxOfConvoToUpdate !== -1) {
     console.log("if (idxOfConvoToUpdate)");
     allConversations[idxOfConvoToUpdate] = conversation;
     return dispatch(setAllConversations(allConversations));
+  } else if (idxOfConvoToUpdate === -1) {
+    allConversations.push(conversation);
+    return dispatch(setAllConversations(allConversations));
+  } else if (conversationsExist === false) {
+    return dispatch(setAllConversations([conversation]));
   }
-  return dispatch(setAllConversations([conversation]));
 };
 
 export const checkForConversations = () => {};
