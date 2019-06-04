@@ -1,7 +1,7 @@
 // This is a dumb component for the conversation cell
 // on the conversation list
 import React from 'react';
-import { Card, Row, Col, CardHeader, CardBody } from 'reactstrap';
+import { Card, Row, Col, CardBody } from 'reactstrap';
 
 class ConversationCell extends React.Component {
 
@@ -37,7 +37,7 @@ class ConversationCell extends React.Component {
             <Row style={{ paddingTop: "30px", marginRight: "15px"}}>
                     <Col md="7" >
                     {readIndicator ? <span className="newMessageDot"></span> : null}
-                      <p>
+                      <p style={{display: "inline-block"}}>
                         {props.name}
                       </p>
                     </Col>

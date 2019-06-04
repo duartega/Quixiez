@@ -67,13 +67,16 @@ class ConversationList extends React.Component {
       };
       
     render() {
-
+      // Fix dot using testData
         return (
             <>
             <div className="content">
                 {this.state.tableData.map((data, idx)=>
                     <ConversationCell key={idx} props={data} renderConvo={this.handleViewConversation} />
                 )}
+                {/* {testData.map((data, idx)=>
+                    <ConversationCell key={idx} props={data} renderConvo={this.handleViewConversation} />
+                )} */}
             </div>
                 
             </>
