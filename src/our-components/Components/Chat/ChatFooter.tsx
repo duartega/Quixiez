@@ -32,7 +32,7 @@ export class ChatFooter extends Component<Props> {
         <br />
         <br />
 
-        <Row className="chat-footer-container justify-content-center w-100">
+        <Row className="chat-footer-container w-100">
           <div className="w-50 align-items-center chat-box-container">
             {/* <div> */}
             <Row>

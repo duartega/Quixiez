@@ -63,10 +63,10 @@ class Conversation extends React.Component<Props, State> {
      * we will reroute the user to the conversation
      * page
      */
-    if (!conversation) {
-      const { history } = this.props;
-      history.replace("/admin/conversations");
-    }
+    // if (!conversation) {
+    //   const { history } = this.props;
+    //   history.replace("/admin/conversations");
+    // }
     this.handleRenderConversation();
     // this.initialScroll();
 
@@ -104,6 +104,16 @@ class Conversation extends React.Component<Props, State> {
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
+  newMessageCameIn = (prevProps: any) => {
+    return ( prevProps.conversation && prevProps.conversation.messages &&
+    this.props.conversation.messages.length -
+      prevProps.conversation.messages.length === 1
+    )
+  }
+
+  conversationDidUpdate = (prevProps: any) =>
+    prevProps.conversation !== this.props.conversation;
+
   componentDidUpdate(prevProps: Props, prevState: State) {
     /**
      * Handling state & scrolling
@@ -128,20 +138,17 @@ class Conversation extends React.Component<Props, State> {
      * Handling props & new messages
      */
     switch (true) {
-      case prevProps.conversation !== this.props.conversation:
+      case prevProps.conversation && this.conversationDidUpdate(prevProps) && this.newMessageCameIn(prevProps):
         console.log("Conversation has been updated");
         // this.handleRenderConversation();
         // this.scrollToBottom();
-        console.log(
-          "this.props.conversation.messages.length - prevProps.conversation.messages.length",
-          this.props.conversation.messages.length -
-            prevProps.conversation.messages.length
-        );
-        if (
-          this.props.conversation.messages.length -
-            prevProps.conversation.messages.length ===
-          1
-        ) {
+
+        // console.log(
+        //   "this.props.conversation.messages.length - prevProps.conversation.messages.length",
+        //   this.props.conversation.messages.length -
+        //     prevProps.conversation.messages.length
+        // );
+          
           const conversation = this.props.conversation.messages[
             this.props.conversation.messages.length - 1
           ];
@@ -151,15 +158,18 @@ class Conversation extends React.Component<Props, State> {
           messages.push(messageBubble);
           this.setState({ messages });
           this.updatedMessages = true;
-        }
+        
         break;
-      default:
+        case this.conversationDidUpdate(prevProps):
+          this.handleRenderConversation();
+      default: 
       // Do nothing
     }
   }
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
+    console.log("CONVOS: ", conversation)
     if (
       conversation &&
       conversation.messages &&

@@ -1,19 +1,15 @@
 // This is a dumb component for the conversation cell
 // on the conversation list
 import React from 'react';
-import {Card, Row, Col, CardHeader, CardBody, Badge} from 'reactstrap';
-import { read } from 'fs';
+import { Card, Row, Col, CardHeader, CardBody } from 'reactstrap';
 
 class ConversationCell extends React.Component {
 
   render() {
     const {props} = this.props;
+    let readIndicator = props.unread;    
 
-    let readIndicator= props.unread;
-    console.log("Unread: ", readIndicator)
-    
-
-    return ( <> <Row style={{marginLeft: "0px"}}>
+    return ( <> <Row style={{marginLeft: "0px"}} onClick={() => this.props.renderConvo(props.id)}>
       <Card className="card-timeline" style={{
         marginBottom: "0px",
         boxShadow: "0 0px 0px 0px rgba(0, 0, 0, 0)"

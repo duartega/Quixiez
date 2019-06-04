@@ -4,6 +4,7 @@ import Conversation from "our-components/Pages/Conversation";
 import ConversationsList from "our-components/Tables/ConversationsTable";
 import { RoutesI } from "../../Types/RoutesI";
 import ConversationsPanel from "../../Pages/ConversationsPanel";
+import ConversationList from "../../Components/Conversations List/AllConversationsWithMessageRight";
 
 const routes: RoutesI[] = [
   {
@@ -32,7 +33,7 @@ const routes: RoutesI[] = [
     name: "Conversations",
     icon: "tim-icons icon-email-85",
     // component: ConversationsList,
-    component: ConversationsPanel,
+    component: ConversationList,
     layout: "/admin"
   },
 
@@ -42,7 +43,7 @@ const routes: RoutesI[] = [
     icon: "tim-icons icon-settings",
     component: Settings,
     layout: "/admin"
-  }
+  } 
 
   // This might be used later on...
 
