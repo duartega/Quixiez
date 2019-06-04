@@ -1,5 +1,5 @@
 import React from "react";
-import { format, getMinutes, getHours } from "date-fns";
+import { format, getMinutes, getHours, parse } from "date-fns";
 import {
   Card,
   CardBody,
@@ -116,4 +116,8 @@ export const calculateTime = (timeReceived: string) => {
     time += " AM";
   }
   return time;
+};
+
+export const getTimeValue = (timeReceived: string) => {
+  return parse(timeReceived).getTime();
 };

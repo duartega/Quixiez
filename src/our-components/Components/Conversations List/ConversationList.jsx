@@ -53,6 +53,7 @@ class ConversationList extends React.Component {
 
     const { allConversations } = this.props;
 
+    let sortedConversations = [];
     // Create an array for our conversations
     conversationsArray = allConversations.map((aConversation, idx) => {
       let { consumerUser, messages } = aConversation;
@@ -63,22 +64,31 @@ class ConversationList extends React.Component {
 
       let time = StatusInfo.calculateTime(timeRecieved);
 
+      let timeValue = StatusInfo.getTimeValue(timeRecieved);
+
+      sortedConversations.push({ idx: idx, timeValue });
+
       return {
         id: idx,
         name: fname,
         message: lastMessage,
         time: time,
-        firstInitial: firstInitial
+        firstInitial: firstInitial,
+        timeValue: timeValue
       };
     });
-    // console.log("THIS IS THE ARRAY: ", conversationsArray);
-    // Set the state so we can render our conversations
-    console.log(
-      "updating state... length of conversationsArray",
-      conversationsArray.length
-    );
-    console.log("length of allConversations", allConversations.length);
-    this.setState({ tableData: conversationsArray });
+
+    sortedConversations = sortedConversations.sort((a, b) => {
+      return a.timeValue < b.timeValue ? 1 : -1;
+    });
+
+    let sortedConversationsArray = [];
+    sortedConversations.forEach(({ idx }) => {
+      sortedConversationsArray.push(conversationsArray[idx]);
+    });
+
+    // this.setState({ tableData: conversationsArray });
+    this.setState({ tableData: sortedConversationsArray });
   };
 
   handleViewConversation = idx => {
