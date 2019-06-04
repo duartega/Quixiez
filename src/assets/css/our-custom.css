@@ -135,3 +135,12 @@ div.chat-header-container {
 .chat-box-container {
   padding-bottom: 20px;
 }
+
+.newMessageDot {
+  height: 10px;
+  width: 10px;
+  background-color: #1d8cf8;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}

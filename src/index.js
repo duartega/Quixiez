@@ -24,6 +24,12 @@ import RegisterWithCompany from "our-components/Pages/RegisterWithCompany";
 import RegisterACompany from "our-components/Pages/CreateCompany";
 import Invite from "our-components/Pages/InviteEmployee";
 
+// Testing purposes while the api is down
+import AllConvos from './our-components/Pages/AllConversations';
+import Convos from './our-components/Components/Conversations List/ConversationList';
+import CL from './our-components/Components/Conversations List/ConversationCell';
+
+
 const hist = createBrowserHistory();
 
 const Root = ({ store }) => (
@@ -62,6 +68,10 @@ const Root = ({ store }) => (
 
         {/* TODO: We need to include this in the layout... */}
         <Route path="/invite" render={props => <Invite {...props} />} />
+
+        <Route path="/list" render={props => <CL {...props} />} />
+        <Route path="/convos" render={props => <Convos {...props} />} />
+
 
         {/* Redirect the user to login */}
         <Redirect from="/" to="/auth" />
