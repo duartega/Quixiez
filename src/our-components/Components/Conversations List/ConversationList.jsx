@@ -65,12 +65,12 @@ class ConversationList extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
-      console.log("ConversationList UPDATED!!");
+      // console.log("ConversationList UPDATED!!");
     }
     
 
     if (prevProps.allConversations !== this.props.allConversations) {
-      console.log("Map Updated");
+      // console.log("Map Updated");
       this.mapConversationsToTable();
     }
     !this.initialRenderOfMessages && this.handleInitialRender();

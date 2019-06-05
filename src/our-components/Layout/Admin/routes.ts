@@ -5,6 +5,7 @@ import ConversationsList from "our-components/Tables/ConversationsTable";
 import { RoutesI } from "../../Types/RoutesI";
 import ConversationsPanel from "../../Pages/ConversationsPanel";
 import ConversationList from "../../Components/Conversations List/AllConversationsWithMessageRight";
+import { ProfilePage } from '../../Components/Profile/ProfilePage';
 
 const routes: RoutesI[] = [
   {
@@ -43,7 +44,18 @@ const routes: RoutesI[] = [
     icon: "tim-icons icon-settings",
     component: Settings,
     layout: "/admin"
-  } 
+  },
+  {
+    path: "/user-profile",
+    // exact: true,
+    name: "User Profile",
+    icon: "tim-icons icon-email-85",
+    // component: ConversationsList,
+    component: ProfilePage,
+    layout: "/admin",
+    // redirect: true
+  }, 
+
 
   // This might be used later on...
 
