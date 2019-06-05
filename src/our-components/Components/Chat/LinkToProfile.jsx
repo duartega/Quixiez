@@ -3,6 +3,7 @@ import { Card, Row, Col, Button } from "reactstrap";
 import { connect } from "react-redux";
 class Profile extends React.Component {
   render() {
+    const { firstName, lastName } = this.props;
     return (
       <>
         <Card style={{ padding: "10px", backgroundColor: "inherit" }}>
@@ -16,7 +17,8 @@ class Profile extends React.Component {
               }}
             >
               <h3 style={{ margin: "0" }}>
-                {this.props.firstName ? this.props.firstName : ""}
+                {firstName ? `${firstName} ` : ""}
+                {lastName ? lastName : ""}
               </h3>
             </Col>
             <Col lg="2" style={{ paddingLeft: "0", paddingRight: "0" }}>
@@ -60,16 +62,19 @@ const mapStateToProps = ({
   conversation: { allConversations, idxOfConversationToRender }
 }) => {
   if (idxOfConversationToRender !== null && allConversations) {
-    const firstName =
-      allConversations[idxOfConversationToRender].consumerUser.firstName;
+    const { consumerUser } = allConversations[idxOfConversationToRender];
+    const firstName = consumerUser.firstName;
+    const lastName = consumerUser.lastName;
 
     return {
-      firstName
+      firstName,
+      lastName
     };
   }
 
   return {
-    firstName: null
+    firstName: null,
+    lastName: null
   };
 };
 
