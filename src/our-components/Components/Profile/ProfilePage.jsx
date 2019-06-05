@@ -15,7 +15,7 @@ export class ProfilePage extends React.Component {
       <div className="content">
         <Card>
         {/* Header */}
-          <Row style={{backgroundColor: "grey", margin: "15px"}}>
+          <Row style={{margin: "15px"}}>
             {/* this is the back button layout */}
             <Button color="primary" style={{margin: 0}}>
                 Back
@@ -37,7 +37,7 @@ export class ProfilePage extends React.Component {
 
 
           {/* Footer */}
-          <Row style={{backgroundColor: "blue", margin: "15px"}}>
+          <Row style={{margin: "15px"}}>
           {/* <Col md="9"/>           */}
           <Col md="12" style={{paddingRight: "0px", "text-align": "right"}}>
             <Button color="primary">
