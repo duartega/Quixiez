@@ -27,6 +27,7 @@ import { bigIntLiteral } from "@babel/types";
 import { conversation } from "redux/reducers/conversations";
 import { badgeColor } from "our-components/Components/Chat/Types";
 import { getTime } from "date-fns";
+import { getConversationToRender } from "redux/actions/helpers/conversationsHelpers";
 
 type Props = {
   conversation: any;
@@ -346,14 +347,9 @@ class Conversation extends React.Component<Props, State> {
 }
 
 const mapStateToProps = ({ conversation }: { conversation: any }) => {
-  const { idxOfConversationToRender, allConversations } = conversation;
-  if (allConversations && allConversations[idxOfConversationToRender]) {
-    return {
-      conversation: allConversations[idxOfConversationToRender]
-    };
-  }
+  const conversationToRender = getConversationToRender(conversation);
   return {
-    conversation: null
+    conversation: conversationToRender
   };
 };
 

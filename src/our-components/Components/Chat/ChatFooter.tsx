@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { Row, Col, Input, Button } from "reactstrap";
+import { connect } from "react-redux";
+import { getConversationToRender } from "redux/actions/helpers/conversationsHelpers";
+import { QueTextPhase } from "our-components/Types/QueTextPhase";
+
 interface Props {
   inputPlaceHolder: string; //
   inputName?: string; //
@@ -12,9 +16,15 @@ interface Props {
    */
   buttonOnClick?: (event: React.MouseEvent<any, MouseEvent>) => void;
   whoIsTyping: string | null;
+  phase: QueTextPhase | null;
 }
 
-export class ChatFooter extends Component<Props> {
+class ChatFooter extends Component<Props> {
+  shouldBeDisabled = () => {
+    const { phase } = this.props;
+    return phase !== "COMPLETE" && phase !== "IN_PROGRESS";
+  };
+
   render() {
     const {
       inputPlaceHolder,
@@ -26,6 +36,7 @@ export class ChatFooter extends Component<Props> {
       buttonOnClick,
       whoIsTyping
     } = this.props;
+
     return (
       <>
         <br />
@@ -53,6 +64,7 @@ export class ChatFooter extends Component<Props> {
                   style={inputStyle}
                   type="textarea"
                   className="px-2"
+                  disabled={this.shouldBeDisabled()}
                 />
               </Col>
               <Col
@@ -75,3 +87,19 @@ export class ChatFooter extends Component<Props> {
     );
   }
 }
+
+const mapStateToProps = ({ conversation }: { conversation: any }) => {
+  const conversationToRender = getConversationToRender(conversation);
+  if (conversationToRender) {
+    return {
+      phase: conversationToRender.phase
+    };
+  }
+  return {
+    phase: null
+  };
+};
+
+const exportChatFooter = connect(mapStateToProps)(ChatFooter);
+
+export { exportChatFooter as ChatFooter };
