@@ -76,8 +76,16 @@ class Login extends React.Component {
 
     axiosPost(login, { email, password })
       .then(result => {
-        const { jwt, companies } = result.data;
-        // const { setCompanyUserJWT } = this.props;
+        const { companyUser, jwt } = result.data;
+        const {
+          companies,
+          id,
+          firstName,
+          lastName,
+          phoneNumber,
+          email,
+          identificationUrl
+        } = companyUser;
 
         this.setState({
           JWT: jwt,
@@ -85,6 +93,14 @@ class Login extends React.Component {
           allCompanies: companies
         });
         localStorage.setItem("jwt", jwt);
+        localStorage.setItem("companyUser", {
+          id,
+          firstName,
+          lastName,
+          phoneNumber,
+          email,
+          identificationUrl
+        });
         // setCompanyUserJWT(jwt);
         console.log(companies);
       })
