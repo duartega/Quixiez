@@ -13,8 +13,19 @@ export class UserInformation extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      deliveryAddress: "",
+      alternateDeliveryAddress: "",
+      consumerType: "",
+      banned: false
+    };
   };
+
+  handleChange = event =>
+    this.setState({[event.target.name]: event.target.value})
 
   render() {
     let labels = [
@@ -27,22 +38,33 @@ export class UserInformation extends React.Component {
       "Banned"
     ];
 
+    let stateNames = [
+      "firstName",
+      "lastName",
+      "phoneNumber",
+      "deliveryAddress",
+      "alternateDeliveryAddress",
+      "consumerType",
+      "banned"
+    ]
+
     return ( 
         <> 
-            <br/>
+        <br />
+        <Row style={{"justify-content": "center"}}><h3>User Information</h3></Row>
             {labels.map((label, idx) => {
                 return (
                 <Row key={idx}>
                     {/* This is where you have the input labels on the left */}
-                    <Col md="3" style={{backgroundColor: "orange"}}>
-                    <label>{label}:</label>
+                    <Col md="2">
+                    <label>{label}{" "}:</label>
                     </Col>
                     <br/>
                     <br/>
                     <br/>
                     {/* This is where the inputs lie on the right of labels */}
-                    <Col md="9" style={{backgroundColor: "green"}}>
-                    <Input placeholder={label}>...</Input>
+                    <Col md="8">
+                    <Input name={stateNames[idx]} placeholder={label + "..."} onChange={this.handleChange} />
                     </Col>
                 </Row>
                 )
