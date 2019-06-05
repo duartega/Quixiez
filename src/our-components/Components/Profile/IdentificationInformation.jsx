@@ -1,7 +1,6 @@
 import React from 'react';
 import { UncontrolledTooltip, Button, Row, Col, Input } from 'reactstrap';
-import TestImage from '../../../Images/TestImage Horizontal.png'; 
-import TestImage1 from '../../../Images/TestImageVerticle.png'; 
+import NullImg from '../../../Images/nullImg.PNG';
 
 export class IdentificationInformation extends React.Component {
 
@@ -12,8 +11,9 @@ export class IdentificationInformation extends React.Component {
           DL_Expiration: "",
           MedNumber: "",
           MedExpiration: "",
-          RecImage: TestImage,
-          MedImage: TestImage1
+          RecImage: null,
+          MedImage: null,
+          nullImg: NullImg
         };
   };
   
@@ -30,9 +30,9 @@ export class IdentificationInformation extends React.Component {
                 <Col md="12" >
                   <Row>
                     <Col md="4">
-                    <Button style={{padding: 0}} id="DL">
-                      <img src={this.state.RecImage} alt="Drivers License"/> 
-                    </Button>
+                      <Button style={{ padding: 0 }} id="DL">
+                        {this.state.RecImage ? (<img src={this.state.RecImage} alt="Drivers License"/> ): (<img src={this.state.nullImg} alt="Drivers License"/> )}
+                      </Button>
                     <UncontrolledTooltip placement="left" target="DL" delay={0}>
                         Click to zoom or edit picture
                     </UncontrolledTooltip>
@@ -77,7 +77,7 @@ export class IdentificationInformation extends React.Component {
                   <Row>
                     <Col>
                       <Button style={{padding: 0}} id="Med">
-                        <img src={this.state.MedImage} alt="Medical Card" />
+                        {this.state.MedImage ? (<img src={this.state.MedImage} alt="Medical Card"/> ): (<img src={this.state.nullImg} alt="Medical Card"/> )}
                       </Button>
                       <UncontrolledTooltip placement="left" target="Med" delay={0}>
                         Click to zoom or edit picture
