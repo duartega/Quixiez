@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import { setConversationToRender } from "../../../redux/actions/conversations";
 import * as StatusInfo from "../../Tables/StatusInfo";
 import { PopOverLeft } from "../PopOverLeft";
-import { Button } from "reactstrap";
+import { Button, Spinner } from "reactstrap";
 import { getTimeValue } from "../../../redux/actions/conversations";
+import ReactBSAlert from "react-bootstrap-sweetalert"; // For a popup that shows we are loading the info
 
 class ConversationList extends React.Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class ConversationList extends React.Component {
       time: "",
       message: "",
       firstInitial: "",
-      tableData: []
+      tableData: [],
+      loading: null
     };
 
     this.initialRenderOfMessages = false;
@@ -29,6 +31,7 @@ class ConversationList extends React.Component {
   };
 
   componentDidMount() {
+    this.showLoadingAlert();    
     const { allConversations } = this.props;
     if (allConversations) {
       this.mapConversationsToTable();
@@ -37,16 +40,41 @@ class ConversationList extends React.Component {
     }
   }
 
+  showLoadingAlert = () => {
+    
+    this.setState({
+      loading: (
+        <ReactBSAlert
+          style={{ display: "block", marginTop: "-100px" }}
+          title="Your conversations are loading..."
+          onConfirm={() => this.hideLoadingAlert()}
+          showConfirm={false}
+        >
+        <div class="loading-spinner"></div>
+          This may take a few seconds...
+        </ReactBSAlert>
+      )
+    });
+  };
+
+  hideLoadingAlert = () => {
+    this.setState({
+      loading: null
+    });
+  };
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps !== this.props) {
       console.log("ConversationList UPDATED!!");
     }
+    
 
     if (prevProps.allConversations !== this.props.allConversations) {
       console.log("Map Updated");
       this.mapConversationsToTable();
     }
     !this.initialRenderOfMessages && this.handleInitialRender();
+    setTimeout(this.hideLoadingAlert, 1500);
   }
 
   mapConversationsToTable = () => {
@@ -89,6 +117,7 @@ class ConversationList extends React.Component {
     return (
       <>
         <div className="content">
+        {this.state.loading}
           {this.state.tableData.map((data, idx) => (
             <ConversationCell
               key={idx}
