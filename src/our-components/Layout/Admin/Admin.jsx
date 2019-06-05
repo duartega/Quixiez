@@ -32,6 +32,7 @@ import {
   updateConversations
 } from "../../../redux/actions/conversations";
 import { INCOMING_QUE_TEXT } from "sockets/events/Events";
+import { setCompanyUser } from "redux/actions";
 
 var ps;
 
@@ -101,20 +102,7 @@ class Admin extends React.Component {
         console.log(err, err.response);
       });
 
-    // OUR CODE
-    // receiveMessage(data => {
-    //   // let notifyMessage = "";
-    //   let options = {};
-    //   options = {
-    //     place: "tr",
-    //     message: "New Message!",
-    //     type: "primary",
-    //     icon: "tim-icons icon-bell-55",
-    //     autoDismiss: 7
-    //   };
-
-    //   this.refs.notificationAlert.notificationAlert(options);
-    // });
+    this.props.setCompanyUser();
   }
   componentWillUnmount() {
     console.log("OUR ADMIN LAYOUR WILL UNMOUNT");
@@ -292,7 +280,8 @@ const mapDispatchToProps = dispatch => ({
   setAllConversations: conversations =>
     dispatch(setAllConversations(conversations)),
   updateConversations: (conversation, callback) =>
-    dispatch(updateConversations(conversation, callback))
+    dispatch(updateConversations(conversation, callback)),
+  setCompanyUser: () => dispatch(setCompanyUser())
 });
 
 export default connect(

@@ -93,14 +93,17 @@ class Login extends React.Component {
           allCompanies: companies
         });
         localStorage.setItem("jwt", jwt);
-        localStorage.setItem("companyUser", {
-          id,
-          firstName,
-          lastName,
-          phoneNumber,
-          email,
-          identificationUrl
-        });
+        localStorage.setItem(
+          "companyUser",
+          JSON.stringify({
+            id,
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+            identificationUrl
+          })
+        );
         // setCompanyUserJWT(jwt);
         console.log(companies);
       })

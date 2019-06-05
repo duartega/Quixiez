@@ -2,34 +2,28 @@
  * reducers/companyUser.js
  */
 
-import { SET_JWT_TOKEN, SET_COMPANY_USER_ID, SET_COMPANY_NAME } from "../ActionTypes";
+import {
+  SET_JWT_TOKEN,
+  SET_COMPANY_USER_ID,
+  SET_COMPANY_NAME,
+  SET_COMPANY_USER
+} from "../ActionTypes";
 
 const companyUserState = {
-  jwt: "",
-  companyUserID: ""
+  companyUser: JSON.parse(localStorage.getItem("companyUser"))
 };
 
 export const companyUserReducer = (state = companyUserState, action) => {
   switch (action.type) {
-    case SET_JWT_TOKEN:
+    case SET_COMPANY_USER:
       return {
         ...state,
-        jwt: action.jwt
+        companyUser: action.companyUser
       };
-    case SET_COMPANY_USER_ID:
-      return {
-        ...state,
-        companyUserId: action.companyUserId
-      };
-      case SET_COMPANY_NAME:
-      return {
-        ...state,
-        companyName: action.companyName
-      };
+
     default:
       return {
         ...state
       };
-
   }
 };
