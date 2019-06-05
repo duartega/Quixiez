@@ -1,5 +1,7 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
+import { Profile } from '../Chat/LinkToProfile';
+
 export class ChatHeader extends React.Component {
   render() {
     return (
@@ -7,9 +9,10 @@ export class ChatHeader extends React.Component {
         {/* <Col style={{ display: "flex" }}> */}
 
         {/* <Col className="align-middle align-items-center"> */}
-        <Col className="header-col">
+        {/* <Col className="header-col">
           <h3 className="text-center align-self-center">Test</h3>
-        </Col>
+        </Col> */}
+        <Profile />
         <br />
         <br />
         <br />

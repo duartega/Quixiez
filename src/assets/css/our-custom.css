@@ -185,3 +185,10 @@ div.chat-header-container {
   margin: 0px;
 }
 /* end message list properties */
+
+/* Message Header props */
+.headerButtons {
+  justify-content: center;
+  margin-left: 0;
+  margin-right: 0;
+}
