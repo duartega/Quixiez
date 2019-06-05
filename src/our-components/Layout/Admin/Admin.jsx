@@ -16,7 +16,7 @@ import routes from "./routes";
 
 import logo from "assets/img/react-logo.png";
 import {
-  receiveMessage,
+  // receiveMessage,
   handleIncomingQueText,
   stopListening
 } from "sockets/Socket";
@@ -61,7 +61,31 @@ class Admin extends React.Component {
     handleIncomingQueText(queText => {
       console.log("INCOMING QUETEXT...");
       const { updateConversations } = this.props;
-      updateConversations(queText);
+      updateConversations(queText, alertType => {
+        if (alertType === "NEW_MESSAGE") {
+          let options = {};
+          options = {
+            place: "tr",
+            message: "New Message!",
+            type: "primary",
+            icon: "tim-icons icon-bell-55",
+            autoDismiss: 7
+          };
+
+          this.refs.notificationAlert.notificationAlert(options);
+        } else if (alertType === "NEW_ORDER") {
+          let options = {};
+          options = {
+            place: "tr",
+            message: "New Order!",
+            type: "primary",
+            icon: "tim-icons icon-bell-55",
+            autoDismiss: 7
+          };
+
+          this.refs.notificationAlert.notificationAlert(options);
+        }
+      });
     });
 
     axiosGet(getAllConversations)
@@ -78,19 +102,19 @@ class Admin extends React.Component {
       });
 
     // OUR CODE
-    receiveMessage(data => {
-      // let notifyMessage = "";
-      let options = {};
-      options = {
-        place: "tr",
-        message: "New Message!",
-        type: "primary",
-        icon: "tim-icons icon-bell-55",
-        autoDismiss: 7
-      };
+    // receiveMessage(data => {
+    //   // let notifyMessage = "";
+    //   let options = {};
+    //   options = {
+    //     place: "tr",
+    //     message: "New Message!",
+    //     type: "primary",
+    //     icon: "tim-icons icon-bell-55",
+    //     autoDismiss: 7
+    //   };
 
-      this.refs.notificationAlert.notificationAlert(options);
-    });
+    //   this.refs.notificationAlert.notificationAlert(options);
+    // });
   }
   componentWillUnmount() {
     console.log("OUR ADMIN LAYOUR WILL UNMOUNT");
@@ -267,8 +291,8 @@ class Admin extends React.Component {
 const mapDispatchToProps = dispatch => ({
   setAllConversations: conversations =>
     dispatch(setAllConversations(conversations)),
-  updateConversations: conversation =>
-    dispatch(updateConversations(conversation))
+  updateConversations: (conversation, callback) =>
+    dispatch(updateConversations(conversation, callback))
 });
 
 export default connect(

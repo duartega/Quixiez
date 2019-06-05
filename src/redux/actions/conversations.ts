@@ -45,11 +45,35 @@ const sortConversations = (
     sortedConversationsArray.push(newUpdatedConversations[idx]);
   });
 
+  // Grab first conversation
+  const messages = newUpdatedConversations[0].messages;
+  // Grad last message of first conversation
+  const lastMessageSentBy = messages[messages.length - 1].sentBy;
+
+  //   lastMessageSentBy !== null && console.log(lastMessageSentBy.id);
+
+  /**
+   * If the message was not sent by the user AND
+   * the message was not sent by the bot we are making
+   * the assumption for now that the current user sent it.
+   *
+   * TODO: Check to see if the current user sent the message
+   * and update the new idx to 0 only if the current user sent
+   * the message.
+   */
+  if (
+    lastMessageSentBy !== null &&
+    lastMessageSentBy.id !== "00000000-0000-0000-0000-000000000000"
+  ) {
+    return {
+      sortedConversationsArray,
+      newIdxOfConversationsToRender: 0
+    };
+  }
   if (
     oldConversationsLength === undefined ||
     idxOfConversationToRender === null
   ) {
-    // console.log("OLD CONVERSATION IS NULL");
     return {
       sortedConversationsArray,
       newIdxOfConversationsToRender: null
@@ -111,10 +135,10 @@ export const setAllConversations = (
   }
 };
 
-export const updateConversations = (conversation: any) => (
-  dispatch: any,
-  getState: any
-) => {
+export const updateConversations = (
+  conversation: any,
+  callback: (alertType: string) => void
+) => (dispatch: any, getState: any) => {
   const {
     conversation: { allConversations }
   } = getState();
@@ -145,17 +169,20 @@ export const updateConversations = (conversation: any) => (
   const oldConversationsLength = allConversations.length;
 
   if (idxOfConvoToUpdate !== -1) {
-    console.log("if (idxOfConvoToUpdate)");
+    // console.log("if (idxOfConvoToUpdate)");
+    callback("NEW_MESSAGE");
     allConversations[idxOfConvoToUpdate] = conversation;
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)
     );
   } else if (idxOfConvoToUpdate === -1) {
+    callback("NEW_ORDER");
     allConversations.push(conversation);
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)
     );
   } else if (conversationsExist === false) {
+    callback("NEW_ORDER");
     return dispatch(
       setAllConversations([conversation], oldConversationsLength)
     );

@@ -216,7 +216,7 @@ class Conversation extends React.Component<Props, State> {
    */
   createMessageBubble = (conversation: any, firstName: string) => {
     const { content, sentBy } = conversation;
-    console.log("conversation", conversation);
+    // console.log("conversation", conversation);
     let sentByLabel = null;
     let badgedColor: badgeColor;
 
