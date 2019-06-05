@@ -16,14 +16,18 @@ export const getTimeValue = (timeReceived: string) => {
   return parse(timeReceived).getTime();
 };
 
-const sortConversations = (conversations: any[]) => {
-  if (!conversations) {
+const sortConversations = (
+  newUpdatedConversations: any[],
+  idxOfConversationToRender: number | null,
+  oldConversationsLength?: number
+) => {
+  if (!newUpdatedConversations) {
     return;
   }
 
   let sortedConversations: any[] = [];
-  conversations.forEach((aConversation, idx) => {
-    console.log(aConversation.messages);
+  newUpdatedConversations.forEach((aConversation, idx) => {
+    // console.log(aConversation.messages);
     const { messages } = aConversation;
     const lastMessageCreatedStamp = messages[messages.length - 1].created;
     sortedConversations.push({
@@ -35,12 +39,31 @@ const sortConversations = (conversations: any[]) => {
   sortedConversations = sortedConversations.sort((a, b) => {
     return a.timeValue < b.timeValue ? 1 : -1;
   });
+
   let sortedConversationsArray: any[] = [];
   sortedConversations.forEach(({ idx }) => {
-    sortedConversationsArray.push(conversations[idx]);
+    sortedConversationsArray.push(newUpdatedConversations[idx]);
   });
 
-  return sortedConversationsArray;
+  if (
+    oldConversationsLength === undefined ||
+    idxOfConversationToRender === null
+  ) {
+    // console.log("OLD CONVERSATION IS NULL");
+    return {
+      sortedConversationsArray,
+      newIdxOfConversationsToRender: null
+    };
+  }
+  const newConversationsLen = newUpdatedConversations.length;
+
+  const newIdxOfConversationsToRender =
+    newConversationsLen - oldConversationsLength + idxOfConversationToRender;
+
+  return {
+    sortedConversationsArray,
+    newIdxOfConversationsToRender
+  };
 };
 
 export const setConversationToRender = (idx: number) => {
@@ -50,14 +73,42 @@ export const setConversationToRender = (idx: number) => {
   };
 };
 
-export const setAllConversations = (conversations: any[]) => {
-  console.log("setting all conversations...", conversations);
-
-  let sortedConversations = sortConversations(conversations);
-  return {
-    type: SET_ALL_CONVERSATIONS,
-    conversations: sortedConversations
-  };
+export const setAllConversations = (
+  conversations: any[],
+  oldConversationsLength?: number
+) => (dispatch: any, getState: any) => {
+  const {
+    idxOfConversationToRender,
+    allConversations
+  } = getState().conversation;
+  //   console.log("idxOfConversationToRender", idxOfConversationToRender);
+  //   console.log("setting all conversations...", conversations);
+  conversations && console.log("conversations.length", conversations.length);
+  allConversations &&
+    console.log("allConversations.length", allConversations.length);
+  let sortedConversationsAndNewIdxToRender = sortConversations(
+    conversations,
+    idxOfConversationToRender,
+    oldConversationsLength
+  );
+  if (sortedConversationsAndNewIdxToRender) {
+    const {
+      sortedConversationsArray,
+      newIdxOfConversationsToRender
+    } = sortedConversationsAndNewIdxToRender;
+    if (newIdxOfConversationsToRender !== null) {
+      console.log(
+        "newIdxOfConversationsToRender",
+        newIdxOfConversationsToRender
+      );
+      dispatch(setConversationToRender(newIdxOfConversationsToRender));
+    }
+    // console.log("sortedConversationsArray", sortedConversationsArray);
+    dispatch({
+      type: SET_ALL_CONVERSATIONS,
+      conversations: sortedConversationsArray
+    });
+  }
 };
 
 export const updateConversations = (conversation: any) => (
@@ -67,8 +118,9 @@ export const updateConversations = (conversation: any) => (
   const {
     conversation: { allConversations }
   } = getState();
-  console.log("UPDATE CONVERSATION CALLED");
-  console.log("conversation", conversation);
+  //   console.log("idxOfConversationToRender", idxOfConversationToRender);
+  //   console.log("UPDATE CONVERSATION CALLED");
+  //   console.log("conversation", conversation);
 
   let conversationsExist = true;
   if (allConversations === null || allConversations.length === 0) {
@@ -89,17 +141,24 @@ export const updateConversations = (conversation: any) => (
       })
     : null;
 
-  console.log("idxOfConvoToUpdate", idxOfConvoToUpdate);
+  //   console.log("idxOfConvoToUpdate", idxOfConvoToUpdate);
+  const oldConversationsLength = allConversations.length;
 
   if (idxOfConvoToUpdate !== -1) {
     console.log("if (idxOfConvoToUpdate)");
     allConversations[idxOfConvoToUpdate] = conversation;
-    return dispatch(setAllConversations(allConversations));
+    return dispatch(
+      setAllConversations(allConversations, oldConversationsLength)
+    );
   } else if (idxOfConvoToUpdate === -1) {
     allConversations.push(conversation);
-    return dispatch(setAllConversations(allConversations));
+    return dispatch(
+      setAllConversations(allConversations, oldConversationsLength)
+    );
   } else if (conversationsExist === false) {
-    return dispatch(setAllConversations([conversation]));
+    return dispatch(
+      setAllConversations([conversation], oldConversationsLength)
+    );
   }
 };
 
