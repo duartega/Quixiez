@@ -49,7 +49,7 @@ class ConversationList extends React.Component {
           onConfirm={() => this.hideLoadingAlert()}
           showConfirm={false}
         >
-          <div class="loading-spinner" />
+          <div className="loading-spinner" />
           This may take a few seconds...
         </ReactBSAlert>
       )
