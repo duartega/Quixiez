@@ -38,7 +38,7 @@ export const ChatBubble = (props: Props) => {
                 </div>
                 <h6>
                   <i className="ti-time" />
-                  {timePassed} ago
+                  {timePassed}
                 </h6>
               </div>
             </CardBody>

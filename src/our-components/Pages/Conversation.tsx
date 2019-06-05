@@ -6,6 +6,8 @@ import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../network/routes";
 import { connect } from "react-redux";
 import { sendMessage } from "../../network/routes";
+import { getTimeValue } from "../../redux/actions/conversations";
+
 import {
   joinRoom,
   // sendMessage,
@@ -25,6 +27,7 @@ import {
 import { bigIntLiteral } from "@babel/types";
 import { conversation } from "redux/reducers/conversations";
 import { badgeColor } from "our-components/Components/Chat/Types";
+import { getTime } from "date-fns";
 
 type Props = {
   conversation: any;
@@ -204,7 +207,7 @@ class Conversation extends React.Component<Props, State> {
    */
   createMessageBubble = (conversation: any, firstName: string) => {
     const { content, sentBy } = conversation;
-    // console.log("conversation", conversation);
+    console.log("conversation", conversation);
     let sentByLabel = null;
     let badgedColor: badgeColor;
 
@@ -221,13 +224,21 @@ class Conversation extends React.Component<Props, State> {
       badgedColor = "warning";
     }
 
+    /**
+     * TODO: Handle Hours ago, at a certain point just render the date..
+     */
+    let timePassed =
+      (getTimeValue(new Date().toString()) -
+        getTimeValue(conversation.created)) /
+      1000;
+    timePassed = Math.floor(timePassed / 60);
     return (
       <ChatBubble
         key={this.key++}
         badgeColor={badgedColor}
         badgeLabel={sentByLabel}
         message={content}
-        timePassed="7 Days"
+        timePassed={`${timePassed} minutes ago`}
         inverted={sentBy ? false : true}
       />
     );
