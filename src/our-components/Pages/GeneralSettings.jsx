@@ -99,7 +99,8 @@ class User extends React.Component {
         delete data.id;
         delete data.companyName;
         this.setState({ ...data });
-        this.hideAutoAlert();
+        // this.hideAutoAlert();
+        setTimeout(this.hideAutoAlert, 500);
       })
       .catch(err => {
         console.log(err, err.response);
@@ -237,6 +238,7 @@ class User extends React.Component {
           onConfirm={() => this.hideAutoAlert()}
           showConfirm={false}
         >
+        <div class="loading-spinner"></div>
           This may take a few seconds...
         </ReactBSAlert>
       )
