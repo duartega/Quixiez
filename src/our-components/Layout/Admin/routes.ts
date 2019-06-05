@@ -46,14 +46,14 @@ const routes: RoutesI[] = [
     layout: "/admin"
   },
   {
-    path: "/user-profile",
-    // exact: true,
+    path: "/conversation/user-profile",
+    exact: true,
     name: "User Profile",
     icon: "tim-icons icon-email-85",
     // component: ConversationsList,
     component: ProfilePage,
     layout: "/admin",
-    // redirect: true
+    redirect: true
   }, 
 
 

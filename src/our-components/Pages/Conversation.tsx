@@ -311,7 +311,7 @@ class Conversation extends React.Component<Props, State> {
     return (
       <>
         <div className="content">
-          <ChatHeader />
+          <ChatHeader history={this.props.history} />
 
           {/* {this.state.messages.map(aMessage => {
             return aMessage;

@@ -1,60 +1,76 @@
 import React from "react";
 import { Card, Row, Col, Button } from "reactstrap";
 import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
+
 class Profile extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderUserProfile: false
+    };
+  };
+
+  goToProfile = () => {
+    this.props.history.push("/admin/conversation/user-profile")
+  }
+
   render() {
     const { firstName, lastName } = this.props;
-    return (
-      <>
-        <Card style={{ padding: "10px", backgroundColor: "inherit" }}>
-          <Row className="headerButtons">
-            <Col
-              lg="8"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <h3 style={{ margin: "0" }}>
-                {firstName ? `${firstName} ` : ""}
-                {lastName ? lastName : ""}
-              </h3>
-            </Col>
-            <Col lg="2" style={{ paddingLeft: "0", paddingRight: "0" }}>
-              <Row className="headerButtons">
-                <Button
-                  className="btn-simple"
-                  color="success"
-                  style={{ paddingRight: "15px", color: "#FFFFFF" }}
-                >
-                  Action
+
+      return (
+        <>
+          <Card style={{ padding: "10px", backgroundColor: "inherit" }}>
+            <Row className="headerButtons">
+              <Col
+                lg="8"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <h3 style={{ margin: "0" }}>
+                  {firstName ? `${firstName} ` : ""}
+                  {lastName ? lastName : ""}
+                </h3>
+              </Col>
+              <Col lg="2" style={{ paddingLeft: "0", paddingRight: "0" }}>
+                <Row className="headerButtons">
+                  <Button
+                    className="btn-simple"
+                    color="success"
+                    style={{ paddingRight: "15px", color: "#FFFFFF" }}
+                  >
+                    Action
                   <i
-                    style={{ paddingLeft: "20px" }}
-                    className="tim-icons icon-pencil"
-                  />
-                </Button>
-              </Row>
-            </Col>
-            <Col lg="2" style={{ paddingLeft: "0", paddingRight: "0" }}>
-              <Row className="headerButtons">
-                <Button
-                  className="btn-simple"
-                  color="success"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Profile
+                      style={{ paddingLeft: "20px" }}
+                      className="tim-icons icon-pencil"
+                    />
+                  </Button>
+                </Row>
+              </Col>
+              <Col lg="2" style={{ paddingLeft: "0", paddingRight: "0" }}>
+                <Row className="headerButtons">
+                  <Button
+                    className="btn-simple"
+                    color="success"
+                    style={{ color: "#FFFFFF" }}
+                    onClick={this.goToProfile}
+                  >
+                    Profile
                   <i
-                    style={{ paddingLeft: "20px" }}
-                    className="tim-icons icon-single-02"
-                  />
-                </Button>
-              </Row>
-            </Col>
-          </Row>
-        </Card>
-      </>
-    );
+                      style={{ paddingLeft: "20px" }}
+                      className="tim-icons icon-single-02"
+                    />
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+          </Card>
+        </>
+      );
   }
 }
 

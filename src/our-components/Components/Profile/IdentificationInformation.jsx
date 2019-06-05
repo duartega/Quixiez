@@ -24,7 +24,7 @@ export class IdentificationInformation extends React.Component {
         return(
             <>
             <br />
-            <Row style={{"justify-content": "center"}}><h3>Identification Information</h3></Row>
+            <Row style={{justifyContent: "center"}}><h3>Identification Information</h3></Row>
                 <br/>
                 {/* The start of the left side of the Identification Information page for images */}
                 <Col md="12" >

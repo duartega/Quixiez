@@ -1,0 +1,11 @@
+// TODO: todo list
+
+    Gabe:
+
+1) Possibly add the Blocking transitions for history: https://www.npmjs.com/package/history
+
+
+
+
+    Joe:
+
