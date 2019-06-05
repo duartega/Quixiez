@@ -6,7 +6,6 @@ import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../network/routes";
 import { connect } from "react-redux";
 import { sendMessage } from "../../network/routes";
-import { getTimeValue } from "../../redux/actions/conversations";
 
 import {
   joinRoom,
@@ -203,14 +202,6 @@ class Conversation extends React.Component<Props, State> {
     }
   };
 
-  getTimePassedValue = (conversationCreated: string) => {
-    let timePassed =
-      (getTimeValue(new Date().toString()) -
-        getTimeValue(conversationCreated)) /
-      1000;
-    return Math.floor(timePassed / 60);
-  };
-
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
@@ -237,49 +228,53 @@ class Conversation extends React.Component<Props, State> {
      * TODO: Handle Hours ago, at a certain point just render the date..
      * - Handle this updating every minute...
      */
-    let timePassed;
-    timePassed = this.getTimePassedValue(conversation.created);
+    // let timePassed;
+    // timePassed = this.getTimePassedValue(conversation.created);
 
     // this.messageTimeStampTime = setInterval(() => {
     //   console.log("called");
     //   timePassed = this.getTimePassedValue(conversation.created);
     // }, 1000);
 
-    let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
+    // let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
     return (
       <ChatBubble
         key={this.key++}
         badgeColor={badgedColor}
         badgeLabel={sentByLabel}
         message={content}
-        timePassed={timePassedStr}
+        // timePassed={timePassedStr}
+        conversationCreated={conversation.created}
         inverted={sentBy ? false : true}
       />
     );
   };
 
-  createMessage = (message?: string) => {
-    // message && sendMessage(message);
-    // will do axiosPost here
+  /**
+   * This isn't being used anywhere
+   */
+  // createMessage = (message?: string) => {
+  //   // message && sendMessage(message);
+  //   // will do axiosPost here
 
-    const messages = (
-      <ChatBubble
-        key={this.key++}
-        badgeColor="info"
-        badgeLabel="Joe"
-        message={message ? message : this.state.message}
-        timePassed="7 Days"
-        inverted={message ? true : false}
-      />
-    );
+  //   const messages = (
+  //     <ChatBubble
+  //       key={this.key++}
+  //       badgeColor="info"
+  //       badgeLabel="Joe"
+  //       message={message ? message : this.state.message}
+  //       timePassed="7 Days"
+  //       inverted={message ? true : false}
+  //     />
+  //   );
 
-    // console.log(receiving, message);
-    // !message && sendMessage(this.state.message);
-    const { messages: messagesState } = this.state;
-    messagesState.push(messages);
+  //   // console.log(receiving, message);
+  //   // !message && sendMessage(this.state.message);
+  //   const { messages: messagesState } = this.state;
+  //   messagesState.push(messages);
 
-    this.setState({ messages: messagesState, message: "" });
-  };
+  //   this.setState({ messages: messagesState, message: "" });
+  // };
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
