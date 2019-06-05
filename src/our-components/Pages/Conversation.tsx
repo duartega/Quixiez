@@ -58,6 +58,7 @@ class Conversation extends React.Component<Props, State> {
   private timeout: any = null;
   private initScroll = true;
   private updatedMessages = false;
+  private messageTimeStampTime: NodeJS.Timeout | undefined;
 
   componentDidMount() {
     // const { conversation } = this.props;
@@ -202,6 +203,14 @@ class Conversation extends React.Component<Props, State> {
     }
   };
 
+  getTimePassedValue = (conversationCreated: string) => {
+    let timePassed =
+      (getTimeValue(new Date().toString()) -
+        getTimeValue(conversationCreated)) /
+      1000;
+    return Math.floor(timePassed / 60);
+  };
+
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
@@ -226,19 +235,24 @@ class Conversation extends React.Component<Props, State> {
 
     /**
      * TODO: Handle Hours ago, at a certain point just render the date..
+     * - Handle this updating every minute...
      */
-    let timePassed =
-      (getTimeValue(new Date().toString()) -
-        getTimeValue(conversation.created)) /
-      1000;
-    timePassed = Math.floor(timePassed / 60);
+    let timePassed;
+    timePassed = this.getTimePassedValue(conversation.created);
+
+    // this.messageTimeStampTime = setInterval(() => {
+    //   console.log("called");
+    //   timePassed = this.getTimePassedValue(conversation.created);
+    // }, 1000);
+
+    let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
     return (
       <ChatBubble
         key={this.key++}
         badgeColor={badgedColor}
         badgeLabel={sentByLabel}
         message={content}
-        timePassed={`${timePassed} minutes ago`}
+        timePassed={timePassedStr}
         inverted={sentBy ? false : true}
       />
     );
