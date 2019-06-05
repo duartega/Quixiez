@@ -6,6 +6,7 @@ import { setConversationToRender } from "../../../redux/actions/conversations";
 import * as StatusInfo from "../../Tables/StatusInfo";
 import { PopOverLeft } from "../PopOverLeft";
 import { Button } from "reactstrap";
+import { getTimeValue } from "../../../redux/actions/conversations";
 
 class ConversationList extends React.Component {
   constructor(props) {
@@ -53,7 +54,6 @@ class ConversationList extends React.Component {
 
     const { allConversations } = this.props;
 
-    let sortedConversations = [];
     // Create an array for our conversations
     conversationsArray = allConversations.map((aConversation, idx) => {
       let { consumerUser, messages } = aConversation;
@@ -64,9 +64,8 @@ class ConversationList extends React.Component {
 
       let time = StatusInfo.calculateTime(timeRecieved);
 
-      let timeValue = StatusInfo.getTimeValue(timeRecieved);
-
-      sortedConversations.push({ idx: idx, timeValue });
+      // NOT DOING ANYTHING WITH THIS YET...
+      let timeValue = getTimeValue(timeRecieved);
 
       return {
         id: idx,
@@ -78,17 +77,7 @@ class ConversationList extends React.Component {
       };
     });
 
-    sortedConversations = sortedConversations.sort((a, b) => {
-      return a.timeValue < b.timeValue ? 1 : -1;
-    });
-
-    let sortedConversationsArray = [];
-    sortedConversations.forEach(({ idx }) => {
-      sortedConversationsArray.push(conversationsArray[idx]);
-    });
-
-    // this.setState({ tableData: conversationsArray });
-    this.setState({ tableData: sortedConversationsArray });
+    this.setState({ tableData: conversationsArray });
   };
 
   handleViewConversation = idx => {

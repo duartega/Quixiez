@@ -6,10 +6,42 @@
 //  import {stat} from "redux-thunk"
 // import { Thunk } from "redux-thunk";
 
+import { parse, getTime } from "date-fns";
 import {
   SET_CONVERSATION_TO_RENDER,
   SET_ALL_CONVERSATIONS
 } from "../ActionTypes";
+
+export const getTimeValue = (timeReceived: string) => {
+  return parse(timeReceived).getTime();
+};
+
+const sortConversations = (conversations: any[]) => {
+  if (!conversations) {
+    return;
+  }
+
+  let sortedConversations: any[] = [];
+  conversations.forEach((aConversation, idx) => {
+    console.log(aConversation.messages);
+    const { messages } = aConversation;
+    const lastMessageCreatedStamp = messages[messages.length - 1].created;
+    sortedConversations.push({
+      idx,
+      timeValue: getTimeValue(lastMessageCreatedStamp)
+    });
+  });
+
+  sortedConversations = sortedConversations.sort((a, b) => {
+    return a.timeValue < b.timeValue ? 1 : -1;
+  });
+  let sortedConversationsArray: any[] = [];
+  sortedConversations.forEach(({ idx }) => {
+    sortedConversationsArray.push(conversations[idx]);
+  });
+
+  return sortedConversationsArray;
+};
 
 export const setConversationToRender = (idx: number) => {
   return {
@@ -19,10 +51,12 @@ export const setConversationToRender = (idx: number) => {
 };
 
 export const setAllConversations = (conversations: any[]) => {
-  console.log("setting all conversations...");
+  console.log("setting all conversations...", conversations);
+
+  let sortedConversations = sortConversations(conversations);
   return {
     type: SET_ALL_CONVERSATIONS,
-    conversations
+    conversations: sortedConversations
   };
 };
 

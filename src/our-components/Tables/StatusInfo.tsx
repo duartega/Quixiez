@@ -117,7 +117,3 @@ export const calculateTime = (timeReceived: string) => {
   }
   return time;
 };
-
-export const getTimeValue = (timeReceived: string) => {
-  return parse(timeReceived).getTime();
-};
