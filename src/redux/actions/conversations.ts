@@ -107,9 +107,9 @@ export const setAllConversations = (
   } = getState().conversation;
   //   console.log("idxOfConversationToRender", idxOfConversationToRender);
   //   console.log("setting all conversations...", conversations);
-  conversations && console.log("conversations.length", conversations.length);
-  allConversations &&
-    console.log("allConversations.length", allConversations.length);
+  // conversations && console.log("conversations.length", conversations.length);
+  // allConversations &&
+  // console.log("allConversations.length", allConversations.length);
   let sortedConversationsAndNewIdxToRender = sortConversations(
     conversations,
     idxOfConversationToRender,
