@@ -31,7 +31,7 @@ class ConversationList extends React.Component {
   };
 
   componentDidMount() {
-    this.showLoadingAlert();    
+    this.showLoadingAlert();
     const { allConversations } = this.props;
     if (allConversations) {
       this.mapConversationsToTable();
@@ -41,7 +41,6 @@ class ConversationList extends React.Component {
   }
 
   showLoadingAlert = () => {
-    
     this.setState({
       loading: (
         <ReactBSAlert
@@ -50,7 +49,7 @@ class ConversationList extends React.Component {
           onConfirm={() => this.hideLoadingAlert()}
           showConfirm={false}
         >
-        <div class="loading-spinner"></div>
+          <div class="loading-spinner" />
           This may take a few seconds...
         </ReactBSAlert>
       )
@@ -67,7 +66,6 @@ class ConversationList extends React.Component {
     if (prevProps !== this.props) {
       // console.log("ConversationList UPDATED!!");
     }
-    
 
     if (prevProps.allConversations !== this.props.allConversations) {
       // console.log("Map Updated");
@@ -117,7 +115,7 @@ class ConversationList extends React.Component {
     return (
       <>
         <div className="content">
-        {this.state.loading}
+          {this.state.loading}
           {this.state.tableData.map((data, idx) => (
             <ConversationCell
               key={idx}

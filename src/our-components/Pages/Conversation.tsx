@@ -6,7 +6,6 @@ import { axiosPost, axiosGet } from "../../network/ApiCalls";
 import { getAllConversations } from "../../network/routes";
 import { connect } from "react-redux";
 import { sendMessage } from "../../network/routes";
-import { getTimeValue } from "../../redux/actions/conversations";
 
 import {
   joinRoom,
@@ -39,6 +38,7 @@ type State = {
   messages: any[];
   message: string;
   companyUserTyping: string | null;
+  mappingMessagesDone: boolean;
 };
 
 class Conversation extends React.Component<Props, State> {
@@ -47,7 +47,8 @@ class Conversation extends React.Component<Props, State> {
     this.state = {
       messages: [],
       message: "",
-      companyUserTyping: null
+      companyUserTyping: null,
+      mappingMessagesDone: false
     };
   }
 
@@ -61,6 +62,7 @@ class Conversation extends React.Component<Props, State> {
   private messageTimeStampTime: NodeJS.Timeout | undefined;
 
   componentDidMount() {
+    // console.log("component did mount");
     // const { conversation } = this.props;
     /**
      * If there aren't any conversation to render
@@ -99,13 +101,13 @@ class Conversation extends React.Component<Props, State> {
   }
 
   initialScroll = () => {
-    // console.log("initialScroll called");
+    console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    // console.log("scrollToBottom called");
+    console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -136,9 +138,11 @@ class Conversation extends React.Component<Props, State> {
     }
 
     if (this.initScroll && prevState.messages !== this.state.messages) {
-      // console.log("initialscroll() calling from compDidUpdate");
-      this.initialScroll();
-      this.initScroll = false;
+      // this.initialScroll();
+      // setTimeout(() => {
+      //   this.initialScroll();
+      // }, 1000);
+      // this.initScroll = false;
     } else if (this.updatedMessages) {
       this.scrollToBottom();
       this.updatedMessages = false;
@@ -203,14 +207,6 @@ class Conversation extends React.Component<Props, State> {
     }
   };
 
-  getTimePassedValue = (conversationCreated: string) => {
-    let timePassed =
-      (getTimeValue(new Date().toString()) -
-        getTimeValue(conversationCreated)) /
-      1000;
-    return Math.floor(timePassed / 60);
-  };
-
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
@@ -237,48 +233,26 @@ class Conversation extends React.Component<Props, State> {
      * TODO: Handle Hours ago, at a certain point just render the date..
      * - Handle this updating every minute...
      */
-    let timePassed;
-    timePassed = this.getTimePassedValue(conversation.created);
+    // let timePassed;
+    // timePassed = this.getTimePassedValue(conversation.created);
 
     // this.messageTimeStampTime = setInterval(() => {
     //   console.log("called");
     //   timePassed = this.getTimePassedValue(conversation.created);
     // }, 1000);
 
-    let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
+    // let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
     return (
       <ChatBubble
         key={this.key++}
         badgeColor={badgedColor}
         badgeLabel={sentByLabel}
         message={content}
-        timePassed={timePassedStr}
+        // timePassed={timePassedStr}
+        conversationCreated={conversation.created}
         inverted={sentBy ? false : true}
       />
     );
-  };
-
-  createMessage = (message?: string) => {
-    // message && sendMessage(message);
-    // will do axiosPost here
-
-    const messages = (
-      <ChatBubble
-        key={this.key++}
-        badgeColor="info"
-        badgeLabel="Joe"
-        message={message ? message : this.state.message}
-        timePassed="7 Days"
-        inverted={message ? true : false}
-      />
-    );
-
-    // console.log(receiving, message);
-    // !message && sendMessage(this.state.message);
-    const { messages: messagesState } = this.state;
-    messagesState.push(messages);
-
-    this.setState({ messages: messagesState, message: "" });
   };
 
   handleChange = (event: any) => {
@@ -315,6 +289,22 @@ class Conversation extends React.Component<Props, State> {
     }
   };
 
+  mapMessages = (callback: () => void) => {
+    const { messages } = this.state;
+    const messagesToRender = messages.map((aMessage, idx) => {
+      return aMessage;
+    });
+
+    /**
+     * TODO: Consider handle scrolling differently?
+     */
+    setTimeout(() => {
+      callback();
+    }, 100);
+
+    return messagesToRender;
+  };
+
   render() {
     console.log("user currently typing", this.state.companyUserTyping);
     return (
@@ -322,9 +312,10 @@ class Conversation extends React.Component<Props, State> {
         <div className="content">
           <ChatHeader />
 
-          {this.state.messages.map(aMessage => {
+          {/* {this.state.messages.map(aMessage => {
             return aMessage;
-          })}
+          })} */}
+          {this.mapMessages(this.scrollToBottom)}
 
           {/* Scroll to bottom of screen on mount
            * If this div is moved below the chat

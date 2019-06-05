@@ -2,92 +2,110 @@ import React from "react";
 import { Row, Col, Card, CardBody, Badge } from "reactstrap";
 import Slide from "@material-ui/core/Slide";
 import { badgeColor } from "./Types";
+import { getTimeValue } from "../../../redux/actions/conversations";
+
 interface Props {
   badgeColor: badgeColor;
   badgeLabel: string;
   message: string;
-  timePassed: string;
+  // timePassed: string;
   inverted?: boolean;
+  conversationCreated: string;
 }
 
-export const ChatBubble = (props: Props) => {
-  const { badgeColor, badgeLabel, message, timePassed, inverted } = props;
-  const className = "timeline-panel our-timeline";
+interface State {
+  conversationCreated: number;
+  conversationCreatedString: string;
+}
 
-  return (
-    <Slide direction="up" in={true} mountOnEnter>
-      {/* <Row className="mx-xl-xl"> */}
-      <Row className="mx-2">
-        <Col>
-          <Card className="card-timeline card-plain card-no-margin">
-            <CardBody>
-              <div className={inverted ? `${className}-inverted` : className}>
-                <div className="timeline-heading">
-                  <Badge color={badgeColor} className="bubble-badge">
-                    {badgeLabel}
-                  </Badge>
-                </div>
-                <div className="timeline-body">
-                  {/* this is to render new lines in text */}
-                  {message.split("\n").map((i, idx) => (
-                    <p key={idx}>
-                      {i}
-                      <br />
-                    </p>
-                  ))}
-                </div>
-                <h6>
-                  <i className="ti-time" />
-                  {timePassed}
-                </h6>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Slide>
-  );
-};
+export class ChatBubble extends React.Component<Props, State> {
+  state = {
+    conversationCreated: 0,
+    conversationCreatedString: ""
+  };
 
-// class ChatBubble extends React.Component<Props> {
-//   render() {
-//     const {
-//       badgeColor,
-//       badgeLabel,
-//       message,
-//       timePassed,
-//       inverted
-//     } = this.props;
-//     return (
-//       <Row className="mx-xl-xl">
-//         <Col>
-//           <Card className="card-timeline card-plain card-no-margin">
-//             <CardBody>
-//               <div
-//                 className={
-//                   inverted
-//                     ? "timeline-panel our-timeline-inverted"
-//                     : "timeline-panel our-timeline"
-//                 }
-//               >
-//                 <div className="timeline-heading">
-//                   <Badge color={badgeColor} className="bubble-badge">
-//                     {badgeLabel}
-//                   </Badge>
-//                 </div>
-//                 <div className="timeline-body">
-//                   <p>{message}</p>
-//                 </div>
-//                 <h6>
-//                   <i className="ti-time" />
-//                   {timePassed} ago
-//                 </h6>
-//               </div>
-//             </CardBody>
-//           </Card>
-//         </Col>
-//       </Row>
-//     );
-//   }
-// }
-// export default ChatBubble;
+  /**
+   * Time Interval that updates the timer.
+   */
+  private timeInterval: number | NodeJS.Timeout | undefined;
+  /**
+   * The timeout value.
+   *
+   * Right now its every 5 seconds.
+   */
+  private intervalTime: number = 5000;
+
+  getTimePassedValue = (conversationCreated: string) => {
+    let timePassed =
+      (getTimeValue(new Date().toString()) -
+        getTimeValue(conversationCreated)) /
+      1000;
+    return Math.floor(timePassed / 60);
+  };
+
+  setTimeAgo = (conversationCreated: string) => {
+    let timePassed = this.getTimePassedValue(conversationCreated);
+    this.setState({
+      conversationCreated: timePassed,
+      conversationCreatedString: `${timePassed} minutes ago`
+    });
+  };
+
+  componentDidMount() {
+    const { conversationCreated } = this.props;
+
+    this.setTimeAgo(conversationCreated);
+
+    this.timeInterval = setInterval(() => {
+      this.setTimeAgo(conversationCreated);
+    }, this.intervalTime);
+  }
+
+  componentWillUnmount() {
+    this.timeInterval && clearInterval(this.timeInterval as number);
+  }
+
+  render() {
+    const {
+      badgeColor,
+      badgeLabel,
+      message,
+      // timePassed,
+      inverted
+    } = this.props;
+    const className = "timeline-panel our-timeline";
+    return (
+      <Slide direction="up" in={true} mountOnEnter>
+        {/* <Row className="mx-xl-xl"> */}
+        <Row className="mx-2">
+          <Col>
+            <Card className="card-timeline card-plain card-no-margin">
+              <CardBody>
+                <div className={inverted ? `${className}-inverted` : className}>
+                  <div className="timeline-heading">
+                    <Badge color={badgeColor} className="bubble-badge">
+                      {badgeLabel}
+                    </Badge>
+                  </div>
+                  <div className="timeline-body">
+                    {/* this is to render new lines in text */}
+                    {message.split("\n").map((i, idx) => (
+                      <p key={idx}>
+                        {i}
+                        <br />
+                      </p>
+                    ))}
+                  </div>
+                  <h6>
+                    <i className="ti-time" />
+                    {this.state.conversationCreatedString}
+                  </h6>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Slide>
+    );
+  }
+}
