@@ -3,7 +3,7 @@ import { ChatBubble } from "../Components/Chat/ChatBubble";
 import { ChatFooter } from "../Components/Chat/ChatFooter";
 import { ChatHeader } from "../Components/Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
-import { getAllConversations } from "../../network/routes";
+import { getAllConversations, queTextSingle } from "../../network/routes";
 import { connect } from "react-redux";
 import { sendMessage } from "../../network/routes";
 
@@ -33,6 +33,7 @@ type Props = {
   conversation: any;
   conversationContainerHeight: number;
   history: any;
+  companyUserId: string;
 };
 
 type State = {
@@ -56,27 +57,15 @@ class Conversation extends React.Component<Props, State> {
   private key = 1;
   // private chatContainer: HTMLDivElement | null = null;
   private messagesEnd: HTMLDivElement | null = null;
-  private innerHeight: any = null;
-  private timeout: any = null;
-  private initScroll = true;
+  private componentHasConductedInitialRender = false;
   private updatedMessages = false;
-  private messageTimeStampTime: NodeJS.Timeout | undefined;
+  private scrollTimeOut: NodeJS.Timeout | number | undefined;
 
   componentDidMount() {
-    // console.log("component did mount");
-    // const { conversation } = this.props;
-    /**
-     * If there aren't any conversation to render
-     * thats because the page was refreshed and
-     * we will reroute the user to the conversation
-     * page
-     */
-    // if (!conversation) {
-    //   const { history } = this.props;
-    //   history.replace("/admin/conversations");
-    // }
-    this.handleRenderConversation();
-    // this.initialScroll();
+    const { conversation } = this.props;
+    if (conversation) {
+      this.handleRenderConversation();
+    }
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
       // console.log(
@@ -96,19 +85,17 @@ class Conversation extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    //   stopListening(INCOMING_MESSAGE);
+    clearTimeout(this.scrollTimeOut as number);
     stopListening(EMPLOYEE_START_TYPING);
-    //   stopListening(UPDATED_QUE_TEXT);
   }
 
   initialScroll = () => {
-    console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    console.log("scrollToBottom called");
+    // console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -125,6 +112,14 @@ class Conversation extends React.Component<Props, State> {
   conversationDidUpdate = (prevProps: any) =>
     prevProps.conversation !== this.props.conversation;
 
+  phaseUpdated = (prevProps: any) => {
+    // console.log("prevProps.conversation.phase", prevProps.conversation.phase);
+    // console.log("this.props.conversation.phase", this.props.conversation.phase);
+    return (
+      prevProps.conversation.phase !== this.props.conversation.phase &&
+      prevProps.conversation.id === this.props.conversation.id
+    );
+  };
   /**
    * TODO: When a conversation changes sometimes
    * the conversation does NOT scroll to the bottom
@@ -135,40 +130,33 @@ class Conversation extends React.Component<Props, State> {
      * Handling state & scrolling
      */
     if (prevState.messages !== this.state.messages) {
-      // console.log("MESSAGES HAVE CHANGED");
     }
 
-    if (this.initScroll && prevState.messages !== this.state.messages) {
-      // this.initialScroll();
-      // setTimeout(() => {
-      //   this.initialScroll();
-      // }, 1000);
-      // this.initScroll = false;
+    if (prevState.messages !== this.state.messages) {
     } else if (this.updatedMessages) {
-      this.scrollToBottom();
       this.updatedMessages = false;
-    } else {
-      // console.log(prevState.messages);
-      // console.log(this.state.messages);
     }
 
+    // console.log("PREV");
+    // this.props.conversation &&
+    //   prevProps.conversation &&
+    //   console.log(this.phaseUpdated(prevProps));
     /**
      * Handling props & new messages
      */
+
     switch (true) {
+      /**
+       * When a new message comes in
+       */
+
+      case this.props.conversation &&
+        prevProps.conversation &&
+        this.phaseUpdated(prevProps):
+        break;
       case prevProps.conversation &&
         this.conversationDidUpdate(prevProps) &&
         this.newMessageCameIn(prevProps):
-        // console.log("Conversation has been updated");
-        // this.handleRenderConversation();
-        // this.scrollToBottom();
-
-        // console.log(
-        //   "this.props.conversation.messages.length - prevProps.conversation.messages.length",
-        //   this.props.conversation.messages.length -
-        //     prevProps.conversation.messages.length
-        // );
-
         const { conversation } = this.props;
         const {
           consumerUser: { firstName }
@@ -184,12 +172,68 @@ class Conversation extends React.Component<Props, State> {
         this.updatedMessages = true;
 
         break;
+      /**
+       * When the user refreshes the page
+       * render the conversation and mark
+       * those messages as READ
+       *
+       * TODO: Not the correct way to do it.
+       * Just because the user loads the page
+       * doesn't mean that they have read that
+       * conversations messages.
+       */
       case this.conversationDidUpdate(prevProps):
         this.handleRenderConversation();
+        // this.handleMarkMessagesAsRead();
+        break;
       default:
       // Do nothing
     }
   }
+
+  // THIS DOES WORK
+  // handleMarkMessagesAsRead = () => {
+  //   const {
+  //     conversation: { id, messages },
+  //     companyUserId
+  //   } = this.props;
+
+  //   if (messages && companyUserId) {
+  //     let messagesUnread = false;
+  //     for (let i = 0; i < messages.length && messagesUnread === false; i++) {
+  //       const { readBy } = messages[i];
+  //       let messageHasBeenRead = false;
+  //       for (
+  //         let j = 0;
+  //         j < readBy.length && messageHasBeenRead === false;
+  //         j++
+  //       ) {
+  //         if (readBy[j].id === companyUserId) {
+  //           messageHasBeenRead = true;
+  //         }
+  //       }
+
+  //       if (messageHasBeenRead === false) {
+  //         messagesUnread = true;
+  //       }
+  //     }
+  //     if (messagesUnread) {
+  //       axiosGet(queTextSingle(id, "READ", "true"));
+  //       console.log("CALLINGAPI");
+  //     }
+  //     console.log("messagesUnread", messagesUnread);
+  //     // const messageUnread = messages.findIndex((aMessage: any) => {
+  //     //   const { readBy } = aMessage;
+  //     //   // console.log(readBy);
+  //     //   return readBy.findIndex(({ id }: { id: string }) => {
+  //     //     // console.log(id);
+  //     //     return id !== companyUserId;
+  //     //   });
+  //     // });
+
+  //     // console.log(messageUnread);
+  //   }
+  // };
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
@@ -230,19 +274,6 @@ class Conversation extends React.Component<Props, State> {
       badgedColor = "warning";
     }
 
-    /**
-     * TODO: Handle Hours ago, at a certain point just render the date..
-     * - Handle this updating every minute...
-     */
-    // let timePassed;
-    // timePassed = this.getTimePassedValue(conversation.created);
-
-    // this.messageTimeStampTime = setInterval(() => {
-    //   console.log("called");
-    //   timePassed = this.getTimePassedValue(conversation.created);
-    // }, 1000);
-
-    // let timePassedStr = timePassed === -1 ? `NOW` : `${timePassed} minutes ago`;
     return (
       <ChatBubble
         key={this.key++}
@@ -259,19 +290,7 @@ class Conversation extends React.Component<Props, State> {
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
     // handleEmployeeStartedTyping("Joe");
-
-    // if (this.timeout) {
-    //   delete this.timeout;
-    // }
-    // this.timeout = setTimeout(() => {
-    //   handleEmployeeStoppedTyping("Joe");
-    // }, 5000);
   };
-
-  // addMessage = () => {
-  //   const { message } = this.state;
-  //   message !== "" && this.createMessage();
-  // };
 
   sendMessage = () => {
     const { id } = this.props.conversation;
@@ -280,7 +299,6 @@ class Conversation extends React.Component<Props, State> {
       axiosPost(sendMessage(id as string), { message: this.state.message });
       this.setState({ message: "" });
     }
-    // this.createMessage();
   };
 
   keyPress = (e: any) => {
@@ -290,17 +308,26 @@ class Conversation extends React.Component<Props, State> {
     }
   };
 
-  mapMessages = (callback: () => void) => {
+  mapMessages = () => {
     const { messages } = this.state;
     const messagesToRender = messages.map((aMessage, idx) => {
       return aMessage;
     });
 
-    /**
-     * TODO: Consider handle scrolling differently?
-     */
-    setTimeout(() => {
-      callback();
+    this.scrollTimeOut = setTimeout(() => {
+      if (
+        this.componentHasConductedInitialRender === false &&
+        this.state.messages.length > 0
+      ) {
+        this.componentHasConductedInitialRender = true;
+        this.scrollToBottom();
+      } else if (this.componentHasConductedInitialRender) {
+        // Handle this logic to allow the page to scroll
+        // better by figuring out a way to call the noted
+        // out line below
+        // this.initialScroll();
+        this.scrollToBottom();
+      }
     }, 100);
 
     return messagesToRender;
@@ -316,7 +343,7 @@ class Conversation extends React.Component<Props, State> {
           {/* {this.state.messages.map(aMessage => {
             return aMessage;
           })} */}
-          {this.mapMessages(this.scrollToBottom)}
+          {this.mapMessages()}
 
           {/* Scroll to bottom of screen on mount
            * If this div is moved below the chat
@@ -346,10 +373,21 @@ class Conversation extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ conversation }: { conversation: any }) => {
+const mapStateToProps = ({
+  conversation,
+  companyUserReducer
+}: {
+  conversation: any;
+  companyUserReducer: any;
+}) => {
+  const {
+    companyUser: { id }
+  } = companyUserReducer;
+
   const conversationToRender = getConversationToRender(conversation);
   return {
-    conversation: conversationToRender
+    conversation: conversationToRender,
+    companyUserId: id
   };
 };
 

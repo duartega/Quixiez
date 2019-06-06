@@ -4,6 +4,11 @@ const baseRoute = testing
   : "https://api.quixiez.com";
 
 export const queTextRoute = `${baseRoute}/quetext`;
+export const queTextSingle = (
+  id: string,
+  mark?: "READ" | "UNREAD",
+  socket?: "true"
+) => `${baseRoute}/quetext/${id}?mark=${mark}&socket=${socket}`;
 export const socketTest = `${baseRoute}/`;
 export const socketTestTestNameSpace = `${baseRoute}/test`;
 export const login = `${baseRoute}/auth/company/login`;
