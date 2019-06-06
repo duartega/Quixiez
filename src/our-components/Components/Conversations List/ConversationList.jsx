@@ -23,6 +23,7 @@ class ConversationList extends React.Component {
     };
 
     this.initialRenderOfMessages = false;
+    this.loadTimeOut = null;
   }
 
   handleInitialRender = () => {
@@ -37,6 +38,8 @@ class ConversationList extends React.Component {
       this.mapConversationsToTable();
 
       !this.initialRenderOfMessages && this.handleInitialRender();
+
+      this.loadTimeOut = setTimeout(this.hideLoadingAlert, 1500);
     }
   }
 
@@ -72,7 +75,17 @@ class ConversationList extends React.Component {
       this.mapConversationsToTable();
     }
     !this.initialRenderOfMessages && this.handleInitialRender();
-    setTimeout(this.hideLoadingAlert, 1500);
+
+    if (this.loadTimeOut) {
+      clearTimeout(this.loadTimeOut);
+    }
+    this.loadTimeOut = setTimeout(this.hideLoadingAlert, 1500);
+  }
+
+  componentWillUnmount() {
+    if (this.loadTimeOut) {
+      clearTimeout(this.loadTimeOut);
+    }
   }
 
   mapConversationsToTable = () => {

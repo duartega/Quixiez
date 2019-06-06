@@ -26,7 +26,7 @@ import User from "views/pages/User.jsx";
 import Login from "views/pages/Login.jsx";
 import Rtl from "views/pages/Rtl.jsx";
 import Lock from "views/pages/Lock.jsx";
-import AllConversations from "./our-components/Pages/AllConversations";
+// import AllConversations from "./our-components/Pages/AllConversations";
 
 const routes = [
   {
@@ -37,14 +37,14 @@ const routes = [
     component: Dashboard,
     layout: "/admin"
   },
-  {
-    path: "/messages",
-    name: "Messages",
-    rtlName: "لوحة القيادة",
-    icon: "tim-icons icon-email-85",
-    component: AllConversations,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/messages",
+  //   name: "Messages",
+  //   rtlName: "لوحة القيادة",
+  //   icon: "tim-icons icon-email-85",
+  //   component: AllConversations,
+  //   layout: "/admin"
+  // },
   {
     collapse: true,
     name: "Pages",
