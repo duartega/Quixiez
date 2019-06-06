@@ -28,12 +28,14 @@ import { conversation } from "redux/reducers/conversations";
 import { badgeColor } from "our-components/Components/Chat/Types";
 import { getTime } from "date-fns";
 import { getConversationToRender } from "redux/actions/helpers/conversationsHelpers";
+import { setCompanyUser } from "redux/actions/companyUserActions";
 
 type Props = {
   conversation: any;
   conversationContainerHeight: number;
   history: any;
   companyUserId: string;
+  companyUserTyping: any;
 };
 
 type State = {
@@ -60,6 +62,7 @@ class Conversation extends React.Component<Props, State> {
   private componentHasConductedInitialRender = false;
   private updatedMessages = false;
   private scrollTimeOut: NodeJS.Timeout | number | undefined;
+  private currentUserTypingTimeOut: NodeJS.Timeout | number | undefined;
 
   componentDidMount() {
     const { conversation } = this.props;
@@ -68,12 +71,16 @@ class Conversation extends React.Component<Props, State> {
     }
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
-      // console.log(
-      //   "Incoming Employee Started Typing (updating the state)",
-      //   companyUsername
-      // );
-      // if (companyUsername !== "Joe") {
-      if (this.state.companyUserTyping === null) {
+      /**
+       * Blocking the current user from seeing his own typing message.
+       *
+       * TODO: In the backend return the companyUser's first name and id
+       * because two people with the same name could be typing
+       */
+      if (
+        this.state.companyUserTyping === null &&
+        this.props.companyUserTyping !== companyUsername
+      ) {
         this.setState({ companyUserTyping: companyUsername });
       }
     });
@@ -289,7 +296,14 @@ class Conversation extends React.Component<Props, State> {
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
-    // handleEmployeeStartedTyping("Joe");
+    handleEmployeeStartedTyping(this.props.companyUserTyping);
+
+    if (this.currentUserTypingTimeOut) {
+      clearTimeout(this.currentUserTypingTimeOut as number);
+    }
+    this.currentUserTypingTimeOut = setTimeout(() => {
+      handleEmployeeStoppedTyping(this.props.companyUserTyping);
+    }, 5000);
   };
 
   sendMessage = () => {
@@ -334,11 +348,11 @@ class Conversation extends React.Component<Props, State> {
   };
 
   render() {
-    console.log("user currently typing", this.state.companyUserTyping);
+    // console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
         <div className="content">
-          <ChatHeader />
+          <ChatHeader history={this.props.history} />
 
           {/* {this.state.messages.map(aMessage => {
             return aMessage;
@@ -381,13 +395,15 @@ const mapStateToProps = ({
   companyUserReducer: any;
 }) => {
   const {
-    companyUser: { id }
+    companyUser: { id, firstName }
   } = companyUserReducer;
 
   const conversationToRender = getConversationToRender(conversation);
+
   return {
     conversation: conversationToRender,
-    companyUserId: id
+    companyUserId: id,
+    companyUserTyping: firstName
   };
 };
 

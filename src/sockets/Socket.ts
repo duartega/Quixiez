@@ -20,14 +20,14 @@ export const sendMessage = (message: string) => {
 
 export const receiveMessage = (messageDataCb: (messageData: any) => void) => {
   socket.on(INCOMING_MESSAGE, (messageData: any) => {
-    console.log("receiving message", messageData);
+    // console.log("receiving message", messageData);
     messageDataCb(messageData);
   });
 };
 
 export const handleEmployeeStartedTyping = (companyUsername: string) => {
   socket.emit(EMPLOYEE_START_TYPING, { companyUsername });
-  console.log("handleEmployee started typing", companyUsername);
+  // console.log("handleEmployee started typing", companyUsername);
 };
 
 export const handleIncomingEmployeeStartedTyping = (

@@ -51,7 +51,7 @@ export class UserInformation extends React.Component {
     return ( 
         <> 
         <br />
-        <Row style={{"justify-content": "center"}}><h3>User Information</h3></Row>
+        <Row style={{justifyContent: "center"}}><h3>User Information</h3></Row>
             {labels.map((label, idx) => {
                 return (
                 <Row key={idx}>

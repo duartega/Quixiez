@@ -1,6 +1,8 @@
 import React from 'react';
 import { UncontrolledTooltip, Button, Row, Col, Input } from 'reactstrap';
+import ReactBSAlert from "react-bootstrap-sweetalert";
 import NullImg from '../../../Images/nullImg.PNG';
+import ImageUpload from "./UploadModule";
 
 export class IdentificationInformation extends React.Component {
 
@@ -13,7 +15,8 @@ export class IdentificationInformation extends React.Component {
           MedExpiration: "",
           RecImage: null,
           MedImage: null,
-          nullImg: NullImg
+          nullImg: NullImg,
+          alert: null
         };
   };
   
@@ -22,15 +25,16 @@ export class IdentificationInformation extends React.Component {
 
     render() {
         return(
-            <>
+          <>
+            {this.state.alert}
             <br />
-            <Row style={{"justify-content": "center"}}><h3>Identification Information</h3></Row>
+            <Row style={{justifyContent: "center"}}><h3>Identification Information</h3></Row>
                 <br/>
                 {/* The start of the left side of the Identification Information page for images */}
                 <Col md="12" >
                   <Row>
                     <Col md="4">
-                      <Button style={{ padding: 0 }} id="DL">
+                      <Button style={{ padding: 0 }} id="DL" onClick={this.inputAlert}>
                         {this.state.RecImage ? (<img src={this.state.RecImage} alt="Drivers License"/> ): (<img src={this.state.nullImg} alt="Drivers License"/> )}
                       </Button>
                     <UncontrolledTooltip placement="left" target="DL" delay={0}>
@@ -39,11 +43,11 @@ export class IdentificationInformation extends React.Component {
                     </Col>
                     <Col md="2">
                       <br/>
-                      <Row>
+                      <Row style={{marginRight: "10px"}}>
                         <label>D. L . Number :</label>
                       </Row>
                       <br/><br/>
-                      <Row>
+                      <Row style={{marginRight: "10px"}}>
                         <label>D. L . Expiration :</label>
                       </Row>
                     </Col>
@@ -85,11 +89,11 @@ export class IdentificationInformation extends React.Component {
                     </Col>
                     <Col md="2">
                       <br/>
-                      <Row>
+                      <Row style={{marginRight: "10px"}}>
                         <label>Medical Number :</label>
                       </Row>
                       <br/><br/>
-                      <Row>
+                      <Row style={{marginRight: "10px"}}>
                         <label>Medical Card Expiration :</label>
                       </Row>
                     </Col>
@@ -119,7 +123,59 @@ export class IdentificationInformation extends React.Component {
                 </Col>
             </>
         );
-    };
+  };
+  
+
+  inputAlert = () => {
+    this.setState({
+      alert: (
+        <ReactBSAlert
+          showCancel
+          style={{ display: "block" }}
+          title="Drivers License Image"
+          onConfirm={e => this.inputConfirmAlert(e)}
+          onCancel={() => this.hideAlert()}
+          confirmBtnBsStyle="success"
+          cancelBtnBsStyle="danger"
+          btnSize=""
+          confirmBtnText="Update Picture"
+          
+        >
+          <ImageUpload />
+        </ReactBSAlert>
+      )
+    });
+  };
+
+  inputConfirmAlert = e => {
+    this.setState({ alert: e });
+    setTimeout(this.inputConfirmAlertNext, 200);
+  };
+
+  hideAlert = () => {
+    this.setState({
+      alert: null
+    });
+  };
+
+  inputConfirmAlertNext = () => {
+    const inputValue = this.state.alert;
+    this.setState({
+      alert: (
+        <ReactBSAlert
+          success
+          style={{ display: "block", marginTop: "-100px" }}
+          onConfirm={() => this.hideAlert()}
+          onCancel={() => this.hideAlert()}
+          confirmBtnBsStyle="success"
+          btnSize=""
+          title="You entered: "
+        >
+          <b>{inputValue}</b>
+        </ReactBSAlert>
+      )
+    });
+  };
 };
 
 {/* <label>Last Name:</label>

@@ -45,7 +45,7 @@ class AllConversations extends React.Component {
             overflow: "auto",
             height: this.conversationHeight
           }}>
-            <Conversation/>
+            <Conversation history={this.props.history}/>
           </Col>
         </Row>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Popover, PopoverBody, Row, Col } from "reactstrap";
+import { Button, Popover, PopoverBody, Row } from "reactstrap";
 
 type Props = {
   idx: number;
