@@ -28,11 +28,13 @@ import { conversation } from "redux/reducers/conversations";
 import { badgeColor } from "our-components/Components/Chat/Types";
 import { getTime } from "date-fns";
 import { getConversationToRender } from "redux/actions/helpers/conversationsHelpers";
+import { setCompanyUser } from 'redux/actions/companyUserActions';
 
 type Props = {
   conversation: any;
   conversationContainerHeight: number;
   history: any;
+  companyUserTyping: any;
 };
 
 type State = {
@@ -258,14 +260,14 @@ class Conversation extends React.Component<Props, State> {
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
-    // handleEmployeeStartedTyping("Joe");
+    handleEmployeeStartedTyping(this.props.companyUserTyping.companyUser.firstName);
 
-    // if (this.timeout) {
-    //   delete this.timeout;
-    // }
-    // this.timeout = setTimeout(() => {
-    //   handleEmployeeStoppedTyping("Joe");
-    // }, 5000);
+    if (this.timeout) {
+      delete this.timeout;
+    }
+    this.timeout = setTimeout(() => {
+      handleEmployeeStoppedTyping("Joe");
+    }, 5000);
   };
 
   // addMessage = () => {
@@ -307,7 +309,7 @@ class Conversation extends React.Component<Props, State> {
   };
 
   render() {
-    console.log("user currently typing", this.state.companyUserTyping);
+    // console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
         <div className="content">
@@ -346,10 +348,13 @@ class Conversation extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ conversation }: { conversation: any }) => {
+const mapStateToProps = ({ conversation, companyUserReducer }: { conversation: any, companyUserReducer: any }) => {
   const conversationToRender = getConversationToRender(conversation);
+  
+
   return {
-    conversation: conversationToRender
+    conversation: conversationToRender,
+    companyUserTyping: companyUserReducer
   };
 };
 
