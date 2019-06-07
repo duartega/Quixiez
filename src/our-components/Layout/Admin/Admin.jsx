@@ -21,7 +21,7 @@ import {
   stopListening
 } from "sockets/Socket";
 import { axiosGet } from "../../../network/ApiCalls";
-import { getAllConversations } from "../../../network/routes";
+import { getAllConversations, getQueTextUnread } from "../../../network/routes";
 /**
  * Redux imports
  */
@@ -29,7 +29,8 @@ import { getAllConversations } from "../../../network/routes";
 import { connect } from "react-redux";
 import {
   setAllConversations,
-  updateConversations
+  updateConversations,
+  setConversationReadUnread
 } from "../../../redux/actions/conversations";
 import { INCOMING_QUE_TEXT } from "sockets/events/Events";
 import { setCompanyUser } from "redux/actions";
@@ -100,6 +101,16 @@ class Admin extends React.Component {
       })
       .catch(err => {
         console.log(err, err.response);
+      });
+
+    axiosGet(getQueTextUnread)
+      .then(result => {
+        const { data } = result;
+        const { setConversationReadUnread } = this.props;
+        setConversationReadUnread(data);
+      })
+      .catch(err => {
+        console.log("err getting unread", err);
       });
 
     this.props.setCompanyUser();
@@ -279,9 +290,14 @@ class Admin extends React.Component {
 const mapDispatchToProps = dispatch => ({
   setAllConversations: conversations =>
     dispatch(setAllConversations(conversations)),
+
   updateConversations: (conversation, callback) =>
     dispatch(updateConversations(conversation, callback)),
-  setCompanyUser: () => dispatch(setCompanyUser())
+
+  setCompanyUser: () => dispatch(setCompanyUser()),
+
+  setConversationReadUnread: queTextUnread =>
+    dispatch(setConversationReadUnread(queTextUnread))
 });
 
 export default connect(

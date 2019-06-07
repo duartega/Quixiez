@@ -44,8 +44,11 @@ class ConversationCell extends React.Component {
   }
 
   render() {
-    const { props } = this.props;
-    let readIndicator = props.unread;
+    const {
+      props,
+      props: { unread }
+    } = this.props;
+    let readIndicator = unread;
 
     return (
       <>

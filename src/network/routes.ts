@@ -9,6 +9,7 @@ export const queTextSingle = (
   mark?: "READ" | "UNREAD",
   socket?: "true"
 ) => `${baseRoute}/quetext/${id}?mark=${mark}&socket=${socket}`;
+export const getQueTextUnread = `${baseRoute}/quetext/unread/`;
 export const socketTest = `${baseRoute}/`;
 export const socketTestTestNameSpace = `${baseRoute}/test`;
 export const login = `${baseRoute}/auth/company/login`;

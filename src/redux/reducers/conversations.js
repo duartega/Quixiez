@@ -4,12 +4,14 @@
 
 import {
   SET_CONVERSATION_TO_RENDER,
-  SET_ALL_CONVERSATIONS
+  SET_ALL_CONVERSATIONS,
+  SET_CONVERSATION_UNREAD
 } from "../ActionTypes";
 
 const conversationsState = {
   idxOfConversationToRender: null,
-  allConversations: null
+  allConversations: null,
+  unread: null
 };
 
 export const conversation = (state = conversationsState, action) => {
@@ -26,6 +28,13 @@ export const conversation = (state = conversationsState, action) => {
       return {
         ...state,
         allConversations: conversations
+      };
+
+    case SET_CONVERSATION_UNREAD:
+      const { unreadHash } = action;
+      return {
+        ...state,
+        unread: { ...unreadHash }
       };
 
     default:

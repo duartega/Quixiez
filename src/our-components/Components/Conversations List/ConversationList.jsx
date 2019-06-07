@@ -91,7 +91,8 @@ class ConversationList extends React.Component {
   mapConversationsToTable = () => {
     let conversationsArray = [];
 
-    const { allConversations } = this.props;
+    const { allConversations, unread } = this.props;
+    // console.log("unread", unread);
 
     // Create an array for our conversations
     conversationsArray = allConversations.map((aConversation, idx) => {
@@ -105,14 +106,17 @@ class ConversationList extends React.Component {
 
       // NOT DOING ANYTHING WITH THIS YET...
       let timeValue = getTimeValue(timeRecieved);
-
+      // console.log(aConversation.id);
+      const { id } = aConversation;
+      // console.log(unread[id]);
       return {
         id: idx,
         name: fname,
         message: lastMessage,
         time: time,
         firstInitial: firstInitial,
-        timeValue: timeValue
+        timeValue: timeValue,
+        unread: unread[id]
       };
     });
 
@@ -148,17 +152,17 @@ class ConversationList extends React.Component {
 
 // export default ConversationList;
 
-const mapStateToProps = ({ conversation: { allConversations } }) => {
+const mapStateToProps = ({ conversation: { allConversations, unread } }) => {
   if (allConversations === null) {
     return {
-      allConversations
+      allConversations,
+      unread
     };
   }
-  // return {
-  //   allConversations
-  // };
+
   return {
-    allConversations: [...allConversations]
+    allConversations: [...allConversations],
+    unread
   };
 };
 

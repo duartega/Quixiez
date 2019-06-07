@@ -9,7 +9,8 @@
 import { parse, getTime } from "date-fns";
 import {
   SET_CONVERSATION_TO_RENDER,
-  SET_ALL_CONVERSATIONS
+  SET_ALL_CONVERSATIONS,
+  SET_CONVERSATION_UNREAD
 } from "../ActionTypes";
 
 export const getTimeValue = (timeReceived: string) => {
@@ -62,6 +63,7 @@ const sortConversations = (
    * the message.
    */
   if (
+    lastMessageSentBy &&
     lastMessageSentBy !== null &&
     lastMessageSentBy.id !== "00000000-0000-0000-0000-000000000000"
   ) {
@@ -187,6 +189,26 @@ export const updateConversations = (
       setAllConversations([conversation], oldConversationsLength)
     );
   }
+};
+
+export const setConversationReadUnread = (queTextUnread: any) => {
+  console.log(queTextUnread);
+
+  const { unreadQueTexts } = queTextUnread;
+
+  const hash: { [key: string]: boolean } = {};
+
+  unreadQueTexts.forEach((aQtextObject: any) => {
+    const { id }: { id: string } = aQtextObject;
+    hash[id] = true;
+  });
+
+  //   console.log(hash);
+
+  return {
+    type: SET_CONVERSATION_UNREAD,
+    unreadHash: hash
+  };
 };
 
 export const checkForConversations = () => {};
