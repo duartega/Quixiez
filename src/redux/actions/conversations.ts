@@ -101,7 +101,8 @@ export const setConversationToRender = (idx: number) => {
 
 export const setAllConversations = (
   conversations: any[],
-  oldConversationsLength?: number
+  oldConversationsLength?: number,
+  updateType?: "message_marked_read"
 ) => (dispatch: any, getState: any) => {
   const {
     idxOfConversationToRender,
@@ -112,6 +113,15 @@ export const setAllConversations = (
   // conversations && console.log("conversations.length", conversations.length);
   // allConversations &&
   // console.log("allConversations.length", allConversations.length);
+
+  if (updateType) {
+    return dispatch({
+      type: SET_ALL_CONVERSATIONS,
+      conversations,
+      updateType
+    });
+  }
+
   let sortedConversationsAndNewIdxToRender = sortConversations(
     conversations,
     idxOfConversationToRender,
@@ -139,13 +149,14 @@ export const setAllConversations = (
 
 export const updateConversations = (
   conversation: any,
-  callback: (alertType: string) => void
+  callback?: (alertType: string) => void,
+  updateType?: "message_marked_read"
 ) => (dispatch: any, getState: any) => {
   const {
     conversation: { allConversations }
   } = getState();
   //   console.log("idxOfConversationToRender", idxOfConversationToRender);
-  //   console.log("UPDATE CONVERSATION CALLED");
+  console.log("UPDATE CONVERSATION CALLED", conversation);
   //   console.log("conversation", conversation);
 
   let conversationsExist = true;
@@ -156,13 +167,13 @@ export const updateConversations = (
 
   const idxOfConvoToUpdate: number = conversationsExist
     ? allConversations.findIndex((aConversation: any) => {
-        console.log(
-          "conversation.id",
-          conversation.id,
-          " === ",
-          "aConversation.id",
-          aConversation.id
-        );
+        // console.log(
+        //   "conversation.id",
+        //   conversation.id,
+        //   " === ",
+        //   "aConversation.id",
+        //   aConversation.id
+        // );
         return conversation.id === aConversation.id;
       })
     : null;
@@ -171,20 +182,34 @@ export const updateConversations = (
   const oldConversationsLength = allConversations.length;
 
   if (idxOfConvoToUpdate !== -1) {
-    // console.log("if (idxOfConvoToUpdate)");
-    callback("NEW_MESSAGE");
+    // updating appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
-    return dispatch(
-      setAllConversations(allConversations, oldConversationsLength)
-    );
+    console.log("CONVO EXISTS", updateType);
+    if (updateType) {
+      console.log("dispatchin updating read by ");
+      return dispatch(
+        setAllConversations(
+          allConversations,
+          oldConversationsLength,
+          updateType
+        )
+      );
+      //   }
+    } else {
+      callback && callback("NEW_MESSAGE");
+
+      return dispatch(
+        setAllConversations(allConversations, oldConversationsLength)
+      );
+    }
   } else if (idxOfConvoToUpdate === -1) {
-    callback("NEW_ORDER");
+    callback && callback("NEW_ORDER");
     allConversations.push(conversation);
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)
     );
   } else if (conversationsExist === false) {
-    callback("NEW_ORDER");
+    callback && callback("NEW_ORDER");
     return dispatch(
       setAllConversations([conversation], oldConversationsLength)
     );

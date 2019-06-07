@@ -7,7 +7,8 @@ import {
   INCOMING_MESSAGE,
   EMPLOYEE_START_TYPING,
   EMPLOYEE_STOP_TYPING,
-  INCOMING_QUE_TEXT
+  INCOMING_QUE_TEXT,
+  MESSAGES_MARKED_READ
 } from "./events/Events";
 
 export const socket = socketIo(socketTestTestNameSpace);
@@ -58,6 +59,14 @@ export const stopListening = (eventName: string) => {
 
 export const handleIncomingQueText = (callback: (queText: any) => void) => {
   socket.on(INCOMING_QUE_TEXT, (data: any) => {
+    callback(data);
+  });
+};
+
+export const handleIncomingMessagesMarkedRead = (
+  callback: (queText: any) => void
+) => {
+  socket.on(MESSAGES_MARKED_READ, (data: any) => {
     callback(data);
   });
 };

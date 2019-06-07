@@ -8,6 +8,8 @@ import { PopOverLeft } from "../PopOverLeft";
 import { Button, Spinner } from "reactstrap";
 import { getTimeValue } from "../../../redux/actions/conversations";
 import ReactBSAlert from "react-bootstrap-sweetalert"; // For a popup that shows we are loading the info
+import { axiosGet } from "network/ApiCalls";
+import { queTextSingle } from "network/routes";
 
 class ConversationList extends React.Component {
   constructor(props) {
@@ -66,8 +68,13 @@ class ConversationList extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { updateType } = this.props;
+
     if (prevProps !== this.props) {
-      // console.log("ConversationList UPDATED!!");
+      if (updateType && updateType === "message_marked_read") {
+        console.log("updateType && updateType === message_marked_read");
+        return; // do nothing
+      }
     }
 
     if (prevProps.allConversations !== this.props.allConversations) {
@@ -124,7 +131,13 @@ class ConversationList extends React.Component {
   };
 
   handleViewConversation = idx => {
-    const { setConversationToRender } = this.props;
+    const { setConversationToRender, unread, allConversations } = this.props;
+    if (allConversations) {
+      const { id } = allConversations[idx];
+      axiosGet(queTextSingle(id, "READ", "true"));
+      // console.log(allConversations[idx].id);
+    }
+
     setConversationToRender(idx);
   };
 
@@ -152,17 +165,21 @@ class ConversationList extends React.Component {
 
 // export default ConversationList;
 
-const mapStateToProps = ({ conversation: { allConversations, unread } }) => {
+const mapStateToProps = ({
+  conversation: { allConversations, unread, updateType }
+}) => {
   if (allConversations === null) {
     return {
       allConversations,
-      unread
+      unread,
+      updateType
     };
   }
 
   return {
     allConversations: [...allConversations],
-    unread
+    unread,
+    updateType
   };
 };
 

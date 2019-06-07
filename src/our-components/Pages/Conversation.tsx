@@ -136,6 +136,14 @@ class Conversation extends React.Component<Props, State> {
     /**
      * Handling state & scrolling
      */
+
+    if (prevProps !== this.props) {
+      const { updateType } = this.props.conversation;
+      if (updateType && updateType === "message_marked_read") {
+        console.log("updateType && updateType === message_marked_read");
+        return; // do nothing
+      }
+    }
     if (prevState.messages !== this.state.messages) {
     }
 

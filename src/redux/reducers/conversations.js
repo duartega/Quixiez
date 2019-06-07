@@ -11,7 +11,8 @@ import {
 const conversationsState = {
   idxOfConversationToRender: null,
   allConversations: null,
-  unread: null
+  unread: null,
+  updateType: null
 };
 
 export const conversation = (state = conversationsState, action) => {
@@ -24,7 +25,15 @@ export const conversation = (state = conversationsState, action) => {
       };
 
     case SET_ALL_CONVERSATIONS:
-      const { conversations } = action;
+      const { conversations, updateType } = action;
+
+      if (updateType) {
+        return {
+          ...state,
+          allConversations: conversations,
+          updateType
+        };
+      }
       return {
         ...state,
         allConversations: conversations

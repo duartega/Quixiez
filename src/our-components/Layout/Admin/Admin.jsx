@@ -18,7 +18,8 @@ import logo from "assets/img/react-logo.png";
 import {
   // receiveMessage,
   handleIncomingQueText,
-  stopListening
+  stopListening,
+  handleIncomingMessagesMarkedRead
 } from "sockets/Socket";
 import { axiosGet } from "../../../network/ApiCalls";
 import { getAllConversations, getQueTextUnread } from "../../../network/routes";
@@ -60,9 +61,16 @@ class Admin extends React.Component {
     }
     window.addEventListener("scroll", this.showNavbarButton);
 
+    const { updateConversations } = this.props;
+
+    handleIncomingMessagesMarkedRead(queText => {
+      console.log("MESSAGE BEING MARKED AS READ", queText);
+      updateConversations(queText, null, "message_marked_read");
+    });
+
     handleIncomingQueText(queText => {
       console.log("INCOMING QUETEXT...");
-      const { updateConversations } = this.props;
+
       updateConversations(queText, alertType => {
         if (alertType === "NEW_MESSAGE") {
           let options = {};
@@ -291,8 +299,8 @@ const mapDispatchToProps = dispatch => ({
   setAllConversations: conversations =>
     dispatch(setAllConversations(conversations)),
 
-  updateConversations: (conversation, callback) =>
-    dispatch(updateConversations(conversation, callback)),
+  updateConversations: (conversation, callback, updateType) =>
+    dispatch(updateConversations(conversation, callback, updateType)),
 
   setCompanyUser: () => dispatch(setCompanyUser()),
 
