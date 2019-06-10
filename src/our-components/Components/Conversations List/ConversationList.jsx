@@ -70,6 +70,10 @@ class ConversationList extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const { updateType } = this.props;
 
+    /**
+     * We are stopping the ConversationList from updating
+     * based on the update Type....
+     */
     if (prevProps !== this.props) {
       if (updateType && updateType === "message_marked_read") {
         console.log("updateType && updateType === message_marked_read");

@@ -36,6 +36,7 @@ type Props = {
   history: any;
   companyUserId: string;
   companyUserTyping: any;
+  updateType: string | null;
 };
 
 type State = {
@@ -59,10 +60,12 @@ class Conversation extends React.Component<Props, State> {
   private key = 1;
   // private chatContainer: HTMLDivElement | null = null;
   private messagesEnd: HTMLDivElement | null = null;
+  private chatBubbleContainer: HTMLDivElement | null = null;
   private componentHasConductedInitialRender = false;
   private updatedMessages = false;
   private scrollTimeOut: NodeJS.Timeout | number | undefined;
   private currentUserTypingTimeOut: NodeJS.Timeout | number | undefined;
+  private previousClientHeight = 0;
 
   componentDidMount() {
     const { conversation } = this.props;
@@ -97,12 +100,13 @@ class Conversation extends React.Component<Props, State> {
   }
 
   initialScroll = () => {
+    console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    // console.log("scrollToBottom called");
+    console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -127,30 +131,52 @@ class Conversation extends React.Component<Props, State> {
       prevProps.conversation.id === this.props.conversation.id
     );
   };
+
+  getSnapshotBeforeUpdate(prevProps: Props, prevState: State) {
+    if (this.chatBubbleContainer) {
+      // const height = this.chatBubbleContainer.scrollHeight;
+      const clientHeight = this.chatBubbleContainer.clientHeight;
+      return clientHeight;
+    }
+    return null;
+  }
+
   /**
    * TODO: When a conversation changes sometimes
    * the conversation does NOT scroll to the bottom
    * of all the conversation bubbles
    */
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  componentDidUpdate(
+    prevProps: Props,
+    prevState: State,
+    snapShot: number | null
+  ) {
     /**
      * Handling state & scrolling
      */
 
-    if (prevProps !== this.props) {
-      const { updateType } = this.props.conversation;
-      if (updateType && updateType === "message_marked_read") {
-        console.log("updateType && updateType === message_marked_read");
-        return; // do nothing
-      }
-    }
-    if (prevState.messages !== this.state.messages) {
-    }
+    const { updateType } = this.props;
 
-    if (prevState.messages !== this.state.messages) {
-    } else if (this.updatedMessages) {
-      this.updatedMessages = false;
-    }
+    // if (prevProps !== this.props) {
+    //   if (updateType && updateType === "message_marked_read") {
+    //     console.log("updateType && updateType === message_marked_read");
+    //     return; // do nothing
+    //   }
+    // }
+
+    // console.log("updateType", updateType);
+    // if (updateType === "message_marked_read") {
+    //   return;
+    // }
+
+    // console.log("after stopping prevProps from scrolling...");
+    // if (prevState.messages !== this.state.messages) {
+    // }
+
+    // if (prevState.messages !== this.state.messages) {
+    // } else if (this.updatedMessages) {
+    //   this.updatedMessages = false;
+    // }
 
     // console.log("PREV");
     // this.props.conversation &&
@@ -160,95 +186,90 @@ class Conversation extends React.Component<Props, State> {
      * Handling props & new messages
      */
 
-    switch (true) {
-      /**
-       * When a new message comes in
-       */
+    // switch (
+    //   true
+    /**
+     * When a new message comes in
+     */
 
-      case this.props.conversation &&
-        prevProps.conversation &&
-        this.phaseUpdated(prevProps):
-        break;
-      case prevProps.conversation &&
-        this.conversationDidUpdate(prevProps) &&
-        this.newMessageCameIn(prevProps):
-        const { conversation } = this.props;
-        const {
-          consumerUser: { firstName }
-        } = conversation;
-        const lastMessage = this.props.conversation.messages[
-          conversation.messages.length - 1
-        ];
-        const messageBubble = this.createMessageBubble(lastMessage, firstName);
-        // const { messages } = this.state;
-        const messages = this.state.messages;
-        messages.push(messageBubble);
-        this.setState({ messages });
-        this.updatedMessages = true;
+    // case this.props.conversation &&
+    //   prevProps.conversation &&
+    //   this.phaseUpdated(prevProps):
+    //   break;
+    // case prevProps.conversation &&
+    //   this.conversationDidUpdate(prevProps) &&
+    //   this.newMessageCameIn(prevProps):
+    //   const { conversation } = this.props;
+    //   const {
+    //     consumerUser: { firstName }
+    //   } = conversation;
+    //   const lastMessage = this.props.conversation.messages[
+    //     conversation.messages.length - 1
+    //   ];
+    //   const messageBubble = this.createMessageBubble(lastMessage, firstName);
+    //   // const { messages } = this.state;
+    //   const messages = this.state.messages;
+    //   messages.push(messageBubble);
+    //   this.setState({ messages });
+    //   this.updatedMessages = true;
 
-        break;
-      /**
-       * When the user refreshes the page
-       * render the conversation and mark
-       * those messages as READ
-       *
-       * TODO: Not the correct way to do it.
-       * Just because the user loads the page
-       * doesn't mean that they have read that
-       * conversations messages.
-       */
-      case this.conversationDidUpdate(prevProps):
+    //   break;
+    // /**
+    //  * When the user refreshes the page
+    //  * render the conversation and mark
+    //  * those messages as READ
+    //  *
+    //  * TODO: Not the correct way to do it.
+    //  * Just because the user loads the page
+    //  * doesn't mean that they have read that
+    //  * conversations messages.
+    //  */
+    // case this.conversationDidUpdate(prevProps):
+    //   this.handleRenderConversation();
+    //   // this.handleMarkMessagesAsRead();
+    //   break;
+    // default:
+    // // Do nothing
+    // ) {
+
+    /**
+     * Handle initial conversation render
+     */
+    if (prevProps.conversation !== this.props.conversation) {
+      if (prevProps.conversation !== null) {
+        // this.handleRenderConversation();
+      }
+    }
+    console.log(snapShot);
+    if (snapShot !== null) {
+      // if (prevProps.conversation.id !== this.props.conversation.id) {
+      if (prevProps.conversation === null && this.props.conversation) {
+        this.previousClientHeight = snapShot;
         this.handleRenderConversation();
-        // this.handleMarkMessagesAsRead();
-        break;
-      default:
-      // Do nothing
+        return;
+      } else if (snapShot > this.previousClientHeight) {
+        console.log("snapShot", snapShot);
+        console.log("this.previousClientHeight", this.previousClientHeight);
+        this.previousClientHeight = snapShot;
+        this.handleRenderConversation();
+
+        // this.scrollToBottom();
+      } else if (snapShot <= this.previousClientHeight) {
+        if (
+          prevProps.conversation &&
+          prevProps.conversation.id !== this.props.conversation.id
+        ) {
+          console.log("(snapShot <= this.previousClientHeight)");
+          this.previousClientHeight = snapShot;
+          this.handleRenderConversation();
+        }
+      }
+
+      return;
     }
   }
 
-  // THIS DOES WORK
-  // handleMarkMessagesAsRead = () => {
-  //   const {
-  //     conversation: { id, messages },
-  //     companyUserId
-  //   } = this.props;
-
-  //   if (messages && companyUserId) {
-  //     let messagesUnread = false;
-  //     for (let i = 0; i < messages.length && messagesUnread === false; i++) {
-  //       const { readBy } = messages[i];
-  //       let messageHasBeenRead = false;
-  //       for (
-  //         let j = 0;
-  //         j < readBy.length && messageHasBeenRead === false;
-  //         j++
-  //       ) {
-  //         if (readBy[j].id === companyUserId) {
-  //           messageHasBeenRead = true;
-  //         }
-  //       }
-
-  //       if (messageHasBeenRead === false) {
-  //         messagesUnread = true;
-  //       }
-  //     }
-  //     if (messagesUnread) {
-  //       axiosGet(queTextSingle(id, "READ", "true"));
-  //       console.log("CALLINGAPI");
-  //     }
-  //     console.log("messagesUnread", messagesUnread);
-  //     // const messageUnread = messages.findIndex((aMessage: any) => {
-  //     //   const { readBy } = aMessage;
-  //     //   // console.log(readBy);
-  //     //   return readBy.findIndex(({ id }: { id: string }) => {
-  //     //     // console.log(id);
-  //     //     return id !== companyUserId;
-  //     //   });
-  //     // });
-
-  //     // console.log(messageUnread);
-  //   }
-  // };
+  // }
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
@@ -336,18 +357,23 @@ class Conversation extends React.Component<Props, State> {
       return aMessage;
     });
 
+    if (this.scrollTimeOut) {
+      clearTimeout(this.scrollTimeOut as number);
+    }
     this.scrollTimeOut = setTimeout(() => {
       if (
         this.componentHasConductedInitialRender === false &&
         this.state.messages.length > 0
       ) {
         this.componentHasConductedInitialRender = true;
+        console.log("mapMessages calling scrollToBottom in IF");
         this.scrollToBottom();
       } else if (this.componentHasConductedInitialRender) {
         // Handle this logic to allow the page to scroll
         // better by figuring out a way to call the noted
         // out line below
         // this.initialScroll();
+        console.log("mapMessages calling scrollToBottom in else if");
         this.scrollToBottom();
       }
     }, 100);
@@ -359,7 +385,7 @@ class Conversation extends React.Component<Props, State> {
     // console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
-        <div className="content">
+        <div ref={ref => (this.chatBubbleContainer = ref)} className="content">
           <ChatHeader history={this.props.history} />
 
           {/* {this.state.messages.map(aMessage => {
@@ -411,7 +437,8 @@ const mapStateToProps = ({
   return {
     conversation: conversationToRender,
     companyUserId: id,
-    companyUserTyping: firstName
+    companyUserTyping: firstName,
+    updateType: conversation.updateType
   };
 };
 
