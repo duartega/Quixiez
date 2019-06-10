@@ -48,7 +48,6 @@ class ConversationCell extends React.Component {
       props,
       props: { unread }
     } = this.props;
-    let readIndicator = unread;
 
     return (
       <>
@@ -75,8 +74,16 @@ class ConversationCell extends React.Component {
             <Col>
               <Row style={{ paddingTop: "30px", marginRight: "15px" }}>
                 <Col md="7">
-                  {readIndicator ? <span className="newMessageDot" /> : null}
-                  <p style={{ display: "inline-block" }}>{props.name}</p>
+                  {unread ? <span className="newMessageDot" /> : null}
+                  <p
+                    style={
+                      unread
+                        ? { display: "inline-block", fontWeight: "bold" }
+                        : { display: "inline-block" }
+                    }
+                  >
+                    {props.name}
+                  </p>
                 </Col>
                 <Col md="5" style={{ paddingRight: "0px", textAlign: "right" }}>
                   <i className="ti-time" /> {props.time}

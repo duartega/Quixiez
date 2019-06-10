@@ -71,18 +71,7 @@ class ConversationList extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { updateType } = this.props;
-
-    /**
-     * We are stopping the ConversationList from updating
-     * based on the update Type....
-     */
-    if (prevProps !== this.props) {
-      if (updateType && updateType === "message_marked_read") {
-        // console.log("updateType && updateType === message_marked_read");
-        return; // do nothing
-      }
-    }
+    // const { updateType } = this.props;
 
     if (prevProps.allConversations !== this.props.allConversations) {
       // console.log("Map Updated");
@@ -149,6 +138,7 @@ class ConversationList extends React.Component {
         // console.log("message is unread!!! calling get...");
         axiosGet(queTextSingle(id, "READ", "true")).then(() => {
           const { setConversationRead } = this.props;
+          console.log("setting conversation as read...");
           setConversationRead(id);
         });
       }
