@@ -10,7 +10,8 @@ import { parse, getTime } from "date-fns";
 import {
   SET_CONVERSATION_TO_RENDER,
   SET_ALL_CONVERSATIONS,
-  SET_CONVERSATION_UNREAD
+  SET_CONVERSATION_UNREAD,
+  SET_CONVERSATION_READ
 } from "../ActionTypes";
 
 export const getTimeValue = (timeReceived: string) => {
@@ -217,7 +218,7 @@ export const updateConversations = (
 };
 
 export const setConversationReadUnread = (queTextUnread: any) => {
-  console.log(queTextUnread);
+  //   console.log(queTextUnread);
 
   const { unreadQueTexts } = queTextUnread;
 
@@ -228,12 +229,22 @@ export const setConversationReadUnread = (queTextUnread: any) => {
     hash[id] = true;
   });
 
-  //   console.log(hash);
-
   return {
     type: SET_CONVERSATION_UNREAD,
     unreadHash: hash
   };
+};
+
+export const setConversationRead = (id: string) => (
+  dispatch: any,
+  getState: any
+) => {
+  const { unread } = getState().conversation;
+  unread[id] = false;
+  return dispatch({
+    type: SET_CONVERSATION_READ,
+    unread
+  });
 };
 
 export const checkForConversations = () => {};

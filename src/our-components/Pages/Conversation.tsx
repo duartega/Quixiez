@@ -141,11 +141,6 @@ class Conversation extends React.Component<Props, State> {
     return null;
   }
 
-  /**
-   * TODO: When a conversation changes sometimes
-   * the conversation does NOT scroll to the bottom
-   * of all the conversation bubbles
-   */
   componentDidUpdate(
     prevProps: Props,
     prevState: State,
@@ -154,83 +149,6 @@ class Conversation extends React.Component<Props, State> {
     /**
      * Handling state & scrolling
      */
-
-    const { updateType } = this.props;
-
-    // if (prevProps !== this.props) {
-    //   if (updateType && updateType === "message_marked_read") {
-    //     console.log("updateType && updateType === message_marked_read");
-    //     return; // do nothing
-    //   }
-    // }
-
-    // console.log("updateType", updateType);
-    // if (updateType === "message_marked_read") {
-    //   return;
-    // }
-
-    // console.log("after stopping prevProps from scrolling...");
-    // if (prevState.messages !== this.state.messages) {
-    // }
-
-    // if (prevState.messages !== this.state.messages) {
-    // } else if (this.updatedMessages) {
-    //   this.updatedMessages = false;
-    // }
-
-    // console.log("PREV");
-    // this.props.conversation &&
-    //   prevProps.conversation &&
-    //   console.log(this.phaseUpdated(prevProps));
-    /**
-     * Handling props & new messages
-     */
-
-    // switch (
-    //   true
-    /**
-     * When a new message comes in
-     */
-
-    // case this.props.conversation &&
-    //   prevProps.conversation &&
-    //   this.phaseUpdated(prevProps):
-    //   break;
-    // case prevProps.conversation &&
-    //   this.conversationDidUpdate(prevProps) &&
-    //   this.newMessageCameIn(prevProps):
-    //   const { conversation } = this.props;
-    //   const {
-    //     consumerUser: { firstName }
-    //   } = conversation;
-    //   const lastMessage = this.props.conversation.messages[
-    //     conversation.messages.length - 1
-    //   ];
-    //   const messageBubble = this.createMessageBubble(lastMessage, firstName);
-    //   // const { messages } = this.state;
-    //   const messages = this.state.messages;
-    //   messages.push(messageBubble);
-    //   this.setState({ messages });
-    //   this.updatedMessages = true;
-
-    //   break;
-    // /**
-    //  * When the user refreshes the page
-    //  * render the conversation and mark
-    //  * those messages as READ
-    //  *
-    //  * TODO: Not the correct way to do it.
-    //  * Just because the user loads the page
-    //  * doesn't mean that they have read that
-    //  * conversations messages.
-    //  */
-    // case this.conversationDidUpdate(prevProps):
-    //   this.handleRenderConversation();
-    //   // this.handleMarkMessagesAsRead();
-    //   break;
-    // default:
-    // // Do nothing
-    // ) {
 
     /**
      * Handle initial conversation render
@@ -366,15 +284,15 @@ class Conversation extends React.Component<Props, State> {
         this.state.messages.length > 0
       ) {
         this.componentHasConductedInitialRender = true;
-        console.log("mapMessages calling scrollToBottom in IF");
+        // console.log("mapMessages calling scrollToBottom in IF");
         this.scrollToBottom();
       } else if (this.componentHasConductedInitialRender) {
         // Handle this logic to allow the page to scroll
         // better by figuring out a way to call the noted
         // out line below
         // this.initialScroll();
-        console.log("mapMessages calling scrollToBottom in else if");
-        this.scrollToBottom();
+        // console.log("mapMessages calling scrollToBottom in else if");
+        this.initialScroll();
       }
     }, 100);
 

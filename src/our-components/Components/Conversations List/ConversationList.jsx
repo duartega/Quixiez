@@ -2,7 +2,10 @@ import React from "react";
 import ConversationCell from "./ConversationCell";
 import testData from "./testData";
 import { connect } from "react-redux";
-import { setConversationToRender } from "../../../redux/actions/conversations";
+import {
+  setConversationToRender,
+  setConversationRead
+} from "../../../redux/actions/conversations";
 import * as StatusInfo from "../../Tables/StatusInfo";
 import { PopOverLeft } from "../PopOverLeft";
 import { Button, Spinner } from "reactstrap";
@@ -136,10 +139,21 @@ class ConversationList extends React.Component {
 
   handleViewConversation = idx => {
     const { setConversationToRender, unread, allConversations } = this.props;
+    // console.log("unread", unread);
+
+    // if (unread)
     if (allConversations) {
       const { id } = allConversations[idx];
-      axiosGet(queTextSingle(id, "READ", "true"));
-      // console.log(allConversations[idx].id);
+      const messageIsUnread = unread[id];
+      if (messageIsUnread) {
+        console.log("message is unread!!! calling get...");
+        axiosGet(queTextSingle(id, "READ", "true")).then(() => {
+          const { setConversationRead } = this.props;
+          setConversationRead(id);
+        });
+      }
+
+      //   // console.log(allConversations[idx].id);
     }
 
     setConversationToRender(idx);
@@ -188,7 +202,8 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = dispatch => ({
-  setConversationToRender: idx => dispatch(setConversationToRender(idx))
+  setConversationToRender: idx => dispatch(setConversationToRender(idx)),
+  setConversationRead: id => dispatch(setConversationRead(id))
 });
 
 export default connect(

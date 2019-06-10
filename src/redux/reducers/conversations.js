@@ -5,7 +5,8 @@
 import {
   SET_CONVERSATION_TO_RENDER,
   SET_ALL_CONVERSATIONS,
-  SET_CONVERSATION_UNREAD
+  SET_CONVERSATION_UNREAD,
+  SET_CONVERSATION_READ
 } from "../ActionTypes";
 
 const conversationsState = {
@@ -44,6 +45,12 @@ export const conversation = (state = conversationsState, action) => {
       return {
         ...state,
         unread: { ...unreadHash }
+      };
+
+    case SET_CONVERSATION_READ:
+      return {
+        ...state,
+        unread: action.unread
       };
 
     default:
