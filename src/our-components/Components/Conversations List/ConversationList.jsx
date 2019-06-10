@@ -146,7 +146,7 @@ class ConversationList extends React.Component {
       const { id } = allConversations[idx];
       const messageIsUnread = unread[id];
       if (messageIsUnread) {
-        console.log("message is unread!!! calling get...");
+        // console.log("message is unread!!! calling get...");
         axiosGet(queTextSingle(id, "READ", "true")).then(() => {
           const { setConversationRead } = this.props;
           setConversationRead(id);

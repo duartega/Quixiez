@@ -157,7 +157,7 @@ export const updateConversations = (
     conversation: { allConversations }
   } = getState();
   //   console.log("idxOfConversationToRender", idxOfConversationToRender);
-  console.log("UPDATE CONVERSATION CALLED", conversation);
+  //   console.log("UPDATE CONVERSATION CALLED", conversation);
   //   console.log("conversation", conversation);
 
   let conversationsExist = true;
@@ -185,9 +185,9 @@ export const updateConversations = (
   if (idxOfConvoToUpdate !== -1) {
     // updating appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
-    console.log("CONVO EXISTS", updateType);
+    // console.log("CONVO EXISTS", updateType);
     if (updateType) {
-      console.log("dispatchin updating read by ");
+      //   console.log("dispatchin updating read by ");
       return dispatch(
         setAllConversations(
           allConversations,

@@ -64,12 +64,12 @@ class Admin extends React.Component {
     const { updateConversations } = this.props;
 
     handleIncomingMessagesMarkedRead(queText => {
-      console.log("MESSAGE BEING MARKED AS READ", queText);
+      // console.log("MESSAGE BEING MARKED AS READ", queText);
       updateConversations(queText, null, "message_marked_read");
     });
 
     handleIncomingQueText(queText => {
-      console.log("INCOMING QUETEXT...");
+      // console.log("INCOMING QUETEXT...");
 
       updateConversations(queText, alertType => {
         if (alertType === "NEW_MESSAGE") {

@@ -89,7 +89,6 @@ class Conversation extends React.Component<Props, State> {
     });
 
     handleIncomingEmployeeStoppedTyping(companyUsername => {
-      // console.log("Incoming STOPPED typing", companyUsername);
       this.setState({ companyUserTyping: null });
     });
   }
@@ -100,13 +99,11 @@ class Conversation extends React.Component<Props, State> {
   }
 
   initialScroll = () => {
-    console.log("initialScroll called");
     this.messagesEnd && this.messagesEnd.scrollIntoView(true);
   };
 
   // scroll to bottom of screen when called
   scrollToBottom = () => {
-    console.log("scrollToBottom called");
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -124,8 +121,6 @@ class Conversation extends React.Component<Props, State> {
     prevProps.conversation !== this.props.conversation;
 
   phaseUpdated = (prevProps: any) => {
-    // console.log("prevProps.conversation.phase", prevProps.conversation.phase);
-    // console.log("this.props.conversation.phase", this.props.conversation.phase);
     return (
       prevProps.conversation.phase !== this.props.conversation.phase &&
       prevProps.conversation.id === this.props.conversation.id
@@ -158,26 +153,30 @@ class Conversation extends React.Component<Props, State> {
         // this.handleRenderConversation();
       }
     }
-    console.log(snapShot);
+
     if (snapShot !== null) {
       // if (prevProps.conversation.id !== this.props.conversation.id) {
       if (prevProps.conversation === null && this.props.conversation) {
         this.previousClientHeight = snapShot;
         this.handleRenderConversation();
+        console.log(
+          "if (prevProps.conversation === null && this.props.conversation)"
+        );
         return;
       } else if (snapShot > this.previousClientHeight) {
-        console.log("snapShot", snapShot);
-        console.log("this.previousClientHeight", this.previousClientHeight);
         this.previousClientHeight = snapShot;
         this.handleRenderConversation();
 
         // this.scrollToBottom();
       } else if (snapShot <= this.previousClientHeight) {
+        // console.log("(snapShot <= this.previousClientHeight)");
         if (
           prevProps.conversation &&
           prevProps.conversation.id !== this.props.conversation.id
         ) {
-          console.log("(snapShot <= this.previousClientHeight)");
+          console.log(
+            "prevProps.conversation.id !== this.props.conversation.id"
+          );
           this.previousClientHeight = snapShot;
           this.handleRenderConversation();
         }
@@ -191,7 +190,7 @@ class Conversation extends React.Component<Props, State> {
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
-    // console.log("CONVOS: ", conversation)
+
     if (
       conversation &&
       conversation.messages &&
@@ -211,7 +210,8 @@ class Conversation extends React.Component<Props, State> {
    */
   createMessageBubble = (conversation: any, firstName: string) => {
     const { content, sentBy } = conversation;
-    // console.log("conversation", conversation);
+    // console.log(conversation);
+
     let sentByLabel = null;
     let badgedColor: badgeColor;
 
@@ -284,14 +284,9 @@ class Conversation extends React.Component<Props, State> {
         this.state.messages.length > 0
       ) {
         this.componentHasConductedInitialRender = true;
-        // console.log("mapMessages calling scrollToBottom in IF");
+
         this.scrollToBottom();
       } else if (this.componentHasConductedInitialRender) {
-        // Handle this logic to allow the page to scroll
-        // better by figuring out a way to call the noted
-        // out line below
-        // this.initialScroll();
-        // console.log("mapMessages calling scrollToBottom in else if");
         this.initialScroll();
       }
     }, 100);
@@ -300,7 +295,6 @@ class Conversation extends React.Component<Props, State> {
   };
 
   render() {
-    // console.log("user currently typing", this.state.companyUserTyping);
     return (
       <>
         <div ref={ref => (this.chatBubbleContainer = ref)} className="content">
