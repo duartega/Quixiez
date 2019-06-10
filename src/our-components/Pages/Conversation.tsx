@@ -23,7 +23,7 @@ import {
   EMPLOYEE_START_TYPING,
   UPDATED_QUE_TEXT
 } from "sockets/events/Events";
-import { bigIntLiteral } from "@babel/types";
+import { bigIntLiteral, throwStatement } from "@babel/types";
 import { conversation } from "redux/reducers/conversations";
 import { badgeColor } from "our-components/Components/Chat/Types";
 import { getTime } from "date-fns";
@@ -66,11 +66,13 @@ class Conversation extends React.Component<Props, State> {
   private scrollTimeOut: NodeJS.Timeout | number | undefined;
   private currentUserTypingTimeOut: NodeJS.Timeout | number | undefined;
   private previousClientHeight = 0;
+  private conversationHasScrolled = false;
 
   componentDidMount() {
     const { conversation } = this.props;
     if (conversation) {
       this.handleRenderConversation();
+      this.handleScroll();
     }
 
     handleIncomingEmployeeStartedTyping(companyUsername => {
@@ -155,38 +157,52 @@ class Conversation extends React.Component<Props, State> {
     }
 
     if (snapShot !== null) {
-      // if (prevProps.conversation.id !== this.props.conversation.id) {
-      if (prevProps.conversation === null && this.props.conversation) {
-        this.previousClientHeight = snapShot;
+      if (
+        prevProps.conversation &&
+        prevProps.conversation.id !== this.props.conversation.id
+      ) {
         this.handleRenderConversation();
-        console.log(
-          "if (prevProps.conversation === null && this.props.conversation)"
-        );
-        return;
-      } else if (snapShot > this.previousClientHeight) {
-        this.previousClientHeight = snapShot;
-        this.handleRenderConversation();
+        this.handleScroll();
 
-        // this.scrollToBottom();
-      } else if (snapShot <= this.previousClientHeight) {
-        // console.log("(snapShot <= this.previousClientHeight)");
-        if (
-          prevProps.conversation &&
-          prevProps.conversation.id !== this.props.conversation.id
-        ) {
-          console.log(
-            "prevProps.conversation.id !== this.props.conversation.id"
-          );
-          this.previousClientHeight = snapShot;
-          this.handleRenderConversation();
-        }
+        // This is the logic we had before
+        // and it was working
+        // as you can see its unnecessary
+        //
+        // if (snapShot > this.previousClientHeight) {
+        //   // if (
+        //   //   prevProps.conversation &&
+        //   //   prevProps.conversation.id === this.props.conversation.id
+        //   // ) {
+        //   this.handleScroll();
+        //   // }
+        //   this.previousClientHeight = snapShot;
+        // }
       }
-
-      return;
+      // } else if (snapShot < this.previousClientHeight) {
+      //   this.handleScroll();
+      //   this.previousClientHeight = snapShot;
+      // }
     }
   }
 
-  // }
+  handleScroll = () => {
+    console.log("handleScroll called");
+    if (this.scrollTimeOut) {
+      clearTimeout(this.scrollTimeOut as number);
+    }
+    this.scrollTimeOut = setTimeout(() => {
+      if (
+        this.componentHasConductedInitialRender === false &&
+        this.state.messages.length > 0
+      ) {
+        this.componentHasConductedInitialRender = true;
+
+        this.scrollToBottom();
+      } else if (this.componentHasConductedInitialRender) {
+        this.initialScroll();
+      }
+    }, 100);
+  };
 
   handleRenderConversation = () => {
     const { conversation } = this.props;
@@ -275,21 +291,21 @@ class Conversation extends React.Component<Props, State> {
       return aMessage;
     });
 
-    if (this.scrollTimeOut) {
-      clearTimeout(this.scrollTimeOut as number);
-    }
-    this.scrollTimeOut = setTimeout(() => {
-      if (
-        this.componentHasConductedInitialRender === false &&
-        this.state.messages.length > 0
-      ) {
-        this.componentHasConductedInitialRender = true;
+    // if (this.scrollTimeOut) {
+    //   clearTimeout(this.scrollTimeOut as number);
+    // }
+    // this.scrollTimeOut = setTimeout(() => {
+    //   if (
+    //     this.componentHasConductedInitialRender === false &&
+    //     this.state.messages.length > 0
+    //   ) {
+    //     this.componentHasConductedInitialRender = true;
 
-        this.scrollToBottom();
-      } else if (this.componentHasConductedInitialRender) {
-        this.initialScroll();
-      }
-    }, 100);
+    //     this.scrollToBottom();
+    //   } else if (this.componentHasConductedInitialRender) {
+    //     this.initialScroll();
+    //   }
+    // }, 100);
 
     return messagesToRender;
   };

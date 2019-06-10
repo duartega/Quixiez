@@ -79,7 +79,7 @@ class ConversationList extends React.Component {
      */
     if (prevProps !== this.props) {
       if (updateType && updateType === "message_marked_read") {
-        console.log("updateType && updateType === message_marked_read");
+        // console.log("updateType && updateType === message_marked_read");
         return; // do nothing
       }
     }
