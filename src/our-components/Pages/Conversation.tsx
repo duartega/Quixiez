@@ -35,14 +35,14 @@ type Props = {
   conversationContainerHeight: number;
   history: any;
   companyUserId: string;
-  companyUserTyping: any;
+  companyUserFirstName: any;
   updateType: string | null;
 };
 
 type State = {
   messages: any[];
   message: string;
-  companyUserTyping: string | null;
+  companyUserFirstName: string | null;
   mappingMessagesDone: boolean;
 };
 
@@ -52,7 +52,7 @@ class Conversation extends React.Component<Props, State> {
     this.state = {
       messages: [],
       message: "",
-      companyUserTyping: null,
+      companyUserFirstName: null,
       mappingMessagesDone: false
     };
   }
@@ -83,15 +83,15 @@ class Conversation extends React.Component<Props, State> {
        * because two people with the same name could be typing
        */
       if (
-        this.state.companyUserTyping === null &&
-        this.props.companyUserTyping !== companyUsername
+        this.state.companyUserFirstName === null &&
+        this.props.companyUserFirstName !== companyUsername
       ) {
-        this.setState({ companyUserTyping: companyUsername });
+        this.setState({ companyUserFirstName: companyUsername });
       }
     });
 
     handleIncomingEmployeeStoppedTyping(companyUsername => {
-      this.setState({ companyUserTyping: null });
+      this.setState({ companyUserFirstName: null });
     });
   }
 
@@ -144,49 +144,39 @@ class Conversation extends React.Component<Props, State> {
     snapShot: number | null
   ) {
     /**
-     * Handling state & scrolling
+     * Handling scrolling
      */
-
-    /**
-     * Handle initial conversation render
-     */
-    if (prevProps.conversation !== this.props.conversation) {
-      if (prevProps.conversation !== null) {
-        // this.handleRenderConversation();
-      }
-    }
-
     if (snapShot !== null) {
+      if (prevProps.conversation === null && this.props.conversation !== null) {
+        this.handleRenderConversation();
+        this.handleScroll();
+      }
       if (
         prevProps.conversation &&
         prevProps.conversation.id !== this.props.conversation.id
       ) {
         this.handleRenderConversation();
         this.handleScroll();
-
-        // This is the logic we had before
-        // and it was working
-        // as you can see its unnecessary
-        //
-        // if (snapShot > this.previousClientHeight) {
-        //   // if (
-        //   //   prevProps.conversation &&
-        //   //   prevProps.conversation.id === this.props.conversation.id
-        //   // ) {
-        //   this.handleScroll();
-        //   // }
-        //   this.previousClientHeight = snapShot;
-        // }
       }
-      // } else if (snapShot < this.previousClientHeight) {
-      //   this.handleScroll();
-      //   this.previousClientHeight = snapShot;
-      // }
+    }
+
+    /**
+     * Handle new message
+     */
+
+    if (
+      prevProps.conversation &&
+      this.props.conversation.messages.length -
+        prevProps.conversation.messages.length ===
+        1
+    ) {
+      this.handleNewMessage();
+      this.handleScroll();
     }
   }
 
   handleScroll = () => {
-    console.log("handleScroll called");
+    // console.log("handleScroll called");
     if (this.scrollTimeOut) {
       clearTimeout(this.scrollTimeOut as number);
     }
@@ -204,6 +194,15 @@ class Conversation extends React.Component<Props, State> {
     }, 100);
   };
 
+  handleNewMessage = () => {
+    const { messages: propMessages } = this.props.conversation;
+    const { messages: stateMessages } = this.state;
+    const newMessage = propMessages[propMessages.length - 1];
+    const newMessageBubble = this.createMessageBubble(newMessage);
+    stateMessages.push(newMessageBubble);
+    this.setState({ messages: stateMessages });
+  };
+
   handleRenderConversation = () => {
     const { conversation } = this.props;
 
@@ -212,9 +211,9 @@ class Conversation extends React.Component<Props, State> {
       conversation.messages &&
       conversation.messages.length > 0
     ) {
-      const { messages, consumerUser } = conversation;
+      const { messages } = conversation;
       const stateMessages = messages.map((aMessage: any) =>
-        this.createMessageBubble(aMessage, consumerUser.firstName)
+        this.createMessageBubble(aMessage)
       );
 
       this.setState({ messages: stateMessages });
@@ -224,7 +223,7 @@ class Conversation extends React.Component<Props, State> {
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
-  createMessageBubble = (conversation: any, firstName: string) => {
+  createMessageBubble = (conversation: any) => {
     const { content, sentBy } = conversation;
     // console.log(conversation);
 
@@ -240,7 +239,8 @@ class Conversation extends React.Component<Props, State> {
         badgedColor = "success";
       }
     } else {
-      sentByLabel = firstName;
+      const { companyUserFirstName } = this.props;
+      sentByLabel = companyUserFirstName;
       badgedColor = "warning";
     }
 
@@ -259,13 +259,13 @@ class Conversation extends React.Component<Props, State> {
 
   handleChange = (event: any) => {
     this.setState({ [event.target.name as "message"]: event.target.value });
-    handleEmployeeStartedTyping(this.props.companyUserTyping);
+    handleEmployeeStartedTyping(this.props.companyUserFirstName);
 
     if (this.currentUserTypingTimeOut) {
       clearTimeout(this.currentUserTypingTimeOut as number);
     }
     this.currentUserTypingTimeOut = setTimeout(() => {
-      handleEmployeeStoppedTyping(this.props.companyUserTyping);
+      handleEmployeeStoppedTyping(this.props.companyUserFirstName);
     }, 5000);
   };
 
@@ -290,22 +290,6 @@ class Conversation extends React.Component<Props, State> {
     const messagesToRender = messages.map((aMessage, idx) => {
       return aMessage;
     });
-
-    // if (this.scrollTimeOut) {
-    //   clearTimeout(this.scrollTimeOut as number);
-    // }
-    // this.scrollTimeOut = setTimeout(() => {
-    //   if (
-    //     this.componentHasConductedInitialRender === false &&
-    //     this.state.messages.length > 0
-    //   ) {
-    //     this.componentHasConductedInitialRender = true;
-
-    //     this.scrollToBottom();
-    //   } else if (this.componentHasConductedInitialRender) {
-    //     this.initialScroll();
-    //   }
-    // }, 100);
 
     return messagesToRender;
   };
@@ -333,7 +317,9 @@ class Conversation extends React.Component<Props, State> {
 
           <ChatFooter
             whoIsTyping={
-              this.state.companyUserTyping ? this.state.companyUserTyping : null
+              this.state.companyUserFirstName
+                ? this.state.companyUserFirstName
+                : null
             }
             inputPlaceHolder="Enter Message"
             inputOnChange={this.handleChange}
@@ -365,7 +351,7 @@ const mapStateToProps = ({
   return {
     conversation: conversationToRender,
     companyUserId: id,
-    companyUserTyping: firstName,
+    companyUserFirstName: firstName,
     updateType: conversation.updateType
   };
 };
