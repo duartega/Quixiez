@@ -13,6 +13,7 @@ import {
   SET_CONVERSATION_UNREAD,
   SET_CONVERSATION_READ
 } from "../ActionTypes";
+import { conditionalExpression } from "@babel/types";
 
 export const getTimeValue = (timeReceived: string) => {
   return parse(timeReceived).getTime();
@@ -109,11 +110,6 @@ export const setAllConversations = (
     idxOfConversationToRender,
     allConversations
   } = getState().conversation;
-  //   console.log("idxOfConversationToRender", idxOfConversationToRender);
-  //   console.log("setting all conversations...", conversations);
-  // conversations && console.log("conversations.length", conversations.length);
-  // allConversations &&
-  // console.log("allConversations.length", allConversations.length);
 
   if (updateType) {
     return dispatch({
@@ -154,17 +150,18 @@ export const updateConversations = (
   updateType?: "message_marked_read"
 ) => (dispatch: any, getState: any) => {
   const {
-    conversation: { allConversations }
+    conversation: { allConversations },
+    companyUserReducer: { id: companyUserId }
   } = getState();
   //   console.log("idxOfConversationToRender", idxOfConversationToRender);
   //   console.log("UPDATE CONVERSATION CALLED", conversation);
   //   console.log("conversation", conversation);
 
-  let conversationsExist = true;
-  if (allConversations === null || allConversations.length === 0) {
-    console.log("(allConversations === null || allConversations.length === 0)");
-    conversationsExist = false;
-  }
+  //   let conversationsExist = true;
+  //   if (allConversations === null || allConversations.length === 0) {
+  //     console.log("(allConversations === null || allConversations.length === 0)");
+  //     conversationsExist = false;
+  //   }
 
   const idxOfConvoToUpdate: number = conversationsExist
     ? allConversations.findIndex((aConversation: any) => {
@@ -185,24 +182,42 @@ export const updateConversations = (
   if (idxOfConvoToUpdate !== -1) {
     // updating appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
-    // console.log("CONVO EXISTS", updateType);
-    if (updateType) {
-      //   console.log("dispatchin updating read by ");
-      return dispatch(
-        setAllConversations(
-          allConversations,
-          oldConversationsLength,
-          updateType
-        )
-      );
-      //   }
-    } else {
-      callback && callback("NEW_MESSAGE");
+    // if (updateType) {
+    console.log("dispatchin updating read by ");
+    //   unread[conversation.id] = true;
 
-      return dispatch(
-        setAllConversations(allConversations, oldConversationsLength)
-      );
+    const { messages } = conversation;
+    const { sentBy } = messages[messages.length - 1];
+    //   console.log(sentBy);
+    if (sentBy && sentBy.id !== companyUserId) {
+      dispatch(setConversationUnread(conversation.id));
+    } else {
+      console.log("ELSE");
+      callback && callback("NEW_MESSAGE");
     }
+
+    return dispatch(
+      setAllConversations(
+        allConversations,
+        oldConversationsLength
+        //   updateType
+      )
+    );
+    //   }
+    // } else {
+    //   const { messages } = conversation;
+    //   const { sentBy } = messages[messages.length - 1];
+    //   //   console.log(sentBy);
+    //   if (sentBy === null && sentBy.id !== companyUserId) {
+    //     dispatch(setConversationUnread(conversation.id));
+    //   } else {
+    //     console.log("ELSE");
+    //     callback && callback("NEW_MESSAGE");
+    //   }
+    //   return dispatch(
+    //     setAllConversations(allConversations, oldConversationsLength)
+    //   );
+    // }
   } else if (idxOfConvoToUpdate === -1) {
     callback && callback("NEW_ORDER");
     allConversations.push(conversation);
@@ -215,6 +230,18 @@ export const updateConversations = (
       setAllConversations([conversation], oldConversationsLength)
     );
   }
+};
+
+export const setConversationUnread = (conversationId: string) => (
+  dispatch: any,
+  getState: any
+) => {
+  const { unread } = getState().conversation;
+  unread[conversationId] = true;
+  return dispatch({
+    type: SET_CONVERSATION_UNREAD,
+    unreadHash: unread
+  });
 };
 
 export const setConversationReadUnread = (queTextUnread: any) => {

@@ -140,13 +140,16 @@ class ConversationList extends React.Component {
           const { setConversationRead } = this.props;
           console.log("setting conversation as read...");
           setConversationRead(id);
+          setConversationToRender(idx);
         });
+      } else {
+        setConversationToRender(idx);
       }
 
       //   // console.log(allConversations[idx].id);
+    } else {
+      setConversationToRender(idx);
     }
-
-    setConversationToRender(idx);
   };
 
   render() {

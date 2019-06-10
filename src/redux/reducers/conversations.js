@@ -44,7 +44,7 @@ export const conversation = (state = conversationsState, action) => {
       const { unreadHash } = action;
       return {
         ...state,
-        unread: { ...unreadHash }
+        unread: unreadHash
       };
 
     case SET_CONVERSATION_READ:
