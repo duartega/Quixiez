@@ -30,9 +30,9 @@ export class ChatBubble extends React.Component<Props, State> {
   /**
    * The timeout value.
    *
-   * Right now its every 5 seconds.
+   * Right now its every 60 seconds.
    */
-  private intervalTime: number = 5000;
+  private intervalTime: number = 60000;
 
   setTimeAgo = (conversationCreated: string) => {
     let timePassed = getTimePassedValue(conversationCreated);
