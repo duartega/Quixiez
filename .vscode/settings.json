@@ -10,5 +10,13 @@
   "editor.renderIndentGuides": true,
   "workbench.iconTheme": "material-icon-theme",
   "breadcrumbs.enabled": true,
-  "cSpell.userWords": ["indica", "twilio", "twiml", "typeorm"]
+  "cSpell.userWords": [
+    "indica",
+    "twilio",
+    "twiml",
+    "typeorm"
+  ],
+  "cSpell.words": [
+    "sweetalert"
+  ]
 }

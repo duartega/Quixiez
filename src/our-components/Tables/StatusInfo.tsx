@@ -87,7 +87,7 @@ export const updateButton = (status: Status) => {
   );
 };
 
-export const calculateTime = (timeReceived: string) => {
+export const calculateTime = (timeReceived: string | Date) => {
   // Using Date-FNS, it automatically converts the UTC to your local time zone
   let hour = getHours(new Date(timeReceived));
   let minutes: string = getMinutes(new Date(timeReceived)) + "";

@@ -27,7 +27,7 @@ export const conversation = (state = conversationsState, action) => {
 
     case SET_ALL_CONVERSATIONS:
       const { conversations, updateType } = action;
-      console.log("SET_ALL_CONVERSATIONS");
+      //   console.log("SET_ALL_CONVERSATIONS");
       if (updateType) {
         return {
           ...state,

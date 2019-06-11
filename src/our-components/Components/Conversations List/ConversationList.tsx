@@ -10,12 +10,34 @@ import * as StatusInfo from "../../Tables/StatusInfo";
 import { PopOverLeft } from "../PopOverLeft";
 import { Button, Spinner } from "reactstrap";
 import { getTimeValue } from "../../../redux/actions/conversations";
+//@ts-ignore
 import ReactBSAlert from "react-bootstrap-sweetalert"; // For a popup that shows we are loading the info
 import { axiosGet } from "network/ApiCalls";
 import { queTextSingle } from "network/routes";
+import { unreadType } from "../../../redux/types/conversationTypes";
+import { QueTextI } from "Types/Interfaces/QueText";
+import { Dispatch } from "redux";
+type Props = {
+  unread: unreadType;
+  allConversations: QueTextI[];
+  idxOfConversationToRender: null | number;
 
-class ConversationList extends React.Component {
-  constructor(props) {
+  /** DispatchToProps */
+  setConversationToRender: (idx: number) => void;
+  setConversationRead: (conversationId: string) => void;
+};
+
+type State = {
+  name: string;
+  time: string;
+  message: string;
+  firstInitial: string;
+  tableData: any[];
+  loading: null | typeof ReactBSAlert;
+};
+
+class ConversationList extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -27,11 +49,20 @@ class ConversationList extends React.Component {
       loading: null
     };
 
-    this.initialRenderOfMessages = false;
-    this.loadTimeOut = null;
-    this.markInitialMessageAsReadTimeOut = null;
-    this.previousIdxRendered = 0;
+    // this.initialRenderOfMessages = false;
+    // this.loadTimeOut = null;
+    // this.markInitialMessageAsReadTimeOut = null;
+    // this.idxToWatch = 0;
+    // this.checkingIdx = true;
   }
+
+  private initialRenderOfMessages = false;
+  private loadTimeOut: NodeJS.Timeout | null | number = null;
+  private markInitialMessageAsReadTimeOut:
+    | NodeJS.Timeout
+    | null
+    | number = null;
+  private idxToWatch = 0;
 
   handleInitialRender = () => {
     this.handleViewConversation(0);
@@ -73,16 +104,29 @@ class ConversationList extends React.Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Props, prevState: State) {
     // const { updateType } = this.props;
-    const { idxOfConversationToRender } = this.props;
+    const { idxOfConversationToRender, allConversations } = this.props;
 
+    // console.log(idxOfConversationToRender);
+    // if a new message came in
     if (
-      typeof idxOfConversationToRender === "number" &&
-      prevProps.idxOfConversationToRender !== idxOfConversationToRender
+      idxOfConversationToRender !== null &&
+      prevProps.allConversations &&
+      prevProps.allConversations[idxOfConversationToRender] !==
+        allConversations[idxOfConversationToRender]
     ) {
-      this.previousIdxRendered = prevProps.idxOfConversationToRender;
+      this.checkIfMessageNeedsToBeMarkedAsRead();
     }
+    // Get last
+    // const
+
+    // if (
+    //   prevProps.idxOfConversationToRender !==
+    //   this.props.idxOfConversationToRender
+    // ) {
+    //   this.checkIfMessageNeedsToBeMarkedAsRead();
+    // }
 
     if (prevProps.allConversations !== this.props.allConversations) {
       // console.log("Map Updated");
@@ -91,17 +135,17 @@ class ConversationList extends React.Component {
     !this.initialRenderOfMessages && this.handleInitialRender();
 
     if (this.loadTimeOut) {
-      clearTimeout(this.loadTimeOut);
+      clearTimeout(this.loadTimeOut as number);
     }
     this.loadTimeOut = setTimeout(this.hideLoadingAlert, 1500);
   }
 
   componentWillUnmount() {
     if (this.loadTimeOut) {
-      clearTimeout(this.loadTimeOut);
+      clearTimeout(this.loadTimeOut as number);
     }
     if (this.markInitialMessageAsReadTimeOut) {
-      clearTimeout(this.markInitialMessageAsReadTimeOut);
+      clearTimeout(this.markInitialMessageAsReadTimeOut as number);
     }
   }
 
@@ -140,13 +184,44 @@ class ConversationList extends React.Component {
     this.setState({ tableData: conversationsArray });
   };
 
+  checkIfMessageNeedsToBeMarkedAsRead = () => {
+    const { unread, allConversations, idxOfConversationToRender } = this.props;
+    console.log("checkIfMessageNeedsToBeMarkedAsRead before if");
+    console.log(
+      "unread",
+      unread,
+      "allConversations",
+      allConversations,
+      "idxOfConversationToRender",
+      idxOfConversationToRender
+    );
+    if (!unread || !allConversations || idxOfConversationToRender === null) {
+      return;
+    }
+
+    console.log("checkIfMessageNeedsToBeMarkedAsRead after if");
+    // Get the appropriate conversation
+    const conversation = allConversations[idxOfConversationToRender];
+    const conversationId = conversation.id;
+
+    if (unread[conversationId]) {
+      this.idxToWatch = idxOfConversationToRender;
+      this.setTimeOutOnMarkingInitMessageAsRead();
+    }
+  };
+
   setTimeOutOnMarkingInitMessageAsRead = () => {
+    console.log("setTimeOutOnMarkingInitMessageAsRead");
+    if (this.markInitialMessageAsReadTimeOut) {
+      clearTimeout(this.markInitialMessageAsReadTimeOut as number);
+    }
+
     this.markInitialMessageAsReadTimeOut = setTimeout(() => {
       const { idxOfConversationToRender } = this.props;
 
       if (
         typeof idxOfConversationToRender === "number" &&
-        idxOfConversationToRender === 0
+        idxOfConversationToRender === this.idxToWatch
       ) {
         console.log("calling markConversationMessagesAsRead");
         this.markConversationMessagesAsRead(0);
@@ -154,14 +229,14 @@ class ConversationList extends React.Component {
     }, 7000);
   };
 
-  handleViewConversation = idx => {
+  handleViewConversation = (idx: number) => {
     const { setConversationToRender, unread, allConversations } = this.props;
     this.markConversationMessagesAsRead(idx);
 
     setConversationToRender(idx);
   };
 
-  markConversationMessagesAsRead = idx => {
+  markConversationMessagesAsRead = (idx: number) => {
     const { unread, allConversations } = this.props;
     // console.log(allConversations);
     if (allConversations) {
@@ -205,15 +280,22 @@ const mapStateToProps = ({
   conversation: {
     allConversations,
     unread,
-    updateType,
+    // updateType,
     idxOfConversationToRender
   }
+}: {
+  conversation: {
+    allConversations: QueTextI[];
+    unread: unreadType;
+    // updateType:
+    idxOfConversationToRender: number;
+  };
 }) => {
   if (allConversations === null) {
     return {
       allConversations,
       unread,
-      updateType,
+      // updateType,
       idxOfConversationToRender
     };
   }
@@ -221,14 +303,15 @@ const mapStateToProps = ({
   return {
     allConversations: [...allConversations],
     unread,
-    updateType,
+    // updateType,
     idxOfConversationToRender
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  setConversationToRender: idx => dispatch(setConversationToRender(idx)),
-  setConversationRead: id => dispatch(setConversationRead(id))
+const mapDispatchToProps = (dispatch: any) => ({
+  setConversationToRender: (idx: number) =>
+    dispatch(setConversationToRender(idx)),
+  setConversationRead: (id: string) => dispatch(setConversationRead(id))
 });
 
 export default connect(

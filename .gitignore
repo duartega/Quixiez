@@ -33,3 +33,4 @@ yarn-error.log*
 
 # submodules
 src/sockets/events
+src/Types

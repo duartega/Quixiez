@@ -20,7 +20,9 @@ import {
   sortConversations
 } from "./helpers/conversationsHelpers";
 
-export const getTimeValue = (timeReceived: string) => {
+import { unreadType } from "../types/conversationTypes";
+
+export const getTimeValue = (timeReceived: string | Date) => {
   return parse(timeReceived).getTime();
 };
 
@@ -45,14 +47,14 @@ export const setAllConversations = (
     idxOfConversationToRender,
     oldConversationsLength
   );
-  console.log("setAllConversations called");
+  //   console.log("setAllConversations called");
   if (sortedConversationsAndNewIdxToRender) {
     const {
       sortedConversationsArray,
       newIdxOfConversationsToRender
     } = sortedConversationsAndNewIdxToRender;
-    console.log("sortedConversationsArray", sortedConversationsArray);
-    console.log("newIdxOfConversationsToRender", newIdxOfConversationsToRender);
+    // console.log("sortedConversationsArray", sortedConversationsArray);
+    // console.log("newIdxOfConversationsToRender", newIdxOfConversationsToRender);
     if (newIdxOfConversationsToRender !== null) {
       console.log(
         "newIdxOfConversationsToRender",
@@ -60,7 +62,7 @@ export const setAllConversations = (
       );
       dispatch(setConversationToRender(newIdxOfConversationsToRender));
     }
-    console.log("sortedConversationsArray", sortedConversationsArray);
+    // console.log("sortedConversationsArray", sortedConversationsArray);
     dispatch({
       type: SET_ALL_CONVERSATIONS,
       conversations: sortedConversationsArray
@@ -168,7 +170,7 @@ export const setConversationReadUnread = (queTextUnread: any) => {
 
   const { unreadQueTexts } = queTextUnread;
 
-  const hash: { [key: string]: boolean } = {};
+  const hash: unreadType = {};
 
   unreadQueTexts.forEach((aQtextObject: any) => {
     const { id }: { id: string } = aQtextObject;

@@ -1,3 +1,6 @@
 [submodule "src/sockets/events"]
 	path = src/sockets/events
 	url = https://github.com/joemissamore/quixiez-sockets.git
+[submodule "src/Types"]
+	path = src/Types
+	url = https://github.com/joemissamore/quixiez-entity-types.git
