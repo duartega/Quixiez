@@ -16,3 +16,17 @@ export const getConversationToRender = (conversations: any): any => {
   // If cant find the conversation
   return null;
 };
+
+export const findIndexOfConversationToUpdate = (
+  conversationToFind: any,
+  allConversations: any[]
+) => {
+  return allConversations.findIndex((aConversation: any) => {
+    return conversationToFind.id === aConversation.id;
+  });
+};
+
+export const getLastMessageInAConversation = (conversation: any) => {
+  const { messages } = conversation;
+  return messages[messages.length - 1];
+};

@@ -14,6 +14,7 @@ import {
   SET_CONVERSATION_READ
 } from "../ActionTypes";
 import { conditionalExpression } from "@babel/types";
+import { findIndexOfConversationToUpdate } from "./helpers/conversationsHelpers";
 
 export const getTimeValue = (timeReceived: string) => {
   return parse(timeReceived).getTime();
@@ -144,57 +145,61 @@ export const setAllConversations = (
   }
 };
 
+/**
+ * This is not working...
+ *
+ * We really don't care about a message being read by for right now...
+ */
+// export const updateConversationsReadBy = (conversation: any) => (
+//   dispatch: any,
+//   getState: any
+// ) => {
+//   const {
+//     conversation: { allConversations }
+//   } = getState();
+
+//   console.log("updateConversationsReadBy FIRING");
+
+//   const idxOfConvoToUpdate = findIndexOfConversationToUpdate(
+//     conversation,
+//     allConversations
+//   );
+//   //   This should always execute
+//   console.log("idxOfConvoToUpdate", idxOfConvoToUpdate);
+//   if (idxOfConvoToUpdate !== -1) {
+//     console.log("updateConversationsReadBy");
+//     allConversations[idxOfConvoToUpdate] = conversation;
+//     dispatch(setAllConversations(allConversations));
+//   }
+
+//   //   if (sentBy === null || (sentBy && sentBy.id !== companyUserId)) {
+//   // dispatch(setConversationUnread(conversation.id));
+//   // callback && callback("NEW_MESSAGE");
+//   //   }
+// };
+
+/**
+ * This is only being called in Admin
+ */
 export const updateConversations = (
   conversation: any,
-  callback?: (alertType: string) => void,
-  updateType?: "message_marked_read"
+  callback?: (alertType: string) => void
 ) => (dispatch: any, getState: any) => {
   const {
     conversation: { allConversations },
     companyUserReducer: { id: companyUserId }
   } = getState();
-  //   console.log("idxOfConversationToRender", idxOfConversationToRender);
-  //   console.log("UPDATE CONVERSATION CALLED", conversation);
-  //   console.log("conversation", conversation);
 
-  //   let conversationsExist = true;
-  //   if (allConversations === null || allConversations.length === 0) {
-  //     console.log("(allConversations === null || allConversations.length === 0)");
-  //     conversationsExist = false;
-  //   }
+  const idxOfConvoToUpdate = findIndexOfConversationToUpdate(
+    conversation,
+    allConversations
+  );
 
-  const idxOfConvoToUpdate: number = conversationsExist
-    ? allConversations.findIndex((aConversation: any) => {
-        // console.log(
-        //   "conversation.id",
-        //   conversation.id,
-        //   " === ",
-        //   "aConversation.id",
-        //   aConversation.id
-        // );
-        return conversation.id === aConversation.id;
-      })
-    : null;
-
-  //   console.log("idxOfConvoToUpdate", idxOfConvoToUpdate);
   const oldConversationsLength = allConversations.length;
 
   if (idxOfConvoToUpdate !== -1) {
     // updating appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
-    // if (updateType) {
-    console.log("dispatchin updating read by ");
-    //   unread[conversation.id] = true;
-
-    const { messages } = conversation;
-    const { sentBy } = messages[messages.length - 1];
-    //   console.log(sentBy);
-    if (sentBy && sentBy.id !== companyUserId) {
-      dispatch(setConversationUnread(conversation.id));
-    } else {
-      console.log("ELSE");
-      callback && callback("NEW_MESSAGE");
-    }
 
     return dispatch(
       setAllConversations(
@@ -203,31 +208,11 @@ export const updateConversations = (
         //   updateType
       )
     );
-    //   }
-    // } else {
-    //   const { messages } = conversation;
-    //   const { sentBy } = messages[messages.length - 1];
-    //   //   console.log(sentBy);
-    //   if (sentBy === null && sentBy.id !== companyUserId) {
-    //     dispatch(setConversationUnread(conversation.id));
-    //   } else {
-    //     console.log("ELSE");
-    //     callback && callback("NEW_MESSAGE");
-    //   }
-    //   return dispatch(
-    //     setAllConversations(allConversations, oldConversationsLength)
-    //   );
-    // }
-  } else if (idxOfConvoToUpdate === -1) {
+  } else {
     callback && callback("NEW_ORDER");
     allConversations.push(conversation);
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)
-    );
-  } else if (conversationsExist === false) {
-    callback && callback("NEW_ORDER");
-    return dispatch(
-      setAllConversations([conversation], oldConversationsLength)
     );
   }
 };

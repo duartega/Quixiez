@@ -32,6 +32,7 @@ import {
   setAllConversations,
   updateConversations,
   setConversationReadUnread
+  // updateConversationsReadBy
 } from "../../../redux/actions/conversations";
 import { INCOMING_QUE_TEXT } from "sockets/events/Events";
 import { setCompanyUser } from "redux/actions";
@@ -64,8 +65,10 @@ class Admin extends React.Component {
     const { updateConversations } = this.props;
 
     handleIncomingMessagesMarkedRead(queText => {
-      // console.log("MESSAGE BEING MARKED AS READ", queText);
-      updateConversations(queText, null, "message_marked_read");
+      // console.log("handleIncomingMessagesMarkedRead");
+      // console.log(queText);
+      // Not working
+      // updateConversationsReadBy(queText);
     });
 
     handleIncomingQueText(queText => {
@@ -306,6 +309,9 @@ const mapDispatchToProps = dispatch => ({
 
   setConversationReadUnread: queTextUnread =>
     dispatch(setConversationReadUnread(queTextUnread))
+
+  // updateConversationsReadBy: conversation =>
+  //   dispatch(updateConversationsReadBy(conversation))
 });
 
 export default connect(

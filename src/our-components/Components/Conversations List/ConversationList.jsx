@@ -29,11 +29,13 @@ class ConversationList extends React.Component {
 
     this.initialRenderOfMessages = false;
     this.loadTimeOut = null;
+    this.markInitialMessageAsReadTimeOut = null;
   }
 
   handleInitialRender = () => {
     this.handleViewConversation(0);
     this.initialRenderOfMessages = true;
+    this.setTimeOutOnMarkingInitMessageAsRead();
   };
 
   componentDidMount() {
@@ -89,6 +91,9 @@ class ConversationList extends React.Component {
     if (this.loadTimeOut) {
       clearTimeout(this.loadTimeOut);
     }
+    if (this.markInitialMessageAsReadTimeOut) {
+      clearTimeout(this.markInitialMessageAsReadTimeOut);
+    }
   }
 
   mapConversationsToTable = () => {
@@ -126,29 +131,40 @@ class ConversationList extends React.Component {
     this.setState({ tableData: conversationsArray });
   };
 
+  setTimeOutOnMarkingInitMessageAsRead = () => {
+    this.markInitialMessageAsReadTimeOut = setTimeout(() => {
+      const { idxOfConversationToRender } = this.props;
+
+      if (
+        typeof idxOfConversationToRender === "number" &&
+        idxOfConversationToRender === 0
+      ) {
+        // console.log("calling markConversationMessagesAsRead");
+        this.markConversationMessagesAsRead(0);
+      }
+    }, 7000);
+  };
+
   handleViewConversation = idx => {
     const { setConversationToRender, unread, allConversations } = this.props;
-    // console.log("unread", unread);
+    this.markConversationMessagesAsRead(idx);
 
-    // if (unread)
+    setConversationToRender(idx);
+  };
+
+  markConversationMessagesAsRead = idx => {
+    const { unread, allConversations } = this.props;
+    // console.log(allConversations);
     if (allConversations) {
       const { id } = allConversations[idx];
       const messageIsUnread = unread[id];
       if (messageIsUnread) {
-        // console.log("message is unread!!! calling get...");
         axiosGet(queTextSingle(id, "READ", "true")).then(() => {
           const { setConversationRead } = this.props;
-          console.log("setting conversation as read...");
-          setConversationRead(id);
-          setConversationToRender(idx);
-        });
-      } else {
-        setConversationToRender(idx);
-      }
 
-      //   // console.log(allConversations[idx].id);
-    } else {
-      setConversationToRender(idx);
+          setConversationRead(id);
+        });
+      }
     }
   };
 
@@ -177,20 +193,27 @@ class ConversationList extends React.Component {
 // export default ConversationList;
 
 const mapStateToProps = ({
-  conversation: { allConversations, unread, updateType }
+  conversation: {
+    allConversations,
+    unread,
+    updateType,
+    idxOfConversationToRender
+  }
 }) => {
   if (allConversations === null) {
     return {
       allConversations,
       unread,
-      updateType
+      updateType,
+      idxOfConversationToRender
     };
   }
 
   return {
     allConversations: [...allConversations],
     unread,
-    updateType
+    updateType,
+    idxOfConversationToRender
   };
 };
 
