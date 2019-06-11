@@ -54,7 +54,18 @@ export const getTimePassedValue = (conversationCreated: string) => {
   if (timePassedInMinutes > 1439) {
     const { hoursAgo } = hoursAgoF(timePassedInMinutes);
     let daysAgo = hoursAgo / 24;
-    daysAgo = Math.floor(daysAgo);
+    /**
+     * If its over or equal to
+     * half of the remaining day
+     * ago use the ceiling.
+     *
+     * Otherwise, use the floor.
+     */
+    if (hoursAgo % 24 >= 12) {
+      daysAgo = Math.ceil(daysAgo);
+    } else {
+      daysAgo = Math.floor(daysAgo);
+    }
 
     if (daysAgo > 1) {
       return `${daysAgo} days ago`;
