@@ -14,85 +14,14 @@ import {
   SET_CONVERSATION_READ
 } from "../ActionTypes";
 import { conditionalExpression } from "@babel/types";
-import { findIndexOfConversationToUpdate } from "./helpers/conversationsHelpers";
+import {
+  findIndexOfConversationToUpdate,
+  isANewMessage,
+  sortConversations
+} from "./helpers/conversationsHelpers";
 
 export const getTimeValue = (timeReceived: string) => {
   return parse(timeReceived).getTime();
-};
-
-const sortConversations = (
-  newUpdatedConversations: any[],
-  idxOfConversationToRender: number | null,
-  oldConversationsLength?: number
-) => {
-  if (!newUpdatedConversations) {
-    return;
-  }
-
-  let sortedConversations: any[] = [];
-  newUpdatedConversations.forEach((aConversation, idx) => {
-    // console.log(aConversation.messages);
-    const { messages } = aConversation;
-    const lastMessageCreatedStamp = messages[messages.length - 1].created;
-    sortedConversations.push({
-      idx,
-      timeValue: getTimeValue(lastMessageCreatedStamp)
-    });
-  });
-
-  sortedConversations = sortedConversations.sort((a, b) => {
-    return a.timeValue < b.timeValue ? 1 : -1;
-  });
-
-  let sortedConversationsArray: any[] = [];
-  sortedConversations.forEach(({ idx }) => {
-    sortedConversationsArray.push(newUpdatedConversations[idx]);
-  });
-
-  // Grab first conversation
-  const messages = newUpdatedConversations[0].messages;
-  // Grad last message of first conversation
-  const lastMessageSentBy = messages[messages.length - 1].sentBy;
-
-  //   lastMessageSentBy !== null && console.log(lastMessageSentBy.id);
-
-  /**
-   * If the message was not sent by the user AND
-   * the message was not sent by the bot we are making
-   * the assumption for now that the current user sent it.
-   *
-   * TODO: Check to see if the current user sent the message
-   * and update the new idx to 0 only if the current user sent
-   * the message.
-   */
-  if (
-    lastMessageSentBy &&
-    lastMessageSentBy !== null &&
-    lastMessageSentBy.id !== "00000000-0000-0000-0000-000000000000"
-  ) {
-    return {
-      sortedConversationsArray,
-      newIdxOfConversationsToRender: 0
-    };
-  }
-  if (
-    oldConversationsLength === undefined ||
-    idxOfConversationToRender === null
-  ) {
-    return {
-      sortedConversationsArray,
-      newIdxOfConversationsToRender: null
-    };
-  }
-  const newConversationsLen = newUpdatedConversations.length;
-
-  const newIdxOfConversationsToRender =
-    newConversationsLen - oldConversationsLength + idxOfConversationToRender;
-
-  return {
-    sortedConversationsArray,
-    newIdxOfConversationsToRender
-  };
 };
 
 export const setConversationToRender = (idx: number) => {
@@ -104,32 +33,26 @@ export const setConversationToRender = (idx: number) => {
 
 export const setAllConversations = (
   conversations: any[],
-  oldConversationsLength?: number,
-  updateType?: "message_marked_read"
+  oldConversationsLength: number
 ) => (dispatch: any, getState: any) => {
   const {
     idxOfConversationToRender,
     allConversations
   } = getState().conversation;
 
-  if (updateType) {
-    return dispatch({
-      type: SET_ALL_CONVERSATIONS,
-      conversations,
-      updateType
-    });
-  }
-
   let sortedConversationsAndNewIdxToRender = sortConversations(
     conversations,
     idxOfConversationToRender,
     oldConversationsLength
   );
+  console.log("setAllConversations called");
   if (sortedConversationsAndNewIdxToRender) {
     const {
       sortedConversationsArray,
       newIdxOfConversationsToRender
     } = sortedConversationsAndNewIdxToRender;
+    console.log("sortedConversationsArray", sortedConversationsArray);
+    console.log("newIdxOfConversationsToRender", newIdxOfConversationsToRender);
     if (newIdxOfConversationsToRender !== null) {
       console.log(
         "newIdxOfConversationsToRender",
@@ -137,7 +60,7 @@ export const setAllConversations = (
       );
       dispatch(setConversationToRender(newIdxOfConversationsToRender));
     }
-    // console.log("sortedConversationsArray", sortedConversationsArray);
+    console.log("sortedConversationsArray", sortedConversationsArray);
     dispatch({
       type: SET_ALL_CONVERSATIONS,
       conversations: sortedConversationsArray
@@ -187,8 +110,11 @@ export const updateConversations = (
 ) => (dispatch: any, getState: any) => {
   const {
     conversation: { allConversations },
-    companyUserReducer: { id: companyUserId }
+    companyUserReducer
   } = getState();
+
+  const { companyUser } = companyUserReducer;
+  const { id: companyUserId } = companyUser;
 
   const idxOfConvoToUpdate = findIndexOfConversationToUpdate(
     conversation,
@@ -198,15 +124,15 @@ export const updateConversations = (
   const oldConversationsLength = allConversations.length;
 
   if (idxOfConvoToUpdate !== -1) {
-    // updating appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
+    let conversationToUpdate = allConversations[idxOfConvoToUpdate];
+    // conversationToUpdate = conversation;
 
+    if (isANewMessage(conversationToUpdate, companyUserId)) {
+      callback && callback("NEW_MESSAGE");
+    }
     return dispatch(
-      setAllConversations(
-        allConversations,
-        oldConversationsLength
-        //   updateType
-      )
+      setAllConversations(allConversations, oldConversationsLength)
     );
   } else {
     callback && callback("NEW_ORDER");

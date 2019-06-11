@@ -72,7 +72,7 @@ class Admin extends React.Component {
     });
 
     handleIncomingQueText(queText => {
-      // console.log("INCOMING QUETEXT...");
+      console.log("INCOMING QUETEXT...");
 
       updateConversations(queText, alertType => {
         if (alertType === "NEW_MESSAGE") {

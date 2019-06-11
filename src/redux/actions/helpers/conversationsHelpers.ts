@@ -1,3 +1,5 @@
+import { getTimeValue } from "../conversations";
+
 /**
  *
  * @param conversations The list of conversations from redux
@@ -29,4 +31,73 @@ export const findIndexOfConversationToUpdate = (
 export const getLastMessageInAConversation = (conversation: any) => {
   const { messages } = conversation;
   return messages[messages.length - 1];
+};
+
+export const isANewMessage = (conversation: any, companyUserId: string) => {
+  const lastMessage = getLastMessageInAConversation(conversation);
+  const lastMessageSentBy = lastMessage.sentBy;
+
+  if (lastMessageSentBy === null) {
+    return true;
+  }
+
+  if (lastMessageSentBy.id === companyUserId) {
+    return false;
+  }
+
+  return true;
+};
+
+export const sortConversations = (
+  newUpdatedConversations: any[],
+  idxOfConversationToRender: number | null,
+  oldConversationsLength: number
+) => {
+  if (!newUpdatedConversations) {
+    return;
+  }
+
+  let sortedConversations: any[] = [];
+  newUpdatedConversations.forEach((aConversation, idx) => {
+    const { messages } = aConversation;
+    const lastMessageCreatedStamp = messages[messages.length - 1].created;
+    sortedConversations.push({
+      idx,
+      timeValue: getTimeValue(lastMessageCreatedStamp)
+    });
+  });
+
+  // Sort through the last message time stamp
+  sortedConversations = sortedConversations.sort((a, b) => {
+    return a.timeValue < b.timeValue ? 1 : -1;
+  });
+
+  let sortedConversationsArray: any[] = [];
+  sortedConversations.forEach(({ idx }) => {
+    sortedConversationsArray.push(newUpdatedConversations[idx]);
+  });
+
+  // Grab first conversation
+  //   const messages = newUpdatedConversations[0].messages;
+  // Grad last message of first conversation
+  //   const lastMessageSentBy = messages[messages.length - 1].sentBy;
+
+  if (
+    oldConversationsLength === undefined ||
+    idxOfConversationToRender === null
+  ) {
+    return {
+      sortedConversationsArray,
+      newIdxOfConversationsToRender: null
+    };
+  }
+  const newConversationsLen = newUpdatedConversations.length;
+
+  const newIdxOfConversationsToRender =
+    newConversationsLen - oldConversationsLength + idxOfConversationToRender;
+
+  return {
+    sortedConversationsArray,
+    newIdxOfConversationsToRender
+  };
 };

@@ -139,7 +139,7 @@ class ConversationList extends React.Component {
         typeof idxOfConversationToRender === "number" &&
         idxOfConversationToRender === 0
       ) {
-        // console.log("calling markConversationMessagesAsRead");
+        console.log("calling markConversationMessagesAsRead");
         this.markConversationMessagesAsRead(0);
       }
     }, 7000);

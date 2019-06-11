@@ -170,6 +170,7 @@ class Conversation extends React.Component<Props, State> {
         prevProps.conversation.messages.length ===
         1
     ) {
+      console.log("handling new message...");
       this.handleNewMessage();
       this.handleScroll();
     }
