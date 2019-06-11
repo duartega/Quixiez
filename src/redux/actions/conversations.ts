@@ -109,7 +109,7 @@ export const updateConversations = (
   callback?: (alertType: string) => void
 ) => (dispatch: any, getState: any) => {
   const {
-    conversation: { allConversations },
+    conversation: { allConversations, unread },
     companyUserReducer
   } = getState();
 
@@ -123,13 +123,21 @@ export const updateConversations = (
 
   const oldConversationsLength = allConversations.length;
 
+  // The conversation has been found
   if (idxOfConvoToUpdate !== -1) {
+    // updated the appropriate conversation
     allConversations[idxOfConvoToUpdate] = conversation;
+    // copy the conversation locally
     let conversationToUpdate = allConversations[idxOfConvoToUpdate];
     // conversationToUpdate = conversation;
 
     if (isANewMessage(conversationToUpdate, companyUserId)) {
+      // Trigger notification
       callback && callback("NEW_MESSAGE");
+
+      // Mark the message as unread
+      const { id } = conversationToUpdate;
+      dispatch(setConversationUnread(id));
     }
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)

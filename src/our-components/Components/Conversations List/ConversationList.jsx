@@ -30,6 +30,7 @@ class ConversationList extends React.Component {
     this.initialRenderOfMessages = false;
     this.loadTimeOut = null;
     this.markInitialMessageAsReadTimeOut = null;
+    this.previousIdxRendered = 0;
   }
 
   handleInitialRender = () => {
@@ -74,6 +75,14 @@ class ConversationList extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     // const { updateType } = this.props;
+    const { idxOfConversationToRender } = this.props;
+
+    if (
+      typeof idxOfConversationToRender === "number" &&
+      prevProps.idxOfConversationToRender !== idxOfConversationToRender
+    ) {
+      this.previousIdxRendered = prevProps.idxOfConversationToRender;
+    }
 
     if (prevProps.allConversations !== this.props.allConversations) {
       // console.log("Map Updated");
@@ -107,13 +116,13 @@ class ConversationList extends React.Component {
       let { consumerUser, messages } = aConversation;
       let fname = consumerUser.firstName + " " + consumerUser.lastName;
       let lastMessage = messages[messages.length - 1].content;
-      let timeRecieved = messages[messages.length - 1].created;
+      let timeReceived = messages[messages.length - 1].created;
       let firstInitial = fname.charAt(0);
 
-      let time = StatusInfo.calculateTime(timeRecieved);
+      let time = StatusInfo.calculateTime(timeReceived);
 
       // NOT DOING ANYTHING WITH THIS YET...
-      let timeValue = getTimeValue(timeRecieved);
+      let timeValue = getTimeValue(timeReceived);
       // console.log(aConversation.id);
       const { id } = aConversation;
       // console.log(unread[id]);

@@ -108,19 +108,19 @@ class Login extends React.Component {
         console.log(companies);
       })
       .catch(err => {
-        console.log(err.response);
-        console.log(err.response.status);
-        const { status } = err.response;
-        if (status === 401) {
-          this.setState({
-            alert: "Wrong username or password",
-            failed: 1
-          });
-          // alert("Wrong username or password");
-        } else {
-          // else unknown error
-          alert("Unknown error has occurred please try again");
-        }
+        console.log(err);
+        // // console.log(err.response.status);
+        // const { status } = err.response;
+        // if (status === 401) {
+        //   this.setState({
+        //     alert: "Wrong username or password",
+        //     failed: 1
+        //   });
+        //   // alert("Wrong username or password");
+        // } else {
+        //   // else unknown error
+        //   alert("Unknown error has occurred please try again");
+        // }
       });
   }
 
