@@ -2,25 +2,24 @@ import React from "react";
 import { Row, Col, Card, CardBody, Badge } from "reactstrap";
 import Slide from "@material-ui/core/Slide";
 import { badgeColor } from "./Types";
-import { getTimeValue } from "../../../redux/actions/conversations";
+import { getTimePassedValue } from "./ChatBubbleTimeStampHelpers";
 
 interface Props {
   badgeColor: badgeColor;
   badgeLabel: string;
   message: string;
-  // timePassed: string;
   inverted?: boolean;
   conversationCreated: string;
 }
 
 interface State {
-  conversationCreated: number;
+  // conversationCreated: number;
   conversationCreatedString: string;
 }
 
 export class ChatBubble extends React.Component<Props, State> {
   state = {
-    conversationCreated: 0,
+    // conversationCreated: 0,
     conversationCreatedString: ""
   };
 
@@ -35,19 +34,11 @@ export class ChatBubble extends React.Component<Props, State> {
    */
   private intervalTime: number = 5000;
 
-  getTimePassedValue = (conversationCreated: string) => {
-    let timePassed =
-      (getTimeValue(new Date().toString()) -
-        getTimeValue(conversationCreated)) /
-      1000;
-    return Math.floor(timePassed / 60);
-  };
-
   setTimeAgo = (conversationCreated: string) => {
-    let timePassed = this.getTimePassedValue(conversationCreated);
+    let timePassed = getTimePassedValue(conversationCreated);
     this.setState({
-      conversationCreated: timePassed,
-      conversationCreatedString: `${timePassed} minutes ago`
+      // conversationCreated: timePassed,
+      conversationCreatedString: timePassed as string
     });
   };
 
