@@ -21,6 +21,7 @@ import {
 } from "./helpers/conversationsHelpers";
 
 import { unreadType } from "../types/conversationTypes";
+import { QueTextI } from "Types/Interfaces/QueText";
 
 export const getTimeValue = (timeReceived: string | Date) => {
   return parse(timeReceived).getTime();
@@ -56,10 +57,10 @@ export const setAllConversations = (
     // console.log("sortedConversationsArray", sortedConversationsArray);
     // console.log("newIdxOfConversationsToRender", newIdxOfConversationsToRender);
     if (newIdxOfConversationsToRender !== null) {
-      console.log(
-        "newIdxOfConversationsToRender",
-        newIdxOfConversationsToRender
-      );
+      //   console.log(
+      //     "newIdxOfConversationsToRender",
+      //     newIdxOfConversationsToRender
+      //   );
       dispatch(setConversationToRender(newIdxOfConversationsToRender));
     }
     // console.log("sortedConversationsArray", sortedConversationsArray);
@@ -107,7 +108,7 @@ export const setAllConversations = (
  * This is only being called in Admin
  */
 export const updateConversations = (
-  conversation: any,
+  conversation: QueTextI,
   callback?: (alertType: string) => void
 ) => (dispatch: any, getState: any) => {
   const {
@@ -144,13 +145,23 @@ export const updateConversations = (
     return dispatch(
       setAllConversations(allConversations, oldConversationsLength)
     );
-  } else {
-    callback && callback("NEW_ORDER");
-    allConversations.push(conversation);
-    return dispatch(
-      setAllConversations(allConversations, oldConversationsLength)
-    );
   }
+  /**
+   * Else the conversation is actually a new
+   * order. We know this because a new
+   * conversation came in and the conversation
+   * does not exist in Redux.
+   */
+  callback && callback("NEW_ORDER");
+
+  const { id } = conversation;
+  dispatch(setConversationUnread(id));
+
+  allConversations.push(conversation);
+
+  return dispatch(
+    setAllConversations(allConversations, oldConversationsLength)
+  );
 };
 
 export const setConversationUnread = (conversationId: string) => (

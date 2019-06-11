@@ -15,6 +15,7 @@ import ReactBSAlert from "react-bootstrap-sweetalert"; // For a popup that shows
 import { axiosGet } from "network/ApiCalls";
 import { queTextSingle } from "network/routes";
 import { unreadType } from "../../../redux/types/conversationTypes";
+//@ts-ignore
 import { QueTextI } from "Types/Interfaces/QueText";
 import { Dispatch } from "redux";
 type Props = {
@@ -48,12 +49,6 @@ class ConversationList extends React.Component<Props, State> {
       tableData: [],
       loading: null
     };
-
-    // this.initialRenderOfMessages = false;
-    // this.loadTimeOut = null;
-    // this.markInitialMessageAsReadTimeOut = null;
-    // this.idxToWatch = 0;
-    // this.checkingIdx = true;
   }
 
   private initialRenderOfMessages = false;
@@ -62,7 +57,7 @@ class ConversationList extends React.Component<Props, State> {
     | NodeJS.Timeout
     | null
     | number = null;
-  private idxToWatch = 0;
+  private idxToWatch: number = 0;
 
   handleInitialRender = () => {
     this.handleViewConversation(0);
@@ -186,20 +181,20 @@ class ConversationList extends React.Component<Props, State> {
 
   checkIfMessageNeedsToBeMarkedAsRead = () => {
     const { unread, allConversations, idxOfConversationToRender } = this.props;
-    console.log("checkIfMessageNeedsToBeMarkedAsRead before if");
-    console.log(
-      "unread",
-      unread,
-      "allConversations",
-      allConversations,
-      "idxOfConversationToRender",
-      idxOfConversationToRender
-    );
+    // console.log("checkIfMessageNeedsToBeMarkedAsRead before if");
+    // console.log(
+    //   "unread",
+    //   unread,
+    //   "allConversations",
+    //   allConversations,
+    //   "idxOfConversationToRender",
+    //   idxOfConversationToRender
+    // );
     if (!unread || !allConversations || idxOfConversationToRender === null) {
       return;
     }
 
-    console.log("checkIfMessageNeedsToBeMarkedAsRead after if");
+    // console.log("checkIfMessageNeedsToBeMarkedAsRead after if");
     // Get the appropriate conversation
     const conversation = allConversations[idxOfConversationToRender];
     const conversationId = conversation.id;
@@ -223,7 +218,7 @@ class ConversationList extends React.Component<Props, State> {
         typeof idxOfConversationToRender === "number" &&
         idxOfConversationToRender === this.idxToWatch
       ) {
-        console.log("calling markConversationMessagesAsRead");
+        // console.log("calling markConversationMessagesAsRead");
         this.markConversationMessagesAsRead(0);
       }
     }, 7000);

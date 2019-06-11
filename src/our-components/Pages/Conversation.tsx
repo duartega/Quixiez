@@ -29,18 +29,23 @@ import { badgeColor } from "our-components/Components/Chat/Types";
 import { getTime } from "date-fns";
 import { getConversationToRender } from "redux/actions/helpers/conversationsHelpers";
 import { setCompanyUser } from "redux/actions/companyUserActions";
+//@ts-ignore
+import { QueTextI } from "Types/Interfaces/QueText";
+
+//@ts-ignore
+import { MessageI } from "Types/Interfaces/Message";
 
 type Props = {
-  conversation: any;
+  conversation: QueTextI;
   conversationContainerHeight: number;
   history: any;
   companyUserId: string;
-  companyUserFirstName: any;
-  updateType: string | null;
+  companyUserFirstName: string;
+  // updateType: string | null;
 };
 
 type State = {
-  messages: any[];
+  messages: JSX.Element[];
   message: string;
   companyUserFirstName: string | null;
   mappingMessagesDone: boolean;
@@ -161,20 +166,34 @@ class Conversation extends React.Component<Props, State> {
     }
 
     /**
-     * Handle new message
+     * Handle new messages
      */
-
     if (
       prevProps.conversation &&
-      this.props.conversation.messages.length -
-        prevProps.conversation.messages.length ===
-        1
+      this.props.conversation.messages.length >
+        prevProps.conversation.messages.length
     ) {
-      console.log("handling new message...");
-      this.handleNewMessage();
+      this.handleNewMessages(
+        prevProps.conversation.messages,
+        this.props.conversation.messages
+      );
       this.handleScroll();
     }
   }
+
+  handleNewMessages = (oldMessages: MessageI[], newMessages: MessageI[]) => {
+    const { length: oldMessagesLength } = oldMessages;
+    const { length: newMessagesLength } = newMessages;
+
+    const { messages } = this.state;
+
+    for (let i = oldMessagesLength; i < newMessagesLength; i++) {
+      const newMessageBubble = this.createMessageBubble(newMessages[i]);
+      messages.push(newMessageBubble);
+    }
+
+    this.setState({ messages });
+  };
 
   handleScroll = () => {
     // console.log("handleScroll called");
@@ -193,15 +212,6 @@ class Conversation extends React.Component<Props, State> {
         this.initialScroll();
       }
     }, 100);
-  };
-
-  handleNewMessage = () => {
-    const { messages: propMessages } = this.props.conversation;
-    const { messages: stateMessages } = this.state;
-    const newMessage = propMessages[propMessages.length - 1];
-    const newMessageBubble = this.createMessageBubble(newMessage);
-    stateMessages.push(newMessageBubble);
-    this.setState({ messages: stateMessages });
   };
 
   handleRenderConversation = () => {
@@ -224,8 +234,8 @@ class Conversation extends React.Component<Props, State> {
   /**
    * TODO: First name isn't working 100% need to return sentBy from backend
    */
-  createMessageBubble = (conversation: any) => {
-    const { content, sentBy } = conversation;
+  createMessageBubble = (message: MessageI) => {
+    const { content, sentBy } = message;
     // console.log(conversation);
 
     let sentByLabel = null;
@@ -252,7 +262,7 @@ class Conversation extends React.Component<Props, State> {
         badgeLabel={sentByLabel}
         message={content}
         // timePassed={timePassedStr}
-        conversationCreated={conversation.created}
+        conversationCreated={(message.created as unknown) as string}
         inverted={sentBy ? false : true}
       />
     );
@@ -352,8 +362,8 @@ const mapStateToProps = ({
   return {
     conversation: conversationToRender,
     companyUserId: id,
-    companyUserFirstName: firstName,
-    updateType: conversation.updateType
+    companyUserFirstName: firstName
+    // updateType: conversation.updateType
   };
 };
 
