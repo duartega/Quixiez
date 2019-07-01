@@ -4,7 +4,7 @@ const baseRoute = testing
   : "https://api.quixiez.com";
 
 export const queTextRoute = `${baseRoute}/quetext`;
-export const queTextSingle = (
+export const queTextSingleEdit = (
   id: string,
   mark?: "READ" | "UNREAD",
   socket?: "true"

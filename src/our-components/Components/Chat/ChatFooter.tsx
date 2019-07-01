@@ -22,7 +22,8 @@ interface Props {
 class ChatFooter extends Component<Props> {
   shouldBeDisabled = () => {
     const { phase } = this.props;
-    return phase !== "COMPLETE" && phase !== "IN_PROGRESS";
+    // return phase !== "COMPLETE" && phase !== "IN_PROGRESS";
+    return false;
   };
 
   render() {

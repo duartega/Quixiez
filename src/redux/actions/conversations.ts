@@ -200,6 +200,9 @@ export const setConversationRead = (id: string) => (
 ) => {
   const { unread } = getState().conversation;
   unread[id] = false;
+
+  console.log("set conversation" + id + " read");
+
   return dispatch({
     type: SET_CONVERSATION_READ,
     unread

@@ -12,8 +12,8 @@ import { Button, Spinner } from "reactstrap";
 import { getTimeValue } from "../../../redux/actions/conversations";
 //@ts-ignore
 import ReactBSAlert from "react-bootstrap-sweetalert"; // For a popup that shows we are loading the info
-import { axiosGet } from "network/ApiCalls";
-import { queTextSingle } from "network/routes";
+import { axiosGet, axiosPut } from "network/ApiCalls";
+import { queTextSingleEdit } from "network/routes";
 import { unreadType } from "../../../redux/types/conversationTypes";
 //@ts-ignore
 import { QueTextI } from "Types/Interfaces/QueText";
@@ -238,7 +238,7 @@ class ConversationList extends React.Component<Props, State> {
       const { id } = allConversations[idx];
       const messageIsUnread = unread[id];
       if (messageIsUnread) {
-        axiosGet(queTextSingle(id, "READ", "true")).then(() => {
+        axiosPut(queTextSingleEdit(id, "READ", "true")).then(() => {
           const { setConversationRead } = this.props;
 
           setConversationRead(id);

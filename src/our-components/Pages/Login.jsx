@@ -31,10 +31,12 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
 
+    // EMAIL: joemissamore@live.com
+    // password: testtest
     this.state = {
       JWT: "",
-      email: "joemissamore@live.com",
-      password: "testtest",
+      email: "",
+      password: "",
       loggedIn: false,
       alert: "",
       unkown: "",

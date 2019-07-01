@@ -31,8 +31,9 @@ import { connect } from "react-redux";
 import {
   setAllConversations,
   updateConversations,
-  setConversationReadUnread
+  setConversationReadUnread,
   // updateConversationsReadBy
+  setConversationRead
 } from "../../../redux/actions/conversations";
 import { INCOMING_QUE_TEXT } from "sockets/events/Events";
 import { setCompanyUser } from "redux/actions";
@@ -65,14 +66,15 @@ class Admin extends React.Component {
     const { updateConversations } = this.props;
 
     handleIncomingMessagesMarkedRead(queText => {
-      // console.log("handleIncomingMessagesMarkedRead");
+      console.log("handleIncomingMessagesMarkedRead");
       // console.log(queText);
       // Not working
-      // updateConversationsReadBy(queText);
+      console.log(queText);
+      // setConversationRead(queText);
     });
 
     handleIncomingQueText(queText => {
-      // console.log("INCOMING QUETEXT...");
+      console.log("INCOMING QUETEXT...");
 
       updateConversations(queText, alertType => {
         if (alertType === "NEW_MESSAGE") {
@@ -106,9 +108,8 @@ class Admin extends React.Component {
         const { data } = result;
         const { setAllConversations, updateConversations } = this.props;
 
-        // sessionStorage.setItem("conversations", JSON.stringify(data));
         setAllConversations(data);
-        // updateConversations(data);
+        console.log(data);
       })
       .catch(err => {
         console.log(err, err.response);

@@ -3,7 +3,7 @@ import { ChatBubble } from "../Components/Chat/ChatBubble";
 import { ChatFooter } from "../Components/Chat/ChatFooter";
 import { ChatHeader } from "../Components/Chat/ChatHeader";
 import { axiosPost, axiosGet } from "../../network/ApiCalls";
-import { getAllConversations, queTextSingle } from "../../network/routes";
+import { getAllConversations } from "../../network/routes";
 import { connect } from "react-redux";
 import { sendMessage } from "../../network/routes";
 
